@@ -29,6 +29,7 @@
 @property (strong, nonatomic) IBOutlet UISwitch         *advertisingSwitch;
 
 @property (strong, nonatomic) NSMutableArray *discoveredDevices;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 @property (readonly) CLLocationCoordinate2D *coordinate;
 @end
 
@@ -48,7 +49,7 @@
     NSMutableArray *DiscoverItems;
     NSMutableArray *discoverLocation;
     NSMutableArray *discoverTime;
-    CLLocationManager *locationManager;
+//    CLLocationManager *locationManager;
     CLLocation *currentLocation;
     NSDate *eventDate;
 }
@@ -238,12 +239,18 @@
 -(void)CurrentLocationIdentifier
 {
     //---- For getting current gps location
-    locationManager = [CLLocationManager new];
-    locationManager.delegate = self;
-    locationManager.distanceFilter = kCLDistanceFilterNone;
-    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    locationManager.distanceFilter = 500; //500 meter filter
-    [locationManager startUpdatingLocation];
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+ //   _locationManager.distanceFilter = kCLDistanceFilterNone;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    self.locationManager.distanceFilter = 500; //500 meter filter
+//    [self.locationManager requestAlwaysAuthorization];
+//    NSLog(@"CurrentLocationIdentifier is called\n");
+    
+    [self.locationManager startUpdatingLocation];
+    NSLog(@"Location Services enabled = %d", [CLLocationManager locationServicesEnabled]);
+    NSLog(@"Authorization Status = %d", [CLLocationManager authorizationStatus]);
+    NSLog(@"CurrentLocationIdentifier is called\n");
     //------
 }
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
@@ -251,6 +258,7 @@
     currentLocation = [locations lastObject];
     //[locationManager stopUpdatingLocation];
     eventDate = currentLocation.timestamp;
+    NSLog(@"Update Location is called\n");
     NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
     if (abs(howRecent) < 15.0) {
         // If the event is recent, do something with it.
@@ -258,6 +266,17 @@
               currentLocation.coordinate.latitude,
               currentLocation.coordinate.longitude);
     }
+}
+    
+    -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+        NSLog(@"%@", error.localizedDescription);
+    }
+
+- (void)locationManager:(CLLocationManager *)manager
+didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    NSLog(@"Authorization status changed to %d\n", status   );
+}
     /*
     CLGeocoder *geocoder = [[CLGeocoder alloc] init] ;
     [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray *placemarks, NSError *error)
@@ -293,7 +312,7 @@
           ------
      }];
      */
-}
+
 
 /** This callback comes whenever a peripheral that is advertising the TRANSFER_SERVICE_UUID is discovered.
  *  We check the RSSI, to make sure it's close enough that we're interested in it, and if it is,
