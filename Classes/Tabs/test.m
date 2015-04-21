@@ -1,39 +1,15 @@
 //
-//  DiscoversView.m
+//  test.m
 //  app
 //
-//  Created by kiddjacky on 3/22/15.
+//  Created by kiddjacky on 4/18/15.
 //  Copyright (c) 2015 KZ. All rights reserved.
 //
 
-#import "DiscoversView.h"
+#import "test.h"
+
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "TransferService.h"
-#import <CoreLocation/CoreLocation.h>
-
-
-
-
-@interface DiscoversView () <CBPeripheralManagerDelegate, CBPeripheralDelegate, CBCentralManagerDelegate, CLLocationManagerDelegate>
-//setup BTLE
-@property (strong, nonatomic) CBPeripheralManager       *peripheralManager;
-@property (strong, nonatomic) CBCentralManager      *centralManager;
-@property (strong, nonatomic) CBPeripheral          *discoveredPeripheral;
-//unused for now
-@property (strong, nonatomic) NSMutableData         *data;
-@property (strong, nonatomic) CBMutableCharacteristic   *transferCharacteristic;
-@property (strong, nonatomic) NSData                    *dataToSend;
-@property (nonatomic, readwrite) NSInteger              sendDataIndex;
-@property (strong, nonatomic) IBOutlet UITextView   *central_textview;
-@property (strong, nonatomic) IBOutlet UITextView       *textView;
-@property (strong, nonatomic) IBOutlet UISwitch         *advertisingSwitch;
-
-@property (strong, nonatomic) NSMutableArray *discoveredDevices;
-//@property (strong, nonatomic) CLLocationManager *locationManager;
-@property (readonly) CLLocationCoordinate2D *coordinate;
-@end
-
-
 #import <Parse/Parse.h>
 #import "ProgressHUD.h"
 
@@ -41,24 +17,41 @@
 #import "messages.h"
 #import "utilities.h"
 
+#import "GroupsView.h"
 #import "ChatView.h"
+#import <CoreBluetooth/CoreBluetooth.h>
+#import "TransferService.h"
+
+@interface test() <CBPeripheralManagerDelegate, UITextViewDelegate, CBPeripheralDelegate, CBCentralManagerDelegate>
+@property (strong, nonatomic) IBOutlet UITextView       *textView;
+@property (strong, nonatomic) IBOutlet UISwitch         *advertisingSwitch;
+@property (strong, nonatomic) CBPeripheralManager       *peripheralManager;
+@property (strong, nonatomic) CBMutableCharacteristic   *transferCharacteristic;
+@property (strong, nonatomic) NSData                    *dataToSend;
+@property (nonatomic, readwrite) NSInteger              sendDataIndex;
+////////////Central Manager
+@property (strong, nonatomic) CBCentralManager      *centralManager;
+@property (strong, nonatomic) CBPeripheral          *discoveredPeripheral;
+@property (strong, nonatomic) NSMutableData         *data;
+@property (strong, nonatomic) IBOutlet UITextView   *central_textview;
+
+@property (retain) NSTimer *switchTimer;
+
+@end
+
+
+#define NOTIFY_MTU      20
+
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-@interface DiscoversView()
+@interface test() <CBPeripheralManagerDelegate, CBPeripheralDelegate, CBCentralManagerDelegate>
 {
-    NSMutableArray *DiscoverItems;
-    NSMutableArray *discoverLocation;
-    NSMutableArray *discoverTime;
-    CLLocationManager *locationManager;
-    CLLocation *currentLocation;
-    NSDate *eventDate;
+    NSMutableArray *discovers;
 }
 @end
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
-#define NOTIFY_MTU      20
-
-@implementation DiscoversView
+@implementation test
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -78,19 +71,15 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
     [super viewDidLoad];
-    self.title = @"Discovers";
+    self.title = @"Groups";
     //---------------------------------------------------------------------------------------------------------------------------------------------
-    // self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self
-    //                                                                         action:@selector(actionNew)];
+    /*self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self
+                                                                             action:@selector(actionNew)];*/
     //---------------------------------------------------------------------------------------------------------------------------------------------
     self.tableView.tableFooterView = [[UIView alloc] init];
-    //---------------------------------------------------------------------------------------------------------------------------------------------
-    DiscoverItems = [[NSMutableArray alloc] init];
-    discoverTime = [[NSMutableArray alloc] init];
-    discoverLocation = [[NSMutableArray alloc] init];
-    self.discoveredDevices = [[NSMutableArray alloc] init];
     
-    //BTLE
+    //---------------------------------------------------------------------------------------------------------------------------------------------
+    discovers = [[NSMutableArray alloc] init];
     
     // Start up the CBPeripheralManager
     _peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
@@ -101,12 +90,6 @@
     
     // And somewhere to store the incoming data
     _data = [[NSMutableData alloc] init];
-    
-    //_locationManager = [[CLLocationManager alloc] init];
-    [self CurrentLocationIdentifier]; // call this method
-    
-    //start ad
-    [self btle_seq];
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -117,96 +100,24 @@
     //---------------------------------------------------------------------------------------------------------------------------------------------
     if ([PFUser currentUser] != nil)
     {
-        [self loadDiscovers];
+        //[self loadGroups];
     }
     else LoginUser(self);
 }
 
--(void) loadDiscovers //load discover people or ibeacon
+- (void)btle_seq
 {
+    [self.peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]] }];
     
-}
-
-
-#pragma mark - Table view data source
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-{
-    return 1;
-}
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-{
-    return [DiscoverItems count];
-}
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-{
-    return 50;
-}
-
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+    self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(btle_switch_mode:) userInfo:nil repeats:YES];
     
     
-    PFUser *user = DiscoverItems[indexPath.row];
-    cell.textLabel.text = user[PF_USER_FULLNAME];
-
-    
-    CLLocation *location = discoverLocation[indexPath.row];
-    if (cell.detailTextLabel.text == nil) cell.detailTextLabel.text = [NSString stringWithFormat:@"latitude %+.6f, longtitude %+.6f\n", location.coordinate.latitude, location.coordinate.longitude];
-    cell.detailTextLabel.textColor = [UIColor lightGrayColor];
-    
-    /*
-    PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [query whereKey:PF_CHAT_GROUPID equalTo:discover.objectId];
-    [query orderByDescending:PF_CHAT_CREATEDAT];
-    [query setLimit:1000];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-     {
-         if ([objects count] != 0)
-         {
-             PFObject *chat = [objects firstObject];
-             NSTimeInterval seconds = [[NSDate date] timeIntervalSinceDate:chat.createdAt];
-             cell.detailTextLabel.text = [NSString stringWithFormat:@"%d messages (%@)", (int) [objects count], TimeElapsed(seconds)];
-         }
-         else cell.detailTextLabel.text = @"No message";
-     }];
-    */
-    return cell;
 }
 
-#pragma mark - Table view delegate
+#pragma mark - Central Methods
 
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    //---------------------------------------------------------------------------------------------------------------------------------------------
-    PFUser *user = DiscoverItems[indexPath.row];
-    //NSString *discoverId = discover.objectId;
-    //---------------------------------------------------------------------------------------------------------------------------------------------
-    //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
-    NSString *discoverId = StartPrivateChat([PFUser currentUser], user);
-    //---------------------------------------------------------------------------------------------------------------------------------------------
-    ChatView *chatView = [[ChatView alloc] initWith:discoverId];
-    chatView.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:chatView animated:YES];
-}
 
-#pragma mark - BTLE
+
 /** centralManagerDidUpdateState is a required protocol method.
  *  Usually, you'd check for other states to make sure the current device supports LE, is powered on, etc.
  *  In this instance, we're just using it to wait for CBCentralManagerStatePoweredOn, which indicates
@@ -237,91 +148,6 @@
     NSLog(@"Scanning started");
 }
 
-//------------ Current Location Address-----
--(void)CurrentLocationIdentifier
-{
-    //---- For getting current gps location
-    locationManager = [[CLLocationManager alloc] init];
-    locationManager.delegate = self;
-    
-    // Check for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
-    if ([locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [locationManager requestWhenInUseAuthorization];
-    }
-    
-    
-    locationManager.distanceFilter = kCLDistanceFilterNone;
-    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    locationManager.distanceFilter = 500; //500 meter filter
-//    [self.locationManager requestAlwaysAuthorization];
-//    NSLog(@"CurrentLocationIdentifier is called\n");
-    
-    [locationManager startUpdatingLocation];
-    NSLog(@"Location Services enabled = %d", [CLLocationManager locationServicesEnabled]);
-    NSLog(@"Authorization Status = %d", [CLLocationManager authorizationStatus]);
-    NSLog(@"CurrentLocationIdentifier is called\n");
-    //------
-}
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
-{
-    currentLocation = [locations lastObject];
-    //[locationManager stopUpdatingLocation];
-    eventDate = currentLocation.timestamp;
-    NSLog(@"Update Location is called\n");
-    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
-    if (abs(howRecent) < 15.0) {
-        // If the event is recent, do something with it.
-        NSLog(@"latitude %+.6f, longitude %+.6f\n",
-              currentLocation.coordinate.latitude,
-              currentLocation.coordinate.longitude);
-    }
-}
-    
-    -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
-        NSLog(@"%@", error.localizedDescription);
-    }
-
-- (void)locationManager:(CLLocationManager *)manager
-didChangeAuthorizationStatus:(CLAuthorizationStatus)status
-{
-    NSLog(@"Authorization status changed to %d\n", status   );
-}
-    /*
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init] ;
-    [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray *placemarks, NSError *error)
-     {
-         if (!(error))
-         {
-             CLPlacemark *placemark = [placemarks objectAtIndex:0];
-             NSLog(@"\nCurrent Location Detected\n");
-             NSLog(@"placemark %@",placemark);
-             NSString *locatedAt = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
-             NSString *Address = [[NSString alloc]initWithString:locatedAt];
-             NSString *Area = [[NSString alloc]initWithString:placemark.locality];
-             NSString *Country = [[NSString alloc]initWithString:placemark.country];
-             NSString *CountryArea = [NSString stringWithFormat:@"%@, %@", Area,Country];
-             NSLog(@"%@",CountryArea);
-         }
-         else
-         {
-             NSLog(@"Geocode failed with error %@", error);
-             NSLog(@"\nCurrent Location Not Detected\n");
-             //return;
-             //CountryArea = NULL;
-         }
-         ---- For more results
-          placemark.region);
-          placemark.country);
-          placemark.locality);
-          placemark.name);
-          placemark.ocean);
-          placemark.postalCode);
-          placemark.subLocality);
-          placemark.location);
-          ------
-     }];
-     */
-
 
 /** This callback comes whenever a peripheral that is advertising the TRANSFER_SERVICE_UUID is discovered.
  *  We check the RSSI, to make sure it's close enough that we're interested in it, and if it is,
@@ -329,7 +155,6 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
  */
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
-    //NSLog(@"enter call back");
     // Reject any where the value is above reasonable range
     if (RSSI.integerValue > -15) {
         return;
@@ -340,48 +165,17 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
         return;
     }
     
-    //NSLog(@"Discovered %@ at %@", peripheral.name, RSSI);
-    
-    BOOL matched = 0;
-    for (CBPeripheral *discovered in self.discoveredDevices) {
-        //NSLog(@"discoverd before %@", discovered.name);
-        if (discovered.name == peripheral.name) {
-            matched = 1;
-        }
-    }
+    NSLog(@"Discovered %@ at %@", peripheral.name, RSSI);
     
     // Ok, it's in range - have we already seen it?
-    //if (self.discoveredPeripheral != peripheral) {
-    if (!matched) {
+    if (self.discoveredPeripheral != peripheral) {
+        
         // Save a local copy of the peripheral, so CoreBluetooth doesn't get rid of it
-        //self.discoveredPeripheral = peripheral;
-        [self.discoveredDevices addObject:peripheral];
-        /* no need to connect
+        self.discoveredPeripheral = peripheral;
+        
         // And connect
         NSLog(@"Connecting to peripheral %@", peripheral);
         [self.centralManager connectPeripheral:peripheral options:nil];
-         */
-        NSString *userName = [advertisementData objectForKey:CBAdvertisementDataLocalNameKey];
-
-        NSLog(@"userName is %@, advertisement Data is %@", userName, advertisementData);
-        if (userName != NULL) {
-        PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-        [query whereKey:PF_USER_USERNAME equalTo:userName];
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-         {
-             if ([objects count] != 0)
-             {
-
-                 PFUser *user = [objects firstObject];
-                  NSLog(@"found user %@", user.username);
-                 [DiscoverItems addObject:user];
-                 [discoverLocation addObject:currentLocation];
-                 [discoverTime addObject:eventDate];
-                 [self.tableView reloadData];
-             }
-         }];
-
-        }
     }
 }
 
@@ -540,7 +334,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 - (void)cleanup
 {
     // Don't do anything if we're not connected
-    if (!self.discoveredPeripheral == CBPeripheralStateConnecting) {
+    if (!self.discoveredPeripheral.isConnected) {
         return;
     }
     
@@ -732,43 +526,5 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 }
 
 
-/** Start advertising
- */
-- (IBAction)switchChanged:(id)sender
-{
-    if (self.advertisingSwitch.on) {
-        // All we advertise is our service's UUID
-        [self btle_seq];
-        //        [self.peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]] }];
-    }
-    
-    else {
-        [self.peripheralManager stopAdvertising];
-    }
-}
-
--(void)btle_switch_mode:(NSTimer *)switchtimer
-{
-    //    NSLog(@"Timer is fired off");
-    
-    //    if (self.peripheralManager.state == CBPeripheralManagerStatePoweredOn) {
-    //        [self.peripheralManager stopAdvertising];
-    //        return;
-    //    }
-    
-}
-
-- (void)btle_seq
-{
-    PFUser *user = [PFUser currentUser];
-    
-    [self.peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]] , CBAdvertisementDataLocalNameKey : user.username   }];
-    NSLog(@"send out advertisment data, user name is %@", user.username);
-    
-    //self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(btle_switch_mode:) userInfo:nil repeats:YES];
-    
-    
-    
-}
-
 @end
+
