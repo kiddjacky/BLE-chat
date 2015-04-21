@@ -331,6 +331,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
     //NSLog(@"enter call back");
     // Reject any where the value is above reasonable range
+    /*
     if (RSSI.integerValue > -15) {
         return;
     }
@@ -339,31 +340,41 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     if (RSSI.integerValue < -35) {
         return;
     }
-    
-    //NSLog(@"Discovered %@ at %@", peripheral.name, RSSI);
+    */
+    NSLog(@"Discovered %@ at %@", peripheral.name, RSSI);
+    NSString *userName = [advertisementData objectForKey:CBAdvertisementDataLocalNameKey];
     
     BOOL matched = 0;
+    for (NSString *foundUser in self.discoveredDevices) {
+        //NSLog(@"discoverd before %@", discovered.name);
+        if ([userName isEqualToString:foundUser]) {
+            matched = 1;
+        }
+    }
+    
+    /* use peripheral.name to filter
     for (CBPeripheral *discovered in self.discoveredDevices) {
         //NSLog(@"discoverd before %@", discovered.name);
         if (discovered.name == peripheral.name) {
             matched = 1;
         }
     }
+    */
     
     // Ok, it's in range - have we already seen it?
     //if (self.discoveredPeripheral != peripheral) {
     if (!matched) {
         // Save a local copy of the peripheral, so CoreBluetooth doesn't get rid of it
         //self.discoveredPeripheral = peripheral;
-        [self.discoveredDevices addObject:peripheral];
+        [self.discoveredDevices addObject:userName];
         /* no need to connect
         // And connect
         NSLog(@"Connecting to peripheral %@", peripheral);
         [self.centralManager connectPeripheral:peripheral options:nil];
          */
-        NSString *userName = [advertisementData objectForKey:CBAdvertisementDataLocalNameKey];
+        //NSString *userName = [advertisementData objectForKey:CBAdvertisementDataLocalNameKey];
 
-        NSLog(@"userName is %@, advertisement Data is %@", userName, advertisementData);
+        NSLog(@"userName is %@, advertisement Data is %@, RSSI value is %@", userName, advertisementData, RSSI);
         if (userName != NULL) {
         PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
         [query whereKey:PF_USER_USERNAME equalTo:userName];
