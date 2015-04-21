@@ -366,7 +366,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     if (!matched) {
         // Save a local copy of the peripheral, so CoreBluetooth doesn't get rid of it
         //self.discoveredPeripheral = peripheral;
-        [self.discoveredDevices addObject:userName];
+
         /* no need to connect
         // And connect
         NSLog(@"Connecting to peripheral %@", peripheral);
@@ -376,6 +376,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 
         NSLog(@"userName is %@, advertisement Data is %@, RSSI value is %@", userName, advertisementData, RSSI);
         if (userName != NULL) {
+                    [self.discoveredDevices addObject:userName];
         PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
         [query whereKey:PF_USER_USERNAME equalTo:userName];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
