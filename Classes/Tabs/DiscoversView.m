@@ -29,7 +29,7 @@
 @property (strong, nonatomic) IBOutlet UISwitch         *advertisingSwitch;
 
 @property (strong, nonatomic) NSMutableArray *discoveredDevices;
-//@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 @property (readonly) CLLocationCoordinate2D *coordinate;
 @end
 
@@ -49,7 +49,7 @@
     NSMutableArray *DiscoverItems;
     NSMutableArray *discoverLocation;
     NSMutableArray *discoverTime;
-    CLLocationManager *locationManager;
+    //CLLocationManager *locationManager;
     CLLocation *currentLocation;
     NSDate *eventDate;
 }
@@ -106,7 +106,7 @@
     [self CurrentLocationIdentifier]; // call this method
     
     //start ad
-    [self btle_seq];
+    //[self btle_seq];
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -232,7 +232,7 @@
 - (void)scan
 {
     [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]]
-                                                options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
+                                                options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @NO }];
     
     NSLog(@"Scanning started");
 }
@@ -241,22 +241,22 @@
 -(void)CurrentLocationIdentifier
 {
     //---- For getting current gps location
-    locationManager = [[CLLocationManager alloc] init];
-    locationManager.delegate = self;
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
     
     // Check for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
-    if ([locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [locationManager requestWhenInUseAuthorization];
+    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [self.locationManager requestWhenInUseAuthorization];
     }
     
     
-    locationManager.distanceFilter = kCLDistanceFilterNone;
-    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    locationManager.distanceFilter = 500; //500 meter filter
+    self.locationManager.distanceFilter = kCLDistanceFilterNone;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    self.locationManager.distanceFilter = 500; //500 meter filter
 //    [self.locationManager requestAlwaysAuthorization];
 //    NSLog(@"CurrentLocationIdentifier is called\n");
     
-    [locationManager startUpdatingLocation];
+    [self.locationManager startUpdatingLocation];
     NSLog(@"Location Services enabled = %d", [CLLocationManager locationServicesEnabled]);
     NSLog(@"Authorization Status = %d", [CLLocationManager authorizationStatus]);
     NSLog(@"CurrentLocationIdentifier is called\n");
@@ -598,7 +598,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     
     // We're in CBPeripheralManagerStatePoweredOn state...
     NSLog(@"self.peripheralManager powered on.");
-    
+            [self btle_seq];
     // ... so build our service.
     
     // Start with the CBMutableCharacteristic

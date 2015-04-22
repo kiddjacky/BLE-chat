@@ -127,6 +127,7 @@
 		29EB241919E9292500D7AA97 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29EB241719E9292500D7AA97 /* LaunchScreen.xib */; };
 		DE1C96E01AE37BB400610AF7 /* DiscoverUser+bluechat.m in Sources */ = {isa = PBXBuildFile; fileRef = DE1C96DF1AE37BB400610AF7 /* DiscoverUser+bluechat.m */; };
 		DE1C96E51AE37F7B00610AF7 /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = DE1C96E41AE37F7B00610AF7 /* test.m */; };
+		DE1C96EA1AE73D1100610AF7 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE1C96E91AE73D1100610AF7 /* CoreBluetooth.framework */; };
 		DE4AA4811AC9B4FE008309D0 /* BTLEPeripheralViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4AA4801AC9B4FE008309D0 /* BTLEPeripheralViewController.m */; };
 		DE6DA8251ABF54CE007A683B /* DiscoversView.m in Sources */ = {isa = PBXBuildFile; fileRef = DE6DA8241ABF54CE007A683B /* DiscoversView.m */; };
 		DEBB7B351AE2FD21009CD940 /* tab_discovers.png in Resources */ = {isa = PBXBuildFile; fileRef = DEBB7B341AE2FD21009CD940 /* tab_discovers.png */; };
@@ -357,6 +358,7 @@
 		DE1C96E31AE37F7B00610AF7 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		DE1C96E41AE37F7B00610AF7 /* test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = test.m; sourceTree = "<group>"; };
 		DE1C96E61AE47D7400610AF7 /* app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = app.entitlements; sourceTree = "<group>"; };
+		DE1C96E91AE73D1100610AF7 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		DE4AA47F1AC9B4FE008309D0 /* BTLEPeripheralViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTLEPeripheralViewController.h; sourceTree = "<group>"; };
 		DE4AA4801AC9B4FE008309D0 /* BTLEPeripheralViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTLEPeripheralViewController.m; sourceTree = "<group>"; };
 		DE4AA4831AC9B582008309D0 /* TransferService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransferService.h; sourceTree = "<group>"; };
@@ -373,6 +375,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE1C96EA1AE73D1100610AF7 /* CoreBluetooth.framework in Frameworks */,
 				29A2996E1A55763100117608 /* Social.framework in Frameworks */,
 				29A2996A1A5575CC00117608 /* AudioToolbox.framework in Frameworks */,
 				29A299681A5575C400117608 /* CFNetwork.framework in Frameworks */,
@@ -917,6 +920,7 @@
 		29EB243319E9297900D7AA97 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DE1C96E91AE73D1100610AF7 /* CoreBluetooth.framework */,
 				29A2996D1A55763100117608 /* Social.framework */,
 				29A299691A5575CC00117608 /* AudioToolbox.framework */,
 				29A299671A5575C400117608 /* CFNetwork.framework */,
