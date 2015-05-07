@@ -13,7 +13,7 @@
 
 @dynamic userName;
 @dynamic timeMeet;
-@dynamic longtitude;
+@dynamic longitude;
 @dynamic latitude;
 
 @end

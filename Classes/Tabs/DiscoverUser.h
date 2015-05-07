@@ -14,7 +14,7 @@
 
 @property (nonatomic, retain) NSString * userName;
 @property (nonatomic, retain) NSDate * timeMeet;
-@property (nonatomic, retain) NSNumber * longtitude;
+@property (nonatomic, retain) NSNumber * longitude;
 @property (nonatomic, retain) NSNumber * latitude;
 
 @end

@@ -128,8 +128,13 @@
 		DE1C96E01AE37BB400610AF7 /* DiscoverUser+bluechat.m in Sources */ = {isa = PBXBuildFile; fileRef = DE1C96DF1AE37BB400610AF7 /* DiscoverUser+bluechat.m */; };
 		DE1C96E51AE37F7B00610AF7 /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = DE1C96E41AE37F7B00610AF7 /* test.m */; };
 		DE1C96EA1AE73D1100610AF7 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE1C96E91AE73D1100610AF7 /* CoreBluetooth.framework */; };
+		DE31A2DD1AF7152800FD8DE2 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE31A2DC1AF7152800FD8DE2 /* CoreDataTableViewController.m */; };
+		DE31A2E31AF7321700FD8DE2 /* AppDelegate+MOC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE31A2E21AF7321700FD8DE2 /* AppDelegate+MOC.m */; };
+		DE31A2E61AF7357400FD8DE2 /* DiscoversView+MOC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE31A2E51AF7357400FD8DE2 /* DiscoversView+MOC.m */; };
 		DE4AA4811AC9B4FE008309D0 /* BTLEPeripheralViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4AA4801AC9B4FE008309D0 /* BTLEPeripheralViewController.m */; };
 		DE6DA8251ABF54CE007A683B /* DiscoversView.m in Sources */ = {isa = PBXBuildFile; fileRef = DE6DA8241ABF54CE007A683B /* DiscoversView.m */; };
+		DEB34C2D1AF0A7DF000A42B8 /* detailsView.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB34C2C1AF0A7DF000A42B8 /* detailsView.m */; };
+		DEB4AE931AF6E48300ED6A77 /* CurrentUser.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB4AE921AF6E48300ED6A77 /* CurrentUser.m */; };
 		DEBB7B351AE2FD21009CD940 /* tab_discovers.png in Resources */ = {isa = PBXBuildFile; fileRef = DEBB7B341AE2FD21009CD940 /* tab_discovers.png */; };
 		DEBB7B481AE3753C009CD940 /* Discover.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DEBB7B461AE3753C009CD940 /* Discover.xcdatamodeld */; };
 		DEBB7B4B1AE37599009CD940 /* DiscoverUser.m in Sources */ = {isa = PBXBuildFile; fileRef = DEBB7B4A1AE37599009CD940 /* DiscoverUser.m */; };
@@ -359,11 +364,23 @@
 		DE1C96E41AE37F7B00610AF7 /* test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = test.m; sourceTree = "<group>"; };
 		DE1C96E61AE47D7400610AF7 /* app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = app.entitlements; sourceTree = "<group>"; };
 		DE1C96E91AE73D1100610AF7 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		DE31A2DB1AF7152800FD8DE2 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
+		DE31A2DC1AF7152800FD8DE2 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
+		DE31A2E11AF7321700FD8DE2 /* AppDelegate+MOC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+MOC.h"; sourceTree = "<group>"; };
+		DE31A2E21AF7321700FD8DE2 /* AppDelegate+MOC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+MOC.m"; sourceTree = "<group>"; };
+		DE31A2E41AF7357400FD8DE2 /* DiscoversView+MOC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DiscoversView+MOC.h"; sourceTree = "<group>"; };
+		DE31A2E51AF7357400FD8DE2 /* DiscoversView+MOC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DiscoversView+MOC.m"; sourceTree = "<group>"; };
+		DE31A2E71AF74D2700FD8DE2 /* PhotoDatabaseAvailability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoDatabaseAvailability.h; sourceTree = "<group>"; };
+		DE31A2EA1AF8689100FD8DE2 /* DatabaseAvailability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatabaseAvailability.h; sourceTree = "<group>"; };
 		DE4AA47F1AC9B4FE008309D0 /* BTLEPeripheralViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTLEPeripheralViewController.h; sourceTree = "<group>"; };
 		DE4AA4801AC9B4FE008309D0 /* BTLEPeripheralViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTLEPeripheralViewController.m; sourceTree = "<group>"; };
 		DE4AA4831AC9B582008309D0 /* TransferService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransferService.h; sourceTree = "<group>"; };
 		DE6DA8231ABF54CE007A683B /* DiscoversView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoversView.h; sourceTree = "<group>"; };
 		DE6DA8241ABF54CE007A683B /* DiscoversView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoversView.m; sourceTree = "<group>"; };
+		DEB34C2B1AF0A7DF000A42B8 /* detailsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = detailsView.h; sourceTree = "<group>"; };
+		DEB34C2C1AF0A7DF000A42B8 /* detailsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = detailsView.m; sourceTree = "<group>"; };
+		DEB4AE911AF6E48300ED6A77 /* CurrentUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurrentUser.h; sourceTree = "<group>"; };
+		DEB4AE921AF6E48300ED6A77 /* CurrentUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CurrentUser.m; sourceTree = "<group>"; };
 		DEBB7B341AE2FD21009CD940 /* tab_discovers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_discovers.png; sourceTree = "<group>"; };
 		DEBB7B471AE3753C009CD940 /* Discover.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Discover.xcdatamodel; sourceTree = "<group>"; };
 		DEBB7B491AE37599009CD940 /* DiscoverUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverUser.h; sourceTree = "<group>"; };
@@ -375,11 +392,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				29A299661A5575BF00117608 /* CoreGraphics.framework in Frameworks */,
 				DE1C96EA1AE73D1100610AF7 /* CoreBluetooth.framework in Frameworks */,
 				29A2996E1A55763100117608 /* Social.framework in Frameworks */,
 				29A2996A1A5575CC00117608 /* AudioToolbox.framework in Frameworks */,
 				29A299681A5575C400117608 /* CFNetwork.framework in Frameworks */,
-				29A299661A5575BF00117608 /* CoreGraphics.framework in Frameworks */,
 				29A299641A5575AF00117608 /* CoreLocation.framework in Frameworks */,
 				29A299621A5575A900117608 /* MobileCoreServices.framework in Frameworks */,
 				29A299601A5575A100117608 /* QuartzCore.framework in Frameworks */,
@@ -452,7 +469,6 @@
 		292338961AA350A400A47A39 /* 02_Messages */ = {
 			isa = PBXGroup;
 			children = (
-				DE1C96E11AE37F0900610AF7 /* New Group */,
 				292338971AA350A400A47A39 /* 01_SelectSingle */,
 				2923389B1AA350A400A47A39 /* 02_SelectMultiple */,
 				2923389C1AA350A400A47A39 /* 03_AddressBook */,
@@ -901,6 +917,9 @@
 				29EB254F19E92ACD00D7AA97 /* AppConstant.h */,
 				29EB240C19E9292500D7AA97 /* AppDelegate.h */,
 				29EB240D19E9292500D7AA97 /* AppDelegate.m */,
+				DE31A2EA1AF8689100FD8DE2 /* DatabaseAvailability.h */,
+				DE31A2E11AF7321700FD8DE2 /* AppDelegate+MOC.h */,
+				DE31A2E21AF7321700FD8DE2 /* AppDelegate+MOC.m */,
 				29EB241519E9292500D7AA97 /* Images.xcassets */,
 				29EB241719E9292500D7AA97 /* LaunchScreen.xib */,
 				29EB240819E9292500D7AA97 /* Supporting Files */,
@@ -941,13 +960,6 @@
 			path = Frameworks;
 			sourceTree = "<group>";
 		};
-		DE1C96E11AE37F0900610AF7 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "New Group";
-			sourceTree = "<group>";
-		};
 		DE1C96E21AE37F2B00610AF7 /* 05_test */ = {
 			isa = PBXGroup;
 			children = (
@@ -962,13 +974,22 @@
 			children = (
 				DE6DA8231ABF54CE007A683B /* DiscoversView.h */,
 				DE6DA8241ABF54CE007A683B /* DiscoversView.m */,
+				DE31A2E71AF74D2700FD8DE2 /* PhotoDatabaseAvailability.h */,
+				DE31A2E41AF7357400FD8DE2 /* DiscoversView+MOC.h */,
+				DE31A2E51AF7357400FD8DE2 /* DiscoversView+MOC.m */,
 				DEBB7B461AE3753C009CD940 /* Discover.xcdatamodeld */,
 				DE1C96DE1AE37BB400610AF7 /* DiscoverUser+bluechat.h */,
+				DEB4AE911AF6E48300ED6A77 /* CurrentUser.h */,
+				DEB4AE921AF6E48300ED6A77 /* CurrentUser.m */,
 				DE1C96DF1AE37BB400610AF7 /* DiscoverUser+bluechat.m */,
 				DEBB7B491AE37599009CD940 /* DiscoverUser.h */,
 				DEBB7B4A1AE37599009CD940 /* DiscoverUser.m */,
+				DEB34C2B1AF0A7DF000A42B8 /* detailsView.h */,
+				DEB34C2C1AF0A7DF000A42B8 /* detailsView.m */,
 				DE4AA47F1AC9B4FE008309D0 /* BTLEPeripheralViewController.h */,
 				DE4AA4801AC9B4FE008309D0 /* BTLEPeripheralViewController.m */,
+				DE31A2DB1AF7152800FD8DE2 /* CoreDataTableViewController.h */,
+				DE31A2DC1AF7152800FD8DE2 /* CoreDataTableViewController.m */,
 				DE4AA4831AC9B582008309D0 /* TransferService.h */,
 			);
 			name = 04_Discovers;
@@ -1112,6 +1133,7 @@
 				292338CB1AA350A400A47A39 /* MessagesView.m in Sources */,
 				292339BB1AA38E0F00A47A39 /* JSQVideoMediaItem.m in Sources */,
 				2923392D1AA38DBD00A47A39 /* AFNetworkActivityIndicatorManager.m in Sources */,
+				DEB4AE931AF6E48300ED6A77 /* CurrentUser.m in Sources */,
 				292338CD1AA350A400A47A39 /* ProfileView.m in Sources */,
 				292338D31AA350A400A47A39 /* WelcomeView.m in Sources */,
 				29EB240E19E9292500D7AA97 /* AppDelegate.m in Sources */,
@@ -1132,6 +1154,7 @@
 				292339281AA38DBD00A47A39 /* AFSecurityPolicy.m in Sources */,
 				2923392F1AA38DBD00A47A39 /* UIAlertView+AFNetworking.m in Sources */,
 				292339B31AA38E0F00A47A39 /* JSQMessagesCollectionViewFlowLayoutInvalidationContext.m in Sources */,
+				DEB34C2D1AF0A7DF000A42B8 /* detailsView.m in Sources */,
 				292339C91AA38E0F00A47A39 /* JSQMessagesToolbarContentView.m in Sources */,
 				292339B11AA38E0F00A47A39 /* JSQMessagesToolbarButtonFactory.m in Sources */,
 				2923392E1AA38DBD00A47A39 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
@@ -1144,7 +1167,9 @@
 				292338D61AA350A400A47A39 /* pushnotification.m in Sources */,
 				292339C81AA38E0F00A47A39 /* JSQMessagesMediaPlaceholderView.m in Sources */,
 				DE4AA4811AC9B4FE008309D0 /* BTLEPeripheralViewController.m in Sources */,
+				DE31A2E31AF7321700FD8DE2 /* AppDelegate+MOC.m in Sources */,
 				DE1C96E01AE37BB400610AF7 /* DiscoverUser+bluechat.m in Sources */,
+				DE31A2DD1AF7152800FD8DE2 /* CoreDataTableViewController.m in Sources */,
 				292339331AA38DBD00A47A39 /* UIRefreshControl+AFNetworking.m in Sources */,
 				292339A71AA38E0F00A47A39 /* UIDevice+JSQMessages.m in Sources */,
 				292339C11AA38E0F00A47A39 /* JSQMessagesCollectionViewCellOutgoing.m in Sources */,
@@ -1152,6 +1177,7 @@
 				292339291AA38DBD00A47A39 /* AFURLConnectionOperation.m in Sources */,
 				292339AF1AA38E0F00A47A39 /* JSQMessagesMediaViewBubbleImageMasker.m in Sources */,
 				292339B01AA38E0F00A47A39 /* JSQMessagesTimestampFormatter.m in Sources */,
+				DE31A2E61AF7357400FD8DE2 /* DiscoversView+MOC.m in Sources */,
 				292339341AA38DBD00A47A39 /* UIWebView+AFNetworking.m in Sources */,
 				296DD5E91A1F557900AB9F8C /* ProgressHUD.m in Sources */,
 				292339C31AA38E0F00A47A39 /* JSQMessagesComposerTextView.m in Sources */,
