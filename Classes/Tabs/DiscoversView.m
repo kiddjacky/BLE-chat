@@ -43,6 +43,7 @@
 
 - (void)awakeFromNib
 {
+    NSLog(@"load into the discover awakeFromNib");
     [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
                                                       object:nil
                                                        queue:nil
@@ -77,7 +78,7 @@
                                                                selector:@selector(localizedStandardCompare:)]];
     
     
-
+    NSLog(@"Discover set managed object context");
     
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
@@ -103,8 +104,15 @@
     //---------------------------------------------------------------------------------------------------------------------------------------------
     self.tableView.tableFooterView = [[UIView alloc] init];
     //---------------------------------------------------------------------------------------------------------------------------------------------
-    
+    NSLog(@"into Discover view did load");
     geocoder = [[CLGeocoder alloc] init];
+    [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      NSLog(@"Get database notification");
+                                                      self.managedObjectContext = note.userInfo[DatabaseAvailabilityContext];
+                                                  }];
 
 }
 

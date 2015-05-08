@@ -16,6 +16,7 @@
 #import "pushnotification.h"
 
 #import "LoginView.h"
+#import "DataBaseAvailability.h"
 
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -80,6 +81,7 @@
 		{
 			ParsePushUserAssign();
 			[ProgressHUD showSuccess:[NSString stringWithFormat:@"Welcome back %@!", user[PF_USER_FULLNAME]]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
 			[self dismissViewControllerAnimated:YES completion:nil];
 		}
 		else [ProgressHUD showError:error.userInfo[@"error"]];

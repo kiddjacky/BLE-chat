@@ -11,6 +11,6 @@
 
 #define DatabaseAvailabilityNotification @"DatabaseAvailabilityNotification"
 #define DatabaseAvailabilityContext @"Context"
-
+#define PFUSER_READY @"PFUSER_READY"
 
 #endif

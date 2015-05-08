@@ -16,6 +16,7 @@
 #import "pushnotification.h"
 
 #import "RegisterView.h"
+#import "DatabaseAvailability.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @interface RegisterView()
@@ -91,6 +92,7 @@
 		{
 			ParsePushUserAssign();
 			[ProgressHUD showSuccess:@"Succeed."];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
 			[self dismissViewControllerAnimated:YES completion:nil];
 		}
 		else [ProgressHUD showError:error.userInfo[@"error"]];

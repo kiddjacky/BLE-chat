@@ -122,7 +122,7 @@
 {
     _DiscoverDatabaseContext = DiscoverDatabaseContext;
     
-    //setup notification to other view controller that the context is avaiable. 
+    //setup notification to other view controller that the context is avaiable.
     NSDictionary *userInfo = self.DiscoverDatabaseContext ? @{DatabaseAvailabilityContext : self.DiscoverDatabaseContext } : nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
     
@@ -412,7 +412,11 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
              NSLog(@"Couldn't save %@", [error localizedDescription]);
              }
             
+            //setup notification to other view controller that the context is avaiable.
+            NSDictionary *userInfo = self.DiscoverDatabaseContext ? @{DatabaseAvailabilityContext : self.DiscoverDatabaseContext } : nil;
+            [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
             
+            NSLog(@"Post database notification!");
         }
         
     }
@@ -622,11 +626,13 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     
     
     // ... so build our service.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(btle_seq) name:PFUSER_READY object:nil];
+    /*
     if ([PFUser currentUser] != nil) {
         [self btle_seq];
     } else {
         return;
-    }
+    }*/
     /*
      // Start with the CBMutableCharacteristic
      self.transferCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]
@@ -801,9 +807,6 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 - (void)btle_seq
 {
     PFUser *user = [PFUser currentUser];
-    while (!user.username) {
-        
-    }
     [self.peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]] , CBAdvertisementDataLocalNameKey : user.username   }];
     NSLog(@"send out advertisment data, user name is %@", user.username);
     
