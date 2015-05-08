@@ -126,6 +126,8 @@
     NSDictionary *userInfo = self.DiscoverDatabaseContext ? @{DatabaseAvailabilityContext : self.DiscoverDatabaseContext } : nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
     
+    NSLog(@"Post database notification!");
+    
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
