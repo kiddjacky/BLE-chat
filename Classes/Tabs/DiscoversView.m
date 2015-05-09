@@ -40,7 +40,7 @@
 
 
 @implementation DiscoversView
-
+/*
 - (void)awakeFromNib
 {
     NSLog(@"load into the discover awakeFromNib");
@@ -52,7 +52,7 @@
                                                       self.managedObjectContext = note.userInfo[DatabaseAvailabilityContext];
                                                   }];
 }
-
+*/
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -73,12 +73,12 @@
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"DiscoverUser"];
     request.predicate = nil;
-    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"userName"
-                                                              ascending:YES
+    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timeMeet"
+                                                              ascending:NO
                                                                selector:@selector(localizedStandardCompare:)]];
     
     
-    NSLog(@"Discover set managed object context");
+    //NSLog(@"Discover set managed object context %@", managedObjectContext);
     
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
@@ -106,14 +106,18 @@
     //---------------------------------------------------------------------------------------------------------------------------------------------
     NSLog(@"into Discover view did load");
     geocoder = [[CLGeocoder alloc] init];
+    
+    
     [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
                                                       object:nil
                                                        queue:nil
                                                   usingBlock:^(NSNotification *note) {
                                                       NSLog(@"Get database notification");
                                                       self.managedObjectContext = note.userInfo[DatabaseAvailabilityContext];
-                                                  }];
-
+                                                }];
+     //setup observer before ask the appdelegate to post
+     [[NSNotificationCenter defaultCenter] postNotificationName:DiscoverViewReady object:nil];
+    
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -124,6 +128,7 @@
     //---------------------------------------------------------------------------------------------------------------------------------------------
     if ([PFUser currentUser] != nil)
     {
+        [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
         [self loadDiscovers];
     }
     else LoginUser(self);
@@ -143,7 +148,7 @@
     NSLog(@"update table view");
     DiscoverUser *discoverUser = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = discoverUser.userName;
-    
+    /*
     //find the actual full name
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
     [query whereKey:PF_USER_USERNAME equalTo:discoverUser.userName];
@@ -157,8 +162,17 @@
              cell.textLabel.text = user.username;
          }
      }];
-
+     */
     
+    NSDateFormatter *df = [NSDateFormatter new];
+    [df setDateFormat:@"dd/MM/yyyy HH:mm"];
+    //df.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+    
+    df.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[NSTimeZone localTimeZone].secondsFromGMT];
+    NSString *localDateString = [df stringFromDate:discoverUser.timeMeet];
+    
+    cell.detailTextLabel.text = localDateString;
+    /*
     CLLocationDegrees longitude = [discoverUser.longitude doubleValue];
     CLLocationDegrees latitude = [discoverUser.latitude doubleValue];
     CLLocation *location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
@@ -186,7 +200,7 @@
              //CountryArea = NULL;
          }
      }];
-    
+    */
 
     //PFUser *user = DiscoverItems[indexPath.row];
     //cell.textLabel.text = user[PF_USER_FULLNAME];

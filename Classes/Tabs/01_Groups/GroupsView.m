@@ -18,6 +18,7 @@
 
 #import "GroupsView.h"
 #import "ChatView.h"
+#import "DatabaseAvailability.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @interface GroupsView()
@@ -65,6 +66,7 @@
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	if ([PFUser currentUser] != nil)
 	{
+        [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
 		[self loadGroups];
 	}
 	else LoginUser(self);

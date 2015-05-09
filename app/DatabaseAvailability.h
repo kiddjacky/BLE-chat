@@ -11,6 +11,8 @@
 
 #define DatabaseAvailabilityNotification @"DatabaseAvailabilityNotification"
 #define DatabaseAvailabilityContext @"Context"
+#define DiscoverViewReady @"DiscoverViewReady"
 #define PFUSER_READY @"PFUSER_READY"
+#define PFUSER_LOGOUT @"PFUSER_LOGOUT"
 
 #endif

@@ -113,6 +113,7 @@
     [self CurrentLocationIdentifier]; // call this method
 
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(post_context) name:DiscoverViewReady object:nil];
     
 	return YES;
 }
@@ -417,6 +418,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
             [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
             
             NSLog(@"Post database notification!");
+            
         }
         
     }
@@ -627,6 +629,8 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     
     // ... so build our service.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(btle_seq) name:PFUSER_READY object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stop_ad) name:PFUSER_LOGOUT object:nil];
     /*
     if ([PFUser currentUser] != nil) {
         [self btle_seq];
@@ -811,11 +815,23 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     NSLog(@"send out advertisment data, user name is %@", user.username);
     
     //self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(btle_switch_mode:) userInfo:nil repeats:YES];
-
-    
 }
 
+-(void)stop_ad
+{
+    [self.peripheralManager stopAdvertising];
+    NSLog(@"stop advertising");
+}
 
+-(void)post_context
+{
+    //setup notification to other view controller that the context is avaiable.
+    NSDictionary *userInfo = self.DiscoverDatabaseContext ? @{DatabaseAvailabilityContext : self.DiscoverDatabaseContext } : nil;
+    [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
+    
+    NSLog(@"Post database notification in observer!");
+    
+}
 
 
 @end

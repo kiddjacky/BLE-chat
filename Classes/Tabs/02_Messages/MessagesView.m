@@ -24,6 +24,7 @@
 #import "AddressBookView.h"
 #import "FacebookFriendsView.h"
 #import "NavigationController.h"
+#import "DatabaseAvailability.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @interface MessagesView()
@@ -86,6 +87,7 @@
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	if ([PFUser currentUser] != nil)
 	{
+        [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
 		[self loadMessages];
 	}
 	else LoginUser(self);

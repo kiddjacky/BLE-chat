@@ -20,7 +20,7 @@
 #import "utilities.h"
 
 #import "ProfileView.h"
-
+#import "DatabaseAvailability.h"
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @interface ProfileView()
 
@@ -80,6 +80,7 @@
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	if ([PFUser currentUser] != nil)
 	{
+        [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
 		[self loadUser];
 	}
 	else LoginUser(self);
@@ -159,6 +160,8 @@
 		ParsePushUserResign();
 		PostNotification(NOTIFICATION_USER_LOGGED_OUT);
 		[self actionCleanup];
+        [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_LOGOUT object:nil];
+        [self dismissViewControllerAnimated:YES completion:nil];
 		LoginUser(self);
 	}
 }
