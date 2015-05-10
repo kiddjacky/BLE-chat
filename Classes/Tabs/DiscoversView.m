@@ -26,12 +26,6 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @interface DiscoversView()
 {
-    NSMutableArray *DiscoverItems;
-    NSMutableArray *discoverLocation;
-    NSMutableArray *discoverTime;
-    //CLLocationManager *locationManager;
-    CLLocation *currentLocation;
-    NSDate *eventDate;
     CLGeocoder *geocoder;
     CLPlacemark *placemark;
 }
@@ -148,7 +142,7 @@
     NSLog(@"update table view");
     DiscoverUser *discoverUser = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = discoverUser.userName;
-    /*
+    
     //find the actual full name
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
     [query whereKey:PF_USER_USERNAME equalTo:discoverUser.userName];
@@ -158,11 +152,11 @@
          {
              
              PFUser *user = [objects firstObject];
-             NSLog(@"found user %@", user.username);
-             cell.textLabel.text = user.username;
+             NSLog(@"found user %@", user[PF_USER_FULLNAME]);
+             cell.textLabel.text = user[PF_USER_FULLNAME];
          }
      }];
-     */
+    
     
     NSDateFormatter *df = [NSDateFormatter new];
     [df setDateFormat:@"dd/MM/yyyy HH:mm"];
@@ -172,6 +166,7 @@
     NSString *localDateString = [df stringFromDate:discoverUser.timeMeet];
     
     cell.detailTextLabel.text = localDateString;
+    NSLog(@"discover user at latitude %@, longitude %@", discoverUser.latitude, discoverUser.longitude);
     /*
     CLLocationDegrees longitude = [discoverUser.longitude doubleValue];
     CLLocationDegrees latitude = [discoverUser.latitude doubleValue];
@@ -190,7 +185,7 @@
              NSString *CountryArea = [NSString stringWithFormat:@"%@, %@", Area,Country];
              NSLog(@"%@",CountryArea);
              //cell.detailTextLabel.text = Area;
-             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@, %@", discoverUser.timeMeet, Area];
+             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ at %@", localDateString, Area];
          }
          else
          {
@@ -232,14 +227,47 @@
 }
 
 #pragma mark - Table view delegate
+-(void)prepareViewController:(id)vc forSegue:(NSString *)segueIdentifier fromIndexPath:(NSIndexPath *)indexPath
+{
+    DiscoverUser *discoverUser = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    if ([vc isKindOfClass:[detailsView class]]) {
+        detailsView *dv = (detailsView *)vc;
+        dv.discoverUser = discoverUser;
+    }
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSIndexPath *indexPath = nil;
+    if([sender isKindOfClass:[UITableViewCell class]]) {
+        indexPath = [self.tableView indexPathForCell:sender];
+    }
+    [self prepareViewController:segue.destinationViewController
+                       forSegue:segue.identifier
+                  fromIndexPath:indexPath];
+}
+
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
+    /*
+    id detailvc = [self.splitViewController.viewControllers lastObject];
+    if([detailvc isKindOfClass:[UINavigationController class]]) {
+        detailvc = [((UINavigationController *)detailvc).viewControllers firstObject];
+        [self prepareViewController:detailvc forSegue:nil fromIndexPath:indexPath];
+    }
+    */
+    
+    DiscoverUser *discoverUser = [self.fetchedResultsController objectAtIndexPath:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     detailsView *dv = [[detailsView alloc] init];
-    dv.location = discoverLocation[indexPath.row];
+    dv.discoverUser = discoverUser;
+    CLLocationDegrees longitude = [discoverUser.longitude doubleValue];
+    CLLocationDegrees latitude = [discoverUser.latitude doubleValue];
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
+    dv.location = location;
     [self.navigationController pushViewController:dv animated:YES];
     /*
     //---------------------------------------------------------------------------------------------------------------------------------------------
