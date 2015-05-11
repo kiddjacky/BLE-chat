@@ -10,13 +10,29 @@
 #import <MapKit/MapKit.h>
 #import "DiscoverUser.h"
 
+#import <Parse/Parse.h>
+
+#import <ParseUI/ParseUI.h>
+
+#import "ProgressHUD.h"
+
+#import "AppConstant.h"
+#import "messages.h"
+#import "utilities.h"
+
+#import "ChatView.h"
+
 @interface detailsView ()
 @property MKMapView *mapView;
 @property UIView *mapContainerView;
 @property UIView *pokeContainerView;
 @property UIView *chatContainerView;
+@property UIView *imageContainerView;
+@property UIView *labelContainerView;
 @property UIButton *poke;
 @property UIButton *chat;
+@property PFImageView *imageUser;
+@property UILabel *label;
 
 @end
 
@@ -28,6 +44,27 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     [self loadView];
+    [self loadUser];
+    
+    
+    self.imageUser.layer.cornerRadius = self.imageUser.frame.size.width / 2;
+    self.imageUser.layer.masksToBounds = YES;
+    [self.imageUser setBackgroundColor:[UIColor grayColor]];
+    self.imageUser.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.imageContainerView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.imageContainerView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.imageContainerView addSubview:self.imageUser];
+    [self.view addSubview:self.imageContainerView];
+    
+    self.label = [[UILabel alloc] init];
+    [self.label setBackgroundColor:[UIColor redColor]];
+    //self.label.text = @"testing";
+    self.label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.labelContainerView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.labelContainerView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.labelContainerView addSubview:self.label];
+    [self.view addSubview:self.labelContainerView];
+    
     
     //self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
     
@@ -109,7 +146,61 @@
                                                            constant:0.0]];
     */
     
-    NSDictionary *viewsDictionary = @{@"mapView":self.mapContainerView, @"poke_view":self.pokeContainerView, @"chat_view":self.chatContainerView};
+    NSDictionary *viewsDictionary = @{@"mapView":self.mapContainerView, @"poke_view":self.pokeContainerView, @"chat_view":self.chatContainerView, @"imageView":self.imageContainerView, @"labelView":self.labelContainerView};
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.imageContainerView
+                                                          attribute:NSLayoutAttributeHeight
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeHeight
+                                                         multiplier:0.2
+                                                           constant:0.0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.imageContainerView
+                                                          attribute:NSLayoutAttributeWidth
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeWidth
+                                                         multiplier:0.2
+                                                           constant:0.0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.labelContainerView
+                                                          attribute:NSLayoutAttributeHeight
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeHeight
+                                                         multiplier:0.1
+                                                           constant:0.0]];
+ 
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.labelContainerView
+                                                          attribute:NSLayoutAttributeWidth
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeWidth
+                                                         multiplier:0.6
+                                                           constant:0.0]];
+    
+
+    NSArray *constraint_POS_V_image = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[imageView]"
+                                                                              options:0
+                                                                              metrics:nil
+                                                                                views:viewsDictionary];
+    
+    NSArray *constraint_POS_H_image = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[imageView]"
+                                                                              options:0
+                                                                              metrics:nil
+                                                                                views:viewsDictionary];
+    
+    NSArray *constraint_POS_V_label = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[labelView]"
+                                                                        options:0
+                                                                        metrics:nil
+                                                                          views:viewsDictionary];
+
+    NSArray *constraint_POS_H_label = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[imageView]-10-[labelView]"
+                                                                              options:0
+                                                                              metrics:nil
+                                                                                views:viewsDictionary];
+    
     
     NSArray *constraint_POS_V = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-80-[mapView]-100-|"
                                                                         options:0
@@ -171,12 +262,17 @@
     */
     //[self.view addConstraints:constraint_POS_H];
     [self.view addConstraints:constraint_POS_V];
+    [self.view addConstraints:constraint_POS_V_image];
+    [self.view addConstraints:constraint_POS_H_image];
+    [self.view addConstraints:constraint_POS_V_label];
+    [self.view addConstraints:constraint_POS_H_label];
     [self.view addConstraints:constraint_POS_H_button1];
     [self.view addConstraints:constraint_POS_H_button2];
     [self.view addConstraints:constraint_POS_H_button3];
     [self.view addConstraints:constraint_POS_V_button1];
     [self.view addConstraints:constraint_POS_V_button2];
     
+    [self.chat addTarget:self action:@selector(actionChat) forControlEvents:UIControlEventTouchUpInside];
     
 }
 
@@ -190,6 +286,39 @@
     
 }
 
+-(void)actionChat
+{
+    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [query whereKey:PF_USER_USERNAME equalTo:self.discoverUser.userName];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+     {
+         if ([objects count] != 0)
+         {
+             PFUser *user = [objects firstObject];
+             //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
+             NSString *discoverId = StartPrivateChat([PFUser currentUser], user);
+             //---------------------------------------------------------------------------------------------------------------------------------------------
+             ChatView *chatView = [[ChatView alloc] initWith:discoverId];
+             chatView.hidesBottomBarWhenPushed = YES;
+             [self.navigationController pushViewController:chatView animated:YES];
+         }
+     }];
+    
+    //NSString *discoverId = discover.objectId;
+    //---------------------------------------------------------------------------------------------------------------------------------------------
+
+}
+
+- (void)loadUser
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+{
+    PFUser *user = [PFUser currentUser];
+    
+    [self.imageUser setFile:user[PF_USER_PICTURE]];
+    [self.imageUser loadInBackground];
+    
+    self.label.text = user[PF_USER_FULLNAME];
+}
 
 
 @end
