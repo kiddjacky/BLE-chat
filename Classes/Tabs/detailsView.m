@@ -21,6 +21,8 @@
 #import "utilities.h"
 
 #import "ChatView.h"
+#import "Contacts.h"
+#import "DatabaseAvailability.h"
 
 @interface detailsView ()
 @property MKMapView *mapView;
@@ -58,7 +60,7 @@
     
     self.label = [[UILabel alloc] init];
     [self.label setBackgroundColor:[UIColor redColor]];
-    //self.label.text = @"testing";
+    self.label.text = @"testing";
     self.label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.labelContainerView = [[UIView alloc] initWithFrame:CGRectZero];
     self.labelContainerView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -69,7 +71,7 @@
     //self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
     
     _poke = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [self.poke setTitle:@"Poke" forState:UIControlStateNormal];
+    [self.poke setTitle:@"Add" forState:UIControlStateNormal];
     [self.poke setBackgroundColor:[UIColor greenColor]];
     self.poke.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 
@@ -273,6 +275,7 @@
     [self.view addConstraints:constraint_POS_V_button2];
     
     [self.chat addTarget:self action:@selector(actionChat) forControlEvents:UIControlEventTouchUpInside];
+    [self.poke addTarget:self action:@selector(actionAdd) forControlEvents:UIControlEventTouchUpInside];
     
 }
 
@@ -284,6 +287,61 @@
     self.view = contentView;
     
     
+}
+
+-(void)actionAdd {
+    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    NSLog(@"discover user to be added is %@",self.discoverUser.userName);
+    [query whereKey:PF_USER_USERNAME equalTo:self.discoverUser.userName];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+     {
+         if ([objects count] != 0)
+         {
+             NSLog(@"add discover user as contact!");
+             PFUser *user = [objects firstObject];
+             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Contacts"];
+             request.predicate = [NSPredicate predicateWithFormat:@"userName = %@", user[PF_USER_USERNAME]];
+             NSError *error;
+             NSArray *matches = [self.context executeFetchRequest:request error:&error];
+             Contacts *contact = nil;
+             
+             if (error) {
+                 NSLog(@"request error!");
+             }
+             else if ([matches count]>=1) {
+                     //they are already friend?
+                     NSLog(@"is this user in the contact list?");
+                     contact = [matches firstObject];
+                     NSLog(@"the name of contact is %@", user.username);
+                 
+             }
+             else {
+
+                 contact = [NSEntityDescription insertNewObjectForEntityForName:@"Contacts"
+                                                                    inManagedObjectContext:self.context];
+                 contact.userName = user.username;
+                 contact.userFullName  = user[PF_USER_FULLNAME];
+                 contact.sex = user[PF_USER_SEX];
+                 contact.age = user[PF_USER_AGE];
+                 contact.interest = user[PF_USER_INTEREST];
+                 contact.selfDescription = user[PF_USER_SELF_DESCRIPTION];
+                 contact.thumbnail = user[PF_USER_THUMBNAIL];
+                 
+                 NSError *error=nil;
+                 
+                 if (![self.context save:&error]) {
+                     NSLog(@"Couldn't save %@", [error localizedDescription]);
+                 }
+                 
+                 NSLog(@"Added!");
+                 //setup notification to other view controller that the context is avaiable.
+                 NSDictionary *userInfo = self.context ? @{DatabaseAvailabilityContext : self.context } : nil;
+                 [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
+             }
+             
+         }
+     }];
+
 }
 
 -(void)actionChat

@@ -14,5 +14,6 @@
 #define DiscoverViewReady @"DiscoverViewReady"
 #define PFUSER_READY @"PFUSER_READY"
 #define PFUSER_LOGOUT @"PFUSER_LOGOUT"
-
+#define ContactAvailabilityNotification @"ContactAvailabilityNotification"
+#define ContactAvailabilityContext @"ContactContext"
 #endif

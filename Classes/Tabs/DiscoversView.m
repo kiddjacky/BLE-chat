@@ -57,6 +57,15 @@
         [self.tabBarItem setImage:[UIImage imageNamed:@"tab_discover"]];
         self.tabBarItem.title = @"Discovers";
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      NSLog(@"Get database notification");
+                                                      self.managedObjectContext = note.userInfo[DatabaseAvailabilityContext];
+                                                  }];
+    
     return self;
 }
 
@@ -102,13 +111,7 @@
     geocoder = [[CLGeocoder alloc] init];
     
     
-    [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
-                                                      object:nil
-                                                       queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      NSLog(@"Get database notification");
-                                                      self.managedObjectContext = note.userInfo[DatabaseAvailabilityContext];
-                                                }];
+
      //setup observer before ask the appdelegate to post
      [[NSNotificationCenter defaultCenter] postNotificationName:DiscoverViewReady object:nil];
     
@@ -268,6 +271,7 @@
     CLLocationDegrees latitude = [discoverUser.latitude doubleValue];
     CLLocation *location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
     dv.location = location;
+    dv.context = self.managedObjectContext;
     [self.navigationController pushViewController:dv animated:YES];
     /*
     //---------------------------------------------------------------------------------------------------------------------------------------------

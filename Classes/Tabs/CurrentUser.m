@@ -2,29 +2,28 @@
 //  CurrentUser.m
 //  app
 //
-//  Created by kiddjacky on 5/3/15.
+//  Created by kiddjacky on 5/17/15.
 //  Copyright (c) 2015 KZ. All rights reserved.
 //
 
 #import "CurrentUser.h"
+#import "Contacts.h"
+#import "DiscoverUser.h"
+
 
 @implementation CurrentUser
 
-@synthesize userName;
-
-static CurrentUser *instance = nil;
-
-+(CurrentUser *) getInstance
-{
-    @synchronized(self)
-    {
-        if(instance==nil)
-        {
-            instance = [CurrentUser new];
-        }
-    }
-    return instance;
-}
-
+@dynamic age;
+@dynamic birthday;
+@dynamic interest;
+@dynamic selfDescription;
+@dynamic sex;
+@dynamic userFullName;
+@dynamic userName;
+@dynamic thumbnail;
+@dynamic picture;
+@dynamic contactList;
+@dynamic contacts;
+@dynamic discovers;
 
 @end

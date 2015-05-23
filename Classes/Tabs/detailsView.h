@@ -11,6 +11,7 @@
 #import "DiscoverUser.h"
 
 @interface detailsView : UIViewController
+@property (strong, nonatomic) NSManagedObjectContext *context;
 @property (strong, nonatomic) CLLocation *location;
 @property (strong, nonatomic) DiscoverUser *discoverUser;
 @end

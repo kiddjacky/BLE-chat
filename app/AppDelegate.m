@@ -27,6 +27,7 @@
 #import "TransferService.h"
 #import <CoreLocation/CoreLocation.h>
 #import "DiscoverUser.h"
+#import "Contacts.h"
 #import "DatabaseAvailability.h"
 #import "AppDelegate+MOC.h"
 
@@ -46,8 +47,7 @@
 //CLLocation
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) CLLocation *currentLocation;
-//Core data
-@property (strong, nonatomic) NSManagedObjectContext *DiscoverDatabaseContext;
+
 @end
 
 
@@ -79,15 +79,17 @@
 	self.messagesView = [[MessagesView alloc] init];
 	self.profileView = [[ProfileView alloc] init];
     self.discoversView = [[DiscoversView alloc] init];
+    self.contactsView = [[ContactsView alloc] init];
 
 	NavigationController *navController1 = [[NavigationController alloc] initWithRootViewController:self.groupsView];
 	NavigationController *navController2 = [[NavigationController alloc] initWithRootViewController:self.messagesView];
 	NavigationController *navController3 = [[NavigationController alloc] initWithRootViewController:self.profileView];
     NavigationController *navController4 = [[NavigationController alloc] initWithRootViewController:self.discoversView];
+    NavigationController *navController5 = [[NavigationController alloc] initWithRootViewController:self.contactsView];
     
 
 	self.tabBarController = [[UITabBarController alloc] init];
-	self.tabBarController.viewControllers = [NSArray arrayWithObjects:navController1, navController2, navController3, navController4, nil];
+	self.tabBarController.viewControllers = [NSArray arrayWithObjects:navController1, navController2, navController3, navController4, navController5, nil];
 	self.tabBarController.tabBar.translucent = NO;
 	self.tabBarController.selectedIndex = DEFAULT_TAB;
 

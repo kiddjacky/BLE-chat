@@ -22,15 +22,29 @@
 #import "ProfileView.h"
 #import "DatabaseAvailability.h"
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-@interface ProfileView()
+@interface ProfileView() <UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *viewHeader;
 @property (strong, nonatomic) IBOutlet PFImageView *imageUser;
 
 @property (strong, nonatomic) IBOutlet UITableViewCell *cellName;
+
+@property (strong, nonatomic) IBOutlet UITableViewCell *cellSex;
+@property (strong, nonatomic) IBOutlet UITableViewCell *cellDate;
+@property (strong, nonatomic) IBOutlet UITableViewCell *cellInterest;
+@property (strong, nonatomic) IBOutlet UITableViewCell *cellSelfDescription;
+
+@property (strong, nonatomic) NSArray *sexArray;
+
+
 @property (strong, nonatomic) IBOutlet UITableViewCell *cellButton;
 
 @property (strong, nonatomic) IBOutlet UITextField *fieldName;
+@property (strong, nonatomic) IBOutlet UITextField *fieldSex;
+@property (strong, nonatomic) IBOutlet UITextField *fieldInterest;
+@property (strong, nonatomic) IBOutlet UITextField *fieldSelfDescription;
+@property (strong, nonatomic) IBOutlet UITextField *fieldDate;
+
 
 @end
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -38,8 +52,9 @@
 @implementation ProfileView
 
 @synthesize viewHeader, imageUser;
-@synthesize cellName, cellButton;
-@synthesize fieldName;
+@synthesize cellName, cellButton, cellSex, cellDate, cellInterest, cellSelfDescription;
+@synthesize fieldName, fieldDate, fieldInterest, fieldSelfDescription, fieldSex;
+
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -70,6 +85,21 @@
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	imageUser.layer.cornerRadius = imageUser.frame.size.width / 2;
 	imageUser.layer.masksToBounds = YES;
+    
+    //setup sex picker
+    UIPickerView *sexPicker = [[UIPickerView alloc] init];
+    //[sexPicker numberOfRowsInComponent:1];
+    [sexPicker setDataSource:self];
+    [sexPicker setDelegate:self];
+    sexPicker.showsSelectionIndicator = YES;
+    [fieldSex setInputView:sexPicker];
+    self.sexArray = [[NSArray alloc] initWithObjects:@"Male",@"Female",@"Unknown",nil];
+    
+    //setup date picker
+    UIDatePicker *datePicker = [[UIDatePicker alloc] init];
+    datePicker.datePickerMode = UIDatePickerModeDate;
+    [datePicker addTarget:self action:@selector(updateDateField:) forControlEvents:UIControlEventValueChanged];
+    [fieldDate setInputView:datePicker];
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -93,6 +123,41 @@
 	[self.view endEditing:YES];
 }
 
+#pragma mark - Picker view
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return 3;
+}
+
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+-(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    return [self.sexArray objectAtIndex:row];
+}
+
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    NSLog(@"Selected Row %ld", (long)row);
+    switch (row) {
+        case 0:
+            self.fieldSex.text = @"Male";
+            break;
+        case 1:
+            self.fieldSex.text = @"Female";
+            break;
+        case 2:
+            self.fieldSex.text = @"Unknown";
+            break;
+            
+        default:
+            break;
+    }
+}
+
 #pragma mark - Backend actions
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -105,18 +170,30 @@
 	[imageUser loadInBackground];
 
 	fieldName.text = user[PF_USER_FULLNAME];
-}
+    fieldSex.text = user[PF_USER_SEX];
+    fieldDate.text = user[PF_USER_BIRTHDAY];
+    fieldInterest.text = user[PF_USER_INTEREST];
+    fieldSelfDescription.text = user[PF_USER_SELF_DESCRIPTION];
+ }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)saveUser
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	NSString *fullname = fieldName.text;
+    NSString *sex = fieldSex.text;
+    NSString *interest = fieldInterest.text;
+    NSString *selfDescription = fieldSelfDescription.text;
+    NSString *birthday = fieldDate.text;
 	if ([fullname length] != 0)
 	{
 		PFUser *user = [PFUser currentUser];
 		user[PF_USER_FULLNAME] = fullname;
 		user[PF_USER_FULLNAME_LOWER] = [fullname lowercaseString];
+        user[PF_USER_SEX] = sex;
+        user[PF_USER_INTEREST] = interest;
+        user[PF_USER_SELF_DESCRIPTION] = selfDescription;
+        user[PF_USER_BIRTHDAY] = birthday;
 		[user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
 		{
 			if (error == nil)
@@ -128,6 +205,7 @@
 	}
 	else [ProgressHUD showError:@"Name field must be set."];
 }
+
 
 #pragma mark - User actions
 
@@ -181,6 +259,14 @@
 	[self saveUser];
 }
 
+
+-(void)updateDateField:(id)sender
+{
+    UIDatePicker *picker = (UIDatePicker *)self.fieldDate.inputView;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"dd-MMM-yyyy";
+    self.fieldDate.text = [NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:picker.date]];
+}
 #pragma mark - UIImagePickerControllerDelegate
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -223,7 +309,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-	return 2;
+	return 6;
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -238,8 +324,38 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	if (indexPath.section == 0) return cellName;
-	if (indexPath.section == 1) return cellButton;
+    if (indexPath.section == 1) return cellSex;
+	if (indexPath.section == 2) return cellDate;
+    if (indexPath.section == 3) return cellInterest;
+    if (indexPath.section == 4) return cellSelfDescription;
+    if (indexPath.section == 5) return cellButton;
 	return nil;
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString *sectionName;
+    switch (section) {
+        case 0:
+            sectionName = NSLocalizedString(@"Name", @"user Name");
+            break;
+        case 1:
+            sectionName = NSLocalizedString(@"Sex", @"sex");
+            break;
+        case 2:
+            sectionName = NSLocalizedString(@"Birthday", @"birthday");
+            break;
+        case 3:
+            sectionName = NSLocalizedString(@"Interest", @"interest");
+            break;
+        case 4:
+            sectionName = NSLocalizedString(@"Self Description", @"selfDescription");
+            break;
+        default:
+            sectionName = @"";
+            break;
+    }
+    return sectionName;
 }
 
 @end
