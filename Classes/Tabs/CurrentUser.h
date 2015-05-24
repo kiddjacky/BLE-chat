@@ -2,7 +2,7 @@
 //  CurrentUser.h
 //  app
 //
-//  Created by kiddjacky on 5/17/15.
+//  Created by kiddjacky on 5/24/15.
 //  Copyright (c) 2015 KZ. All rights reserved.
 //
 
@@ -18,11 +18,11 @@
 @property (nonatomic, retain) NSString * interest;
 @property (nonatomic, retain) NSString * selfDescription;
 @property (nonatomic, retain) NSString * sex;
-@property (nonatomic, retain) NSString * userFullName;
 @property (nonatomic, retain) NSString * userName;
 @property (nonatomic, retain) id thumbnail;
 @property (nonatomic, retain) id picture;
-@property (nonatomic, retain) id contactList;
+@property (nonatomic, retain) NSData * contactList;
+@property (nonatomic, retain) NSString * userFullName;
 @property (nonatomic, retain) NSSet *contacts;
 @property (nonatomic, retain) NSSet *discovers;
 @end

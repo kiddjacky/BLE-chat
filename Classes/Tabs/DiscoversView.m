@@ -74,14 +74,16 @@
 {
     _managedObjectContext = managedObjectContext;
     
+    
+    
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"DiscoverUser"];
     request.predicate = nil;
+    
+    
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timeMeet"
-                                                              ascending:NO
-                                                               selector:@selector(localizedStandardCompare:)]];
+                                                              ascending:NO]];
     
     
-    //NSLog(@"Discover set managed object context %@", managedObjectContext);
     
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request

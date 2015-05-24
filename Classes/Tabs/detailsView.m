@@ -23,6 +23,7 @@
 
 #import "ChatView.h"
 #import "Contacts.h"
+#import "CurrentUser.h"
 #import "DatabaseAvailability.h"
 
 @interface detailsView ()
@@ -313,6 +314,7 @@
              NSError *error;
              NSArray *matches = [self.context executeFetchRequest:request error:&error];
              Contacts *contact = nil;
+             CurrentUser *currentUser = nil;
              
              if (error) {
                  NSLog(@"request error!");
@@ -336,7 +338,11 @@
                  contact.selfDescription = user[PF_USER_SELF_DESCRIPTION];
                  contact.thumbnail = user[PF_USER_THUMBNAIL];
                  
+
+                 
                  NSError *error=nil;
+                 
+                 
                  
                  if (![self.context save:&error]) {
                      NSLog(@"Couldn't save %@", [error localizedDescription]);
@@ -346,6 +352,24 @@
                  //setup notification to other view controller that the context is avaiable.
                  NSDictionary *userInfo = self.context ? @{DatabaseAvailabilityContext : self.context } : nil;
                  [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
+                 
+                 
+                 //add contact to current user contact list
+                 PFUser *user = [PFUser currentUser];
+                 NSLog(@"original contact list is %@", user[PF_USER_CONTACTS]);
+                 NSMutableArray *contactList = [[NSMutableArray alloc] init];
+                 [contactList addObject:contact.userName];
+                 [contactList addObjectsFromArray:user[PF_USER_CONTACTS]];
+                 NSLog(@"now contact list is %@", contactList);
+                 user[PF_USER_CONTACTS] = contactList;
+                 [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+                  {
+                      if (error == nil)
+                      {
+                          [ProgressHUD showSuccess:@"Add Contact!"];
+                      }
+                      else [ProgressHUD showError:@"Network error."];
+                  }];
              }
              
          }

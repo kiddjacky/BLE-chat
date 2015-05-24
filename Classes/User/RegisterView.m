@@ -201,7 +201,7 @@
      {
          if ([objects count] != 0)
          {
-             NSLog(@"setup the current user");
+             NSLog(@"setup the current user after register");
              PFUser *user = [objects firstObject];
              CurrentUser *current_user = [NSEntityDescription
                                           insertNewObjectForEntityForName:@"CurrentUser"
@@ -215,34 +215,6 @@
              current_user.thumbnail = user[PF_USER_THUMBNAIL];
              current_user.contactList = user[PF_USER_CONTACTS];
              
-             
-             //load contacts
-             for (NSString * contact_name in current_user.contactList) {
-                 NSLog(@"setup the contact %@", contact_name);
-                 PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-                 [query whereKey:PF_USER_USERNAME equalTo:contact_name];
-                 [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-                  {
-                      if ([objects count] != 0)
-                      {
-                          PFUser *user = [objects firstObject];
-                          Contacts *contact = [NSEntityDescription
-                                               insertNewObjectForEntityForName:@"Contacts"
-                                               inManagedObjectContext:context];
-                          contact.userName = user.username;
-                          contact.userFullName = user[PF_USER_FULLNAME];
-                          contact.sex = user[PF_USER_SEX];
-                          contact.age = user[PF_USER_AGE];
-                          contact.interest = user[PF_USER_INTEREST];
-                          contact.selfDescription = user[PF_USER_SELF_DESCRIPTION];
-                          contact.thumbnail = user[PF_USER_THUMBNAIL];
-                          
-                      }
-                  }];
-                 
-             }
-             //load discovers
-             //loadDiscover function
              
              //SAVE CONTEXT
              NSError *contactSaveError = nil;
