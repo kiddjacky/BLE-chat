@@ -33,7 +33,7 @@
 @property UIView *labelContainerView;
 @property UIButton *poke;
 @property UIButton *chat;
-@property PFImageView *imageUser;
+@property (nonatomic, strong) PFImageView *imageUser;
 @property UILabel *label;
 
 @end
@@ -45,22 +45,24 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    self.imageUser = [[PFImageView alloc] init];
     [self loadView];
     [self loadUser];
     
     
     self.imageUser.layer.cornerRadius = self.imageUser.frame.size.width / 2;
     self.imageUser.layer.masksToBounds = YES;
-    [self.imageUser setBackgroundColor:[UIColor grayColor]];
+//    [self.imageUser setBackgroundColor:[UIColor grayColor]];
     self.imageUser.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.imageContainerView = [[UIView alloc] initWithFrame:CGRectZero];
     self.imageContainerView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.imageContainerView addSubview:self.imageUser];
     [self.view addSubview:self.imageContainerView];
-    
+
     self.label = [[UILabel alloc] init];
-    [self.label setBackgroundColor:[UIColor redColor]];
-    self.label.text = @"testing";
+    //   [self.label setBackgroundColor:[UIColor redColor]];
+    self.label.text = self.discoverUser.userName;
+    NSLog(@"text label =  %@", self.label.text);
     self.label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.labelContainerView = [[UIView alloc] initWithFrame:CGRectZero];
     self.labelContainerView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -367,15 +369,33 @@
 
 }
 
+
+
 - (void)loadUser
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-    PFUser *user = [PFUser currentUser];
     
-    [self.imageUser setFile:user[PF_USER_PICTURE]];
-    [self.imageUser loadInBackground];
+
+    //    PFUser *user = [PFUser currentUser];
     
-    self.label.text = user[PF_USER_FULLNAME];
+    
+    //    self.label.text = user[PF_USER_FULLNAME];
+    NSLog(@"debug = %@", self.discoverUser.userName);
+    
+    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [query whereKey:PF_USER_USERNAME equalTo:self.discoverUser.userName];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+     {
+         if ([objects count] != 0)
+         {
+             NSLog(@"debug 2 = %@ objects count = %lu" , self.discoverUser.userName, (unsigned long)[objects count]);
+             PFUser *user = [objects firstObject];
+             //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
+            [self.imageUser loadInBackground];
+             [self.imageUser setFile:user[PF_USER_PICTURE]];
+         }
+     }];
+    
 }
 
 
