@@ -13,6 +13,7 @@
 #import <Parse/Parse.h>
 
 #import <ParseUI/ParseUI.h>
+#import <QuartzCore/QuartzCore.h>
 
 #import "ProgressHUD.h"
 
@@ -33,7 +34,7 @@
 @property UIView *labelContainerView;
 @property UIButton *poke;
 @property UIButton *chat;
-@property (nonatomic, strong) PFImageView *imageUser;
+@property PFImageView *imageUser;
 @property UILabel *label;
 
 @end
@@ -62,6 +63,7 @@
     self.label = [[UILabel alloc] init];
     //   [self.label setBackgroundColor:[UIColor redColor]];
     self.label.text = self.discoverUser.userName;
+    [self.label setFont:[UIFont fontWithName:@"System" size:30]];
     NSLog(@"text label =  %@", self.label.text);
     self.label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.labelContainerView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -72,14 +74,19 @@
     
     //self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
     
-    _poke = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    _poke = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.poke.layer.cornerRadius = 10;
+    self.poke.clipsToBounds = YES;
     [self.poke setTitle:@"Add" forState:UIControlStateNormal];
-    [self.poke setBackgroundColor:[UIColor greenColor]];
+   [self.poke setBackgroundColor:[UIColor blueColor]];
+
     self.poke.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 
-    _chat = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    _chat = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.chat.layer.cornerRadius = 10;
+    self.chat.clipsToBounds = YES;
     [self.chat setTitle:@"Chat" forState:UIControlStateNormal];
-    [self.chat setBackgroundColor:[UIColor greenColor]];
+    [self.chat setBackgroundColor:[UIColor blueColor]];
     self.chat.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 
     self.chatContainerView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -391,8 +398,9 @@
              NSLog(@"debug 2 = %@ objects count = %lu" , self.discoverUser.userName, (unsigned long)[objects count]);
              PFUser *user = [objects firstObject];
              //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
-            [self.imageUser loadInBackground];
+
              [self.imageUser setFile:user[PF_USER_PICTURE]];
+            [self.imageUser loadInBackground];
          }
      }];
     
