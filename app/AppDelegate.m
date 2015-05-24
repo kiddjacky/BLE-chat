@@ -117,7 +117,25 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(post_context) name:DiscoverViewReady object:nil];
     
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stop_scan) name:PFUSER_LOGOUT object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(start_scan) name:PFUSER_READY object:nil];
+    
 	return YES;
+}
+
+-(void)stop_scan
+{
+    [self.centralManager stopScan];
+}
+
+-(void)start_scan
+{
+    if (self.centralManager.state != CBCentralManagerStatePoweredOn) {
+        // In a real app, you'd deal with all the states correctly
+        return;
+    }
+    [self scan];
 }
 
 //setup discover database
@@ -233,7 +251,7 @@
     // The state must be CBCentralManagerStatePoweredOn...
     
     // ... so start scanning
-    [self scan];
+    //[self scan];
     
 }
 
@@ -410,10 +428,14 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
             double longitude = (double)[self.currentLocation coordinate].longitude;
             discoverUser.longitude = [NSNumber numberWithDouble:longitude];
             NSError *error=nil;
+
+                        NSLog(@"Discover add is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
             
              if (![self.DiscoverDatabaseContext save:&error]) {
              NSLog(@"Couldn't save %@", [error localizedDescription]);
              }
+            
+            NSLog(@"Discover add is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
             
             //setup notification to other view controller that the context is avaiable.
             NSDictionary *userInfo = self.DiscoverDatabaseContext ? @{DatabaseAvailabilityContext : self.DiscoverDatabaseContext } : nil;

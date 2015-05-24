@@ -136,9 +136,9 @@
 		DEBB7B481AE3753C009CD940 /* Discover.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DEBB7B461AE3753C009CD940 /* Discover.xcdatamodeld */; };
 		DEE855401B081778000AA5AC /* ContactsView.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE8553F1B081778000AA5AC /* ContactsView.m */; };
 		DEE855461B08232E000AA5AC /* contactDetailsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE855451B08232E000AA5AC /* contactDetailsVC.m */; };
-		DEE855491B09BE92000AA5AC /* CurrentUser.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE855481B09BE92000AA5AC /* CurrentUser.m */; };
 		DEE8554C1B09BE93000AA5AC /* Contacts.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE8554B1B09BE93000AA5AC /* Contacts.m */; };
 		DEE8554F1B09BE93000AA5AC /* DiscoverUser.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE8554E1B09BE93000AA5AC /* DiscoverUser.m */; };
+		DEE855521B12817C000AA5AC /* CurrentUser.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE855511B12817C000AA5AC /* CurrentUser.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -382,12 +382,12 @@
 		DEE8553F1B081778000AA5AC /* ContactsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsView.m; sourceTree = "<group>"; };
 		DEE855441B08232E000AA5AC /* contactDetailsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = contactDetailsVC.h; sourceTree = "<group>"; };
 		DEE855451B08232E000AA5AC /* contactDetailsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = contactDetailsVC.m; sourceTree = "<group>"; };
-		DEE855471B09BE92000AA5AC /* CurrentUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurrentUser.h; sourceTree = "<group>"; };
-		DEE855481B09BE92000AA5AC /* CurrentUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CurrentUser.m; sourceTree = "<group>"; };
 		DEE8554A1B09BE93000AA5AC /* Contacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contacts.h; sourceTree = "<group>"; };
 		DEE8554B1B09BE93000AA5AC /* Contacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contacts.m; sourceTree = "<group>"; };
 		DEE8554D1B09BE93000AA5AC /* DiscoverUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverUser.h; sourceTree = "<group>"; };
 		DEE8554E1B09BE93000AA5AC /* DiscoverUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverUser.m; sourceTree = "<group>"; };
+		DEE855501B12817C000AA5AC /* CurrentUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurrentUser.h; sourceTree = "<group>"; };
+		DEE855511B12817C000AA5AC /* CurrentUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CurrentUser.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -986,8 +986,8 @@
 				DE31A2E71AF74D2700FD8DE2 /* PhotoDatabaseAvailability.h */,
 				DE31A2E41AF7357400FD8DE2 /* DiscoversView+MOC.h */,
 				DE31A2E51AF7357400FD8DE2 /* DiscoversView+MOC.m */,
-				DEE855471B09BE92000AA5AC /* CurrentUser.h */,
-				DEE855481B09BE92000AA5AC /* CurrentUser.m */,
+				DEE855501B12817C000AA5AC /* CurrentUser.h */,
+				DEE855511B12817C000AA5AC /* CurrentUser.m */,
 				DEBB7B461AE3753C009CD940 /* Discover.xcdatamodeld */,
 				DE1C96DE1AE37BB400610AF7 /* DiscoverUser+bluechat.h */,
 				DE1C96DF1AE37BB400610AF7 /* DiscoverUser+bluechat.m */,
@@ -1118,6 +1118,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DEE855521B12817C000AA5AC /* CurrentUser.m in Sources */,
 				292338F61AA374C300A47A39 /* SelectMultipleView.m in Sources */,
 				292338C71AA350A400A47A39 /* AddressBookView.m in Sources */,
 				292339B41AA38E0F00A47A39 /* JSQMessagesCollectionViewLayoutAttributes.m in Sources */,
@@ -1125,7 +1126,6 @@
 				292339271AA38DBD00A47A39 /* AFNetworkReachabilityManager.m in Sources */,
 				DEE8554F1B09BE93000AA5AC /* DiscoverUser.m in Sources */,
 				292D2EFA1A84497A00CEC270 /* JSQSystemSoundPlayer.m in Sources */,
-				DEE855491B09BE92000AA5AC /* CurrentUser.m in Sources */,
 				292339BE1AA38E0F00A47A39 /* JSQMessagesCollectionViewCell.m in Sources */,
 				292339241AA38DBD00A47A39 /* AFHTTPRequestOperation.m in Sources */,
 				292338D71AA350A400A47A39 /* camera.m in Sources */,

@@ -2,7 +2,7 @@
 //  CurrentUser.m
 //  app
 //
-//  Created by kiddjacky on 5/17/15.
+//  Created by kiddjacky on 5/24/15.
 //  Copyright (c) 2015 KZ. All rights reserved.
 //
 
@@ -18,11 +18,11 @@
 @dynamic interest;
 @dynamic selfDescription;
 @dynamic sex;
-@dynamic userFullName;
 @dynamic userName;
 @dynamic thumbnail;
 @dynamic picture;
 @dynamic contactList;
+@dynamic userFullName;
 @dynamic contacts;
 @dynamic discovers;
 
