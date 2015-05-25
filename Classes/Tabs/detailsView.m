@@ -52,7 +52,9 @@
     [self loadUser];
     
     
-    self.imageUser.layer.cornerRadius = self.imageUser.frame.size.width / 2;
+
+    NSLog(@"corner radius =  %f", self.imageUser.frame.size.width / 2);
+//    self.imageUser.layer.cornerRadius = 10;
     self.imageUser.layer.masksToBounds = YES;
 //    [self.imageUser setBackgroundColor:[UIColor grayColor]];
     self.imageUser.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -127,9 +129,9 @@
                                                           relatedBy:NSLayoutRelationEqual
                                                              toItem:self.view
                                                           attribute:NSLayoutAttributeWidth
-                                                         multiplier:1.0
+                                                         multiplier:0.5
                                                            constant:0]];
-    /*
+    
     // Height constraint, half of parent view height
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.mapContainerView
                                                           attribute:NSLayoutAttributeHeight
@@ -138,14 +140,14 @@
                                                           attribute:NSLayoutAttributeHeight
                                                          multiplier:0.5
                                                            constant:0]];
-    */
+    
     // Center horizontally
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.mapContainerView
                                                           attribute:NSLayoutAttributeCenterX
                                                           relatedBy:NSLayoutRelationEqual
                                                              toItem:self.view
                                                           attribute:NSLayoutAttributeCenterX
-                                                         multiplier:1.0
+                                                         multiplier:1
                                                            constant:0.0]];
     /*
     // Center vertically
@@ -214,7 +216,7 @@
                                                                                 views:viewsDictionary];
     
     
-    NSArray *constraint_POS_V = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-80-[mapView]-100-|"
+    NSArray *constraint_POS_V = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-100-[mapView]-100-|"
                                                                         options:0
                                                                         metrics:nil
                                                                           views:viewsDictionary];
@@ -422,7 +424,7 @@
              NSLog(@"debug 2 = %@ objects count = %lu" , self.discoverUser.userName, (unsigned long)[objects count]);
              PFUser *user = [objects firstObject];
              //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
-
+    self.imageUser.layer.cornerRadius = self.imageUser.frame.size.width / 2;
              [self.imageUser setFile:user[PF_USER_PICTURE]];
             [self.imageUser loadInBackground];
          }
