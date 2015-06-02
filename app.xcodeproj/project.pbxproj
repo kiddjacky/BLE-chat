@@ -125,6 +125,9 @@
 		29EB240E19E9292500D7AA97 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 29EB240D19E9292500D7AA97 /* AppDelegate.m */; };
 		29EB241619E9292500D7AA97 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 29EB241519E9292500D7AA97 /* Images.xcassets */; };
 		29EB241919E9292500D7AA97 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29EB241719E9292500D7AA97 /* LaunchScreen.xib */; };
+		685AE2511B1DA8F600C8D9E9 /* Whale_preview_180.png in Resources */ = {isa = PBXBuildFile; fileRef = 685AE2501B1DA8F600C8D9E9 /* Whale_preview_180.png */; };
+		685AE2531B1DAB5000C8D9E9 /* Whale_preview_120.png in Resources */ = {isa = PBXBuildFile; fileRef = 685AE2521B1DAB5000C8D9E9 /* Whale_preview_120.png */; };
+		689D00E91B1D9BFD003E21F3 /* contact-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 689D00E81B1D9BFD003E21F3 /* contact-icon.png */; };
 		DE1C96E01AE37BB400610AF7 /* DiscoverUser+bluechat.m in Sources */ = {isa = PBXBuildFile; fileRef = DE1C96DF1AE37BB400610AF7 /* DiscoverUser+bluechat.m */; };
 		DE1C96EA1AE73D1100610AF7 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE1C96E91AE73D1100610AF7 /* CoreBluetooth.framework */; };
 		DE31A2DD1AF7152800FD8DE2 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE31A2DC1AF7152800FD8DE2 /* CoreDataTableViewController.m */; };
@@ -359,6 +362,9 @@
 		29EB241519E9292500D7AA97 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		29EB241819E9292500D7AA97 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		29EB254F19E92ACD00D7AA97 /* AppConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConstant.h; sourceTree = "<group>"; };
+		685AE2501B1DA8F600C8D9E9 /* Whale_preview_180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Whale_preview_180.png; path = Images.xcassets/AppIcon.appiconset/Whale_preview_180.png; sourceTree = "<group>"; };
+		685AE2521B1DAB5000C8D9E9 /* Whale_preview_120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Whale_preview_120.png; path = Images.xcassets/AppIcon.appiconset/Whale_preview_120.png; sourceTree = "<group>"; };
+		689D00E81B1D9BFD003E21F3 /* contact-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-icon.png"; sourceTree = "<group>"; };
 		DE1C96DE1AE37BB400610AF7 /* DiscoverUser+bluechat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DiscoverUser+bluechat.h"; sourceTree = "<group>"; };
 		DE1C96DF1AE37BB400610AF7 /* DiscoverUser+bluechat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DiscoverUser+bluechat.m"; sourceTree = "<group>"; };
 		DE1C96E61AE47D7400610AF7 /* app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = app.entitlements; sourceTree = "<group>"; };
@@ -877,6 +883,7 @@
 		29A5312C1AAEEF9500263CB1 /* tabbar */ = {
 			isa = PBXGroup;
 			children = (
+				689D00E81B1D9BFD003E21F3 /* contact-icon.png */,
 				29A5312D1AAEEF9500263CB1 /* tab_groups@2x.png */,
 				29A5312E1AAEEF9500263CB1 /* tab_messages@2x.png */,
 				29A5312F1AAEEF9500263CB1 /* tab_profile@2x.png */,
@@ -919,6 +926,8 @@
 				DE1C96E61AE47D7400610AF7 /* app.entitlements */,
 				29EB254F19E92ACD00D7AA97 /* AppConstant.h */,
 				29EB240C19E9292500D7AA97 /* AppDelegate.h */,
+				685AE2501B1DA8F600C8D9E9 /* Whale_preview_180.png */,
+				685AE2521B1DAB5000C8D9E9 /* Whale_preview_120.png */,
 				29EB240D19E9292500D7AA97 /* AppDelegate.m */,
 				DE31A2EA1AF8689100FD8DE2 /* DatabaseAvailability.h */,
 				DE31A2E11AF7321700FD8DE2 /* AppDelegate+MOC.h */,
@@ -1087,9 +1096,11 @@
 				29A531351AAEEF9500263CB1 /* tab_messages@2x.png in Resources */,
 				292338C81AA350A400A47A39 /* AddressBookView.xib in Resources */,
 				29EB241919E9292500D7AA97 /* LaunchScreen.xib in Resources */,
+				685AE2511B1DA8F600C8D9E9 /* Whale_preview_180.png in Resources */,
 				292339C01AA38E0F00A47A39 /* JSQMessagesCollectionViewCellIncoming.xib in Resources */,
 				292338CC1AA350A400A47A39 /* MessagesView.xib in Resources */,
 				292339C71AA38E0F00A47A39 /* JSQMessagesLoadEarlierHeaderView.xib in Resources */,
+				685AE2531B1DAB5000C8D9E9 /* Whale_preview_120.png in Resources */,
 				29A531341AAEEF9500263CB1 /* tab_groups@2x.png in Resources */,
 				292338CA1AA350A400A47A39 /* MessagesCell.xib in Resources */,
 				292338F71AA374C300A47A39 /* SelectMultipleView.xib in Resources */,
@@ -1098,6 +1109,7 @@
 				292339A21AA38E0F00A47A39 /* JSQMessagesAssets.bundle in Resources */,
 				292338C61AA350A400A47A39 /* SelectSingleView.xib in Resources */,
 				29A531361AAEEF9500263CB1 /* tab_profile@2x.png in Resources */,
+				689D00E91B1D9BFD003E21F3 /* contact-icon.png in Resources */,
 				29A531331AAEEF9500263CB1 /* profile_blank@2x.png in Resources */,
 				DEBB7B351AE2FD21009CD940 /* tab_discovers.png in Resources */,
 				29A531311AAEEF9500263CB1 /* messages_blank@2x.png in Resources */,
