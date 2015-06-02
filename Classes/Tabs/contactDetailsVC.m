@@ -8,7 +8,7 @@
 
 #import "contactDetailsVC.h"
 #import <Parse/Parse.h>
-
+#import <QuartzCore/QuartzCore.h>
 #import <ParseUI/ParseUI.h>
 
 #import "ProgressHUD.h"
@@ -28,6 +28,8 @@
 @property UILabel *selfDescription;
 
 @property UIView *chatContainerView;
+@property UIView *labelContainerView;
+@property UILabel *label;
 @end
 
 
@@ -37,9 +39,23 @@
     [super viewDidLoad];
   [self loadView];
     
-    _chat = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.label = [[UILabel alloc] init];
+    //   [self.label setBackgroundColor:[UIColor redColor]];
+    self.label.text = @"testing";
+    [self.label setFont:[UIFont fontWithName:@"System" size:30]];
+    NSLog(@"text label =  %@", self.label.text);
+    self.label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.labelContainerView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.labelContainerView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.labelContainerView addSubview:self.label];
+    [self.view addSubview:self.labelContainerView];
+
+    
+    _chat = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.chat.layer.cornerRadius = 10;
+    self.chat.clipsToBounds = YES;
     [self.chat setTitle:@"Chat" forState:UIControlStateNormal];
-    [self.chat setBackgroundColor:[UIColor greenColor]];
+    [self.chat setBackgroundColor:[UIColor blueColor]];
     self.chat.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
     self.chatContainerView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -48,14 +64,35 @@
     [self.chatContainerView addSubview:self.chat];
     [self.view addSubview:self.chatContainerView];
     
-    NSDictionary *viewsDictionary = @{@"chat_view":self.chatContainerView};
+    NSDictionary *viewsDictionary = @{@"chat_view":self.chatContainerView, @"labelView":self.labelContainerView};
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.chatContainerView
+                                                          attribute:NSLayoutAttributeHeight
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeHeight
+                                                         multiplier:0.1
+                                                           constant:0.0]];
+
+    NSArray *constraint_POS_V_label = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[labelView]"
+                                                                              options:0
+                                                                              metrics:nil
+                                                                                views:viewsDictionary];
+    
+    NSArray *constraint_POS_H_label = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[imageView]-10-[labelView]"
+                                                                              options:0
+                                                                              metrics:nil
+                                                                                views:viewsDictionary];
+    
+    
+    
     
     NSArray *constraint_POS_V_chat = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-100-[chat_view]-100-|"
                                                                                 options:0
                                                                                 metrics:nil
                                                                                   views:viewsDictionary];
     
-    NSArray *constraint_POS_H_chat = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[chat_view]-|"
+    NSArray *constraint_POS_H_chat = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-50-[chat_view]-50-|"
                                                                                 options:0
                                                                                 metrics:nil
                                                                                   views:viewsDictionary];
