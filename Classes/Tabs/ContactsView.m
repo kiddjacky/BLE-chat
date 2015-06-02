@@ -32,7 +32,7 @@
                                                   }];
     if (self)
     {
-        [self.tabBarItem setImage:[UIImage imageNamed:@"tab_discover"]];
+        [self.tabBarItem setImage:[UIImage imageNamed:@"contact-icon"]];
         self.tabBarItem.title = @"Contacts";
     }
     return self;
