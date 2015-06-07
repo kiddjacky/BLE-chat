@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "Contacts.h"
+#import "DiscoverUser.h"
 
 @interface contactDetailsVC : UIViewController
 @property (strong, nonatomic) Contacts *contact;
+@property (strong, nonatomic) DiscoverUser *discoverUser;
+
 @end

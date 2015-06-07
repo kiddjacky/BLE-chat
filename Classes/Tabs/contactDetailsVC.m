@@ -10,6 +10,7 @@
 #import <Parse/Parse.h>
 #import <QuartzCore/QuartzCore.h>
 #import <ParseUI/ParseUI.h>
+#import "DiscoverUser.h"
 
 #import "ProgressHUD.h"
 
@@ -37,16 +38,27 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-  [self loadView];
+    [self loadView];
+    [self loadUser];
     
     self.label = [[UILabel alloc] init];
-    //   [self.label setBackgroundColor:[UIColor redColor]];
-    self.label.text = @"testing";
+//  [self.label setBackgroundColor:[UIColor redColor]];
+    self.label.lineBreakMode = NSLineBreakByWordWrapping;
+    self.label.numberOfLines = 10;
+    NSString *full_name = [NSString stringWithFormat:@"Full name = %@", self.contact.userFullName ];
+    NSString *age = [NSString stringWithFormat:@"Age = %@", self.contact.age ];
+    NSString *sex = [NSString stringWithFormat:@"Sex = %@", self.contact.sex ];
+    NSString *interest = [NSString stringWithFormat:@"interest = %@", self.contact.interest ];
+    NSString *self_description = [NSString stringWithFormat:@"self description = %@", self.contact.selfDescription ];
+
+    self.label.text = [NSString stringWithFormat:@"%@ \r %@ \r %@ \r %@ \r %@", full_name, age, sex, interest, self_description];
     [self.label setFont:[UIFont fontWithName:@"System" size:30]];
     NSLog(@"text label =  %@", self.label.text);
     self.label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.labelContainerView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.label sizeToFit];
+    self.labelContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.labelContainerView.translatesAutoresizingMaskIntoConstraints = NO;
+//    [self.labelContainerView setBackgroundColor:[UIColor blueColor]];
     [self.labelContainerView addSubview:self.label];
     [self.view addSubview:self.labelContainerView];
 
@@ -73,21 +85,31 @@
                                                           attribute:NSLayoutAttributeHeight
                                                          multiplier:0.1
                                                            constant:0.0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.labelContainerView
+                                                          attribute:NSLayoutAttributeHeight
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeHeight
+                                                         multiplier:0.1
+                                                           constant:0.0]];
 
+
+    
     NSArray *constraint_POS_V_label = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[labelView]"
                                                                               options:0
                                                                               metrics:nil
                                                                                 views:viewsDictionary];
     
-    NSArray *constraint_POS_H_label = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[imageView]-10-[labelView]"
+    NSArray *constraint_POS_H_label = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-50-[labelView]-50-|"
                                                                               options:0
                                                                               metrics:nil
                                                                                 views:viewsDictionary];
     
+ 
     
     
-    
-    NSArray *constraint_POS_V_chat = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-100-[chat_view]-100-|"
+    NSArray *constraint_POS_V_chat = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[chat_view]-50-|"
                                                                                 options:0
                                                                                 metrics:nil
                                                                                   views:viewsDictionary];
@@ -98,6 +120,8 @@
                                                                                   views:viewsDictionary];
     [self.view addConstraints:constraint_POS_V_chat];
     [self.view addConstraints:constraint_POS_H_chat];
+    [self.view addConstraints:constraint_POS_V_label];
+    [self.view addConstraints:constraint_POS_H_label];
     
     
     [self.chat addTarget:self action:@selector(actionChat) forControlEvents:UIControlEventTouchUpInside];
@@ -136,4 +160,36 @@
     //---------------------------------------------------------------------------------------------------------------------------------------------
     
 }
+
+
+
+- (void)loadUser
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+{
+    
+    
+    //    PFUser *user = [PFUser currentUser];
+    
+    
+    //    self.label.text = user[PF_USER_FULLNAME];
+    NSLog(@"debug = %@", self.contact.userName);
+    
+    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [query whereKey:PF_USER_USERNAME equalTo:self.contact.userName];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+     {
+         if ([objects count] != 0)
+         {
+             NSLog(@"debug 2 = %@ objects count = %lu" , self.contact.userName, (unsigned long)[objects count]);
+             PFUser *user = [objects firstObject];
+             //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
+//             self.imageUser.layer.cornerRadius = self.imageUser.frame.size.width / 2;
+//             [self.imageUser setFile:user[PF_USER_PICTURE]];
+//             [self.imageUser loadInBackground];
+         }
+     }];
+    
+}
+
+
 @end
