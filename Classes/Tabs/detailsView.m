@@ -316,7 +316,7 @@
              NSError *error;
              NSArray *matches = [self.context executeFetchRequest:request error:&error];
              Contacts *contact = nil;
-             CurrentUser *currentUser = nil;
+             //CurrentUser *currentUser = nil;
              
              if (error) {
                  NSLog(@"request error!");
