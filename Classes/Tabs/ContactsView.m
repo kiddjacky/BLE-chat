@@ -126,5 +126,28 @@
     [self.navigationController pushViewController:ivc animated:YES];
 }
 
+#pragma mark - Table view delegate
+-(void)prepareViewController:(id)vc forSegue:(NSString *)segueIdentifier fromIndexPath:(NSIndexPath *)indexPath
+{
+    Contacts *user_contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    if ([vc isKindOfClass:[contactDetailsVC class]]) {
+        contactDetailsVC *dv = (contactDetailsVC *)vc;
+        dv.contact = user_contact;
+ //    NSLog(@"debug prepare = %@", dv.discoverUser.userName);
+    }
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSIndexPath *indexPath = nil;
+    if([sender isKindOfClass:[UITableViewCell class]]) {
+        indexPath = [self.tableView indexPathForCell:sender];
+    }
+    [self prepareViewController:segue.destinationViewController
+                       forSegue:segue.identifier
+                  fromIndexPath:indexPath];
+}
+
+
 
 @end
