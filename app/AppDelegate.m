@@ -405,78 +405,48 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     NSString *userName = [advertisementData objectForKey:CBAdvertisementDataLocalNameKey];
     NSLog(@"Discovered %@ at %@", userName, RSSI);
     
-    if (userName!=NULL) {
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"DiscoverUser"];
-        request.predicate = [NSPredicate predicateWithFormat:@"userName = %@", userName];
-        
-        NSError *error;
-        NSArray *matches = [self.DiscoverDatabaseContext executeFetchRequest:request error:&error];
-        
-        if (error) {
-            //handle error
-            NSLog(@"request Error!");
-        } else if ([matches count]==1) {
-            //maybe need to update the location or time
-            NSLog(@"already matched");
-            DiscoverUser *discoverUser = [matches firstObject];
-            NSLog(@"already discover user is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
-            //caculate time difference
-            NSTimeInterval distanceBetweeenDates = [[NSDate date] timeIntervalSinceDate:discoverUser.timeMeet];
-            double secondsInMin = 60;
-            NSInteger minsBetweenDates = distanceBetweeenDates / secondsInMin;
-            if (minsBetweenDates > 5 )
-            {
-                NSLog(@"time meet for the same discover user is more than 5 mins, update location and time");
-                discoverUser.timeMeet = [NSDate date];
-                double latitude = (double)[self.currentLocation coordinate].latitude;
-                discoverUser.latitude = [NSNumber numberWithDouble:latitude];
-                double longitude = (double)[self.currentLocation coordinate].longitude;
-                discoverUser.longitude = [NSNumber numberWithDouble:longitude];
-                
-                if (![self.DiscoverDatabaseContext save:&error]) {
-                    NSLog(@"Couldn't save %@", [error localizedDescription]);
-                }
-                
-                //NSLog(@"Discover add is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
-                
-                //setup notification to other view controller that the context is avaiable.
-                NSDictionary *userInfo = self.DiscoverDatabaseContext ? @{DatabaseAvailabilityContext : self.DiscoverDatabaseContext } : nil;
-                [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
-            }
-            else {
-                NSLog(@"time meet for the same discover user is too soon to change");
-            }
-            
-        } else {
-            NSLog(@"create new core data");
-            
-            NSFetchRequest *add_request = [NSFetchRequest fetchRequestWithEntityName:@"DiscoverUser"];
-            add_request.predicate = nil;
-            add_request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timeMeet"
-                                                                          ascending:NO]];
-            
-            NSError *add_error;
-            NSArray *add_matches = [self.DiscoverDatabaseContext executeFetchRequest:add_request error:&add_error];
-            
-            if ([add_matches count] == DISCOVER_USER_LIMIT) {
-                NSLog(@"discover user reaching limit, remove the earliest discover user");
-                [self.DiscoverDatabaseContext deleteObject:[add_matches lastObject]];
-            }
-            
-            NSManagedObjectContext *context = [self DiscoverDatabaseContext];
-            DiscoverUser *discoverUser = [NSEntityDescription insertNewObjectForEntityForName:@"DiscoverUser" inManagedObjectContext:context];
-            discoverUser.userName = userName;
+    if (userName!=NULL && userName.length > 0 ) {
+        [self get_info:userName];
+    }
+    else { //if null, it is in back gorund, need ot connect
+        if (peripheral.state == CBPeripheralStateDisconnected) {
+            [self.centralManager connectPeripheral:peripheral options:nil];
+        }
+    }
+}
+
+
+-(void) get_info:(NSString *)userName
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"DiscoverUser"];
+    request.predicate = [NSPredicate predicateWithFormat:@"userName = %@", userName];
+    
+    NSError *error;
+    NSArray *matches = [self.DiscoverDatabaseContext executeFetchRequest:request error:&error];
+    
+    if (error) {
+        //handle error
+        NSLog(@"request Error!");
+    } else if ([matches count]==1) {
+        //maybe need to update the location or time
+        NSLog(@"already matched");
+        DiscoverUser *discoverUser = [matches firstObject];
+        NSLog(@"already discover user is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
+        //caculate time difference
+        NSTimeInterval distanceBetweeenDates = [[NSDate date] timeIntervalSinceDate:discoverUser.timeMeet];
+        double secondsInMin = 60;
+        NSInteger minsBetweenDates = distanceBetweeenDates / secondsInMin;
+        if (minsBetweenDates > 5 )
+        {
+            NSLog(@"time meet for the same discover user is more than 5 mins, update location and time");
             discoverUser.timeMeet = [NSDate date];
             double latitude = (double)[self.currentLocation coordinate].latitude;
             discoverUser.latitude = [NSNumber numberWithDouble:latitude];
             double longitude = (double)[self.currentLocation coordinate].longitude;
             discoverUser.longitude = [NSNumber numberWithDouble:longitude];
-            NSError *error=nil;
-
-            NSLog(@"Discover add is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
             
             if (![self.DiscoverDatabaseContext save:&error]) {
-              NSLog(@"Couldn't save %@", [error localizedDescription]);
+                NSLog(@"Couldn't save %@", [error localizedDescription]);
             }
             
             //NSLog(@"Discover add is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
@@ -484,14 +454,53 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
             //setup notification to other view controller that the context is avaiable.
             NSDictionary *userInfo = self.DiscoverDatabaseContext ? @{DatabaseAvailabilityContext : self.DiscoverDatabaseContext } : nil;
             [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
-            
-            NSLog(@"Post database notification!");
-            
         }
+        else {
+            NSLog(@"time meet for the same discover user is too soon to change");
+        }
+        
+    } else {
+        NSLog(@"create new core data");
+        
+        NSFetchRequest *add_request = [NSFetchRequest fetchRequestWithEntityName:@"DiscoverUser"];
+        add_request.predicate = nil;
+        add_request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timeMeet"
+                                                                      ascending:NO]];
+        
+        NSError *add_error;
+        NSArray *add_matches = [self.DiscoverDatabaseContext executeFetchRequest:add_request error:&add_error];
+        
+        if ([add_matches count] == DISCOVER_USER_LIMIT) {
+            NSLog(@"discover user reaching limit, remove the earliest discover user");
+            [self.DiscoverDatabaseContext deleteObject:[add_matches lastObject]];
+        }
+        
+        NSManagedObjectContext *context = [self DiscoverDatabaseContext];
+        DiscoverUser *discoverUser = [NSEntityDescription insertNewObjectForEntityForName:@"DiscoverUser" inManagedObjectContext:context];
+        discoverUser.userName = userName;
+        discoverUser.timeMeet = [NSDate date];
+        double latitude = (double)[self.currentLocation coordinate].latitude;
+        discoverUser.latitude = [NSNumber numberWithDouble:latitude];
+        double longitude = (double)[self.currentLocation coordinate].longitude;
+        discoverUser.longitude = [NSNumber numberWithDouble:longitude];
+        NSError *error=nil;
+        
+        NSLog(@"Discover add is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
+        
+        if (![self.DiscoverDatabaseContext save:&error]) {
+            NSLog(@"Couldn't save %@", [error localizedDescription]);
+        }
+        
+        //NSLog(@"Discover add is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
+        
+        //setup notification to other view controller that the context is avaiable.
+        NSDictionary *userInfo = self.DiscoverDatabaseContext ? @{DatabaseAvailabilityContext : self.DiscoverDatabaseContext } : nil;
+        [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
+        
+        NSLog(@"Post database notification!");
         
     }
 }
-
 
 /** If the connection fails for whatever reason, we need to deal with it.
  */
@@ -559,9 +568,9 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
         
         // And check if it's the right one
         if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]]) {
-            
+            [peripheral readValueForCharacteristic:characteristic];
             // If it is, subscribe to it
-            [peripheral setNotifyValue:YES forCharacteristic:characteristic];
+            //[peripheral setNotifyValue:YES forCharacteristic:characteristic];
         }
     }
     
@@ -581,10 +590,10 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     NSString *stringFromData = [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding];
     
     // Have we got everything we need?
-    if ([stringFromData isEqualToString:@"EOM"]) {
+    if (stringFromData != nil) {
         
         // We have, so show the data,
-        [self.central_textview setText:[[NSString alloc] initWithData:self.data encoding:NSUTF8StringEncoding]];
+        [self get_info:stringFromData];
         
         // Cancel our subscription to the characteristic
         [peripheral setNotifyValue:NO forCharacteristic:characteristic];
@@ -594,7 +603,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     }
     
     // Otherwise, just add the data on to what we already have
-    [self.data appendData:characteristic.value];
+    //[self.data appendData:characteristic.value];
     
     // Log it
     NSLog(@"Received: %@", stringFromData);
@@ -881,7 +890,19 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     PFUser *user = [PFUser currentUser];
     [self.peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]] , CBAdvertisementDataLocalNameKey : user.username  }];
     NSLog(@"send out advertisment data, user name is %@", user.username);
+    // create our characteristics
+    CBMutableCharacteristic *characteristic =
+    [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]
+                                       properties:CBCharacteristicPropertyRead
+                                            value:[user.username dataUsingEncoding:NSUTF8StringEncoding]
+                                      permissions:CBAttributePermissionsReadable];
     
+    // create the service with the characteristics
+    CBMutableService *service = [[CBMutableService alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID] primary:YES];
+    service.characteristics = @[characteristic];
+    [self.peripheralManager addService:service];
+    
+
     //self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(btle_switch_mode:) userInfo:nil repeats:YES];
 }
 
