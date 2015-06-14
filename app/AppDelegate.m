@@ -36,6 +36,7 @@
 @property (strong, nonatomic) CBPeripheralManager       *peripheralManager;
 @property (strong, nonatomic) CBCentralManager      *centralManager;
 @property (strong, nonatomic) CBPeripheral          *discoveredPeripheral;
+@property (strong, nonatomic) CBPeripheral          *connectingPeripheral;
 //unused for now
 @property (strong, nonatomic) NSMutableData         *data;
 @property (strong, nonatomic) CBMutableCharacteristic   *transferCharacteristic;
@@ -409,8 +410,11 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
         [self get_info:userName];
     }
     else { //if null, it is in back gorund, need ot connect
+        NSLog(@"peripheral is in background, try to connect");
         if (peripheral.state == CBPeripheralStateDisconnected) {
+            NSLog(@"try to connect");
             [self.centralManager connectPeripheral:peripheral options:nil];
+            self.connectingPeripheral = peripheral;
         }
     }
 }
@@ -483,6 +487,21 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
         discoverUser.latitude = [NSNumber numberWithDouble:latitude];
         double longitude = (double)[self.currentLocation coordinate].longitude;
         discoverUser.longitude = [NSNumber numberWithDouble:longitude];
+        
+        //find the actual full name
+        PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+        [query whereKey:PF_USER_USERNAME equalTo:discoverUser.userName];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+         {
+             if ([objects count] != 0)
+             {
+                 
+                 PFUser *user = [objects firstObject];
+                 NSLog(@"found user %@", user[PF_USER_FULLNAME]);
+                 discoverUser.userFullName = user[PF_USER_FULLNAME];
+             }
+         }];
+        
         NSError *error=nil;
         
         NSLog(@"Discover add is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
@@ -546,7 +565,8 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     
     // Loop through the newly filled peripheral.services array, just in case there's more than one.
     for (CBService *service in peripheral.services) {
-        [peripheral discoverCharacteristics:@[[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]] forService:service];
+        NSLog(@"discover service %@", service);
+        [peripheral discoverCharacteristics:nil forService:service];
     }
 }
 
@@ -565,9 +585,10 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     
     // Again, we loop through the array, just in case.
     for (CBCharacteristic *characteristic in service.characteristics) {
-        
+            NSLog(@"discover characteristic");
         // And check if it's the right one
-        if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]]) {
+        if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]]) {
+            NSLog(@"read characteristic!");
             [peripheral readValueForCharacteristic:characteristic];
             // If it is, subscribe to it
             //[peripheral setNotifyValue:YES forCharacteristic:characteristic];
@@ -588,7 +609,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     }
     
     NSString *stringFromData = [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding];
-    
+    NSLog(@"characteristic is %@", stringFromData);
     // Have we got everything we need?
     if (stringFromData != nil) {
         

@@ -146,21 +146,9 @@
     if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     NSLog(@"update table view");
     DiscoverUser *discoverUser = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = discoverUser.userName;
+    cell.textLabel.text = discoverUser.userFullName;
     
-    //find the actual full name
-    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    [query whereKey:PF_USER_USERNAME equalTo:discoverUser.userName];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-     {
-         if ([objects count] != 0)
-         {
-             
-             PFUser *user = [objects firstObject];
-             NSLog(@"found user %@", user[PF_USER_FULLNAME]);
-             cell.textLabel.text = user[PF_USER_FULLNAME];
-         }
-     }];
+
     
     
     NSDateFormatter *df = [NSDateFormatter new];

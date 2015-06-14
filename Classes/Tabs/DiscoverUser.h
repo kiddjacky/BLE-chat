@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSNumber * longitude;
 @property (nonatomic, retain) NSDate * timeMeet;
 @property (nonatomic, retain) NSString * userName;
+@property (nonatomic, retain) NSString * userFullName;
 @property (nonatomic, retain) id thumbnail;
 
 @end

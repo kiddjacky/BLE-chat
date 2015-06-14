@@ -15,6 +15,7 @@
 @dynamic longitude;
 @dynamic timeMeet;
 @dynamic userName;
+@dynamic userFullName;
 @dynamic thumbnail;
 
 @end
