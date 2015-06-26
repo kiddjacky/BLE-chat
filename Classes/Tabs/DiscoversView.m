@@ -159,6 +159,35 @@
     NSString *localDateString = [df stringFromDate:discoverUser.timeMeet];
     
     cell.detailTextLabel.text = localDateString;
+
+    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [query whereKey:PF_USER_USERNAME equalTo:discoverUser.userName];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+     {
+         if ([objects count] != 0)
+         {
+             
+             PFUser *user = [objects firstObject];
+             NSLog(@"found user %@", user[PF_USER_FULLNAME]);
+  //           discoverUser.userFullName = user[PF_USER_FULLNAME];
+             discoverUser.thumbnail = user[PF_USER_THUMBNAIL];
+         }
+     }];
+
+    
+     if (discoverUser.thumbnail == nil)
+     {
+     cell.imageView.image = [UIImage imageNamed:@"Whale_preview_120.png"];
+     
+     }
+     else
+     {
+     cell.imageView.image = discoverUser.thumbnail;
+     }
+     
+    
+
+    
     NSLog(@"discover user at latitude %@, longitude %@", discoverUser.latitude, discoverUser.longitude);
     /*
     CLLocationDegrees longitude = [discoverUser.longitude doubleValue];
