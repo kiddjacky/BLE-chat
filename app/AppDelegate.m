@@ -410,11 +410,17 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
         [self get_info:userName];
     }
     else { //if null, it is in back gorund, need ot connect
+        //NSUUID *nsUUID = [[NSUUID UUID] initWithUUIDString:@"DD2468AB-1865-B926-7FA4-AE3755D479D8"];
+        NSArray *known_peripherals = [self.centralManager retrievePeripheralsWithIdentifiers:[NSArray arrayWithObject:peripheral.identifier]];
+        NSLog(@"peripeheral is %@", peripheral);
+        NSLog(@"known_periperal is %@", known_peripherals);
+        if ([known_peripherals count] == 0) {
         NSLog(@"peripheral is in background, try to connect");
         if (peripheral.state == CBPeripheralStateDisconnected) {
             NSLog(@"try to connect");
             [self.centralManager connectPeripheral:peripheral options:nil];
             self.connectingPeripheral = peripheral;
+        }
         }
     }
 }
@@ -499,6 +505,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
                  PFUser *user = [objects firstObject];
                  NSLog(@"found user %@", user[PF_USER_FULLNAME]);
                  discoverUser.userFullName = user[PF_USER_FULLNAME];
+                 discoverUser.thumbnail = user[PF_USER_THUMBNAIL];
              }
          }];
         
