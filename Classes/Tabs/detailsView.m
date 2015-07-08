@@ -339,21 +339,17 @@
                  contact.interest = user[PF_USER_INTEREST];
                  contact.selfDescription = user[PF_USER_SELF_DESCRIPTION];
                  //contact.thumbnail = user[PF_USER_THUMBNAIL];
-                 
+                 PFFile *contactThumbnail = user[PF_USER_THUMBNAIL];
+                 [contactThumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
 
-                 
-                 NSError *error=nil;
-                 
-                 
-                 
-                 if (![self.context save:&error]) {
-                     NSLog(@"Couldn't save %@", [error localizedDescription]);
-                 }
-                 
-                 NSLog(@"Added!");
-                 //setup notification to other view controller that the context is avaiable.
-                 NSDictionary *userInfo = self.context ? @{DatabaseAvailabilityContext : self.context } : nil;
-                 [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
+                     if(!error) {
+                         contact.thumbnail = data;
+                         [self save_and_post];
+                     }
+                 }];
+
+                 [self save_and_post];
+
                  
                  
                  //add contact to current user contact list
@@ -377,6 +373,22 @@
          }
      }];
 
+}
+
+-(void) save_and_post
+{
+    NSError *error=nil;
+    
+    
+    
+    if (![self.context save:&error]) {
+        NSLog(@"Couldn't save %@", [error localizedDescription]);
+    }
+    
+    NSLog(@"Added!");
+    //setup notification to other view controller that the context is avaiable.
+    NSDictionary *userInfo = self.context ? @{DatabaseAvailabilityContext : self.context } : nil;
+    [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
 }
 
 -(void)actionChat

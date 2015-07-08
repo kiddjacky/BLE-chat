@@ -97,6 +97,9 @@
     Contacts *contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = contact.userFullName;
     cell.detailTextLabel.text = contact.selfDescription;
+    if (contact.thumbnail != nil) {
+    cell.imageView.image = [UIImage imageWithData:contact.thumbnail];
+    }
     /*
     cell.imageView.image = [UIImage imageWithData:contact.thumbnail];
     if (!cell.imageView.image) {
