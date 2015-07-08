@@ -338,7 +338,7 @@
                  contact.age = user[PF_USER_AGE];
                  contact.interest = user[PF_USER_INTEREST];
                  contact.selfDescription = user[PF_USER_SELF_DESCRIPTION];
-                 contact.thumbnail = user[PF_USER_THUMBNAIL];
+                 //contact.thumbnail = user[PF_USER_THUMBNAIL];
                  
 
                  
@@ -415,6 +415,7 @@
     //    self.label.text = user[PF_USER_FULLNAME];
     NSLog(@"debug = %@", self.discoverUser.userName);
     
+
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
     [query whereKey:PF_USER_USERNAME equalTo:self.discoverUser.userName];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)

@@ -146,8 +146,6 @@
     if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     NSLog(@"update table view");
     DiscoverUser *discoverUser = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = discoverUser.userFullName;
-    
 
     
     
@@ -160,6 +158,7 @@
     
     cell.detailTextLabel.text = localDateString;
 
+    /*
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
     [query whereKey:PF_USER_USERNAME equalTo:discoverUser.userName];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
@@ -168,13 +167,22 @@
          {
              
              PFUser *user = [objects firstObject];
-             NSLog(@"found user %@", user[PF_USER_FULLNAME]);
-  //           discoverUser.userFullName = user[PF_USER_FULLNAME];
-             discoverUser.thumbnail = user[PF_USER_THUMBNAIL];
+             PFFile *discoverThumbnail = user[PF_USER_THUMBNAIL];
+             [discoverThumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                 NSLog(@"in the block");
+                 if(!error) {
+                     NSLog(@"no error!");
+                     UIImage *image = [UIImage imageWithData:data];
+                     NSLog(@"data is %@", data);
+                     dispatch_async(dispatch_get_main_queue(), ^{ cell.imageView.image = image; });
+                 }
+             }];
          }
      }];
+    */
 
-    
+    cell.textLabel.text = discoverUser.userFullName;
+
      if (discoverUser.thumbnail == nil)
      {
      cell.imageView.image = [UIImage imageNamed:@"Whale_preview_120.png"];
@@ -182,47 +190,9 @@
      }
      else
      {
-     cell.imageView.image = discoverUser.thumbnail;
+         UIImage *image = [UIImage imageWithData:discoverUser.thumbnail];
+        cell.imageView.image = image;
      }
-     
-    
-
-    
-    NSLog(@"discover user at latitude %@, longitude %@", discoverUser.latitude, discoverUser.longitude);
-    /*
-    CLLocationDegrees longitude = [discoverUser.longitude doubleValue];
-    CLLocationDegrees latitude = [discoverUser.latitude doubleValue];
-    CLLocation *location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
-    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error)
-     {
-         if (!(error))
-         {
-             CLPlacemark *placemark = [placemarks objectAtIndex:0];
-             NSLog(@"\nCurrent Location Detected\n");
-             NSLog(@"placemark %@",placemark);
-             NSString *locatedAt = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
-             NSString *Address = [[NSString alloc]initWithString:locatedAt];
-             NSString *Area = [[NSString alloc]initWithString:placemark.locality];
-             NSString *Country = [[NSString alloc]initWithString:placemark.country];
-             NSString *CountryArea = [NSString stringWithFormat:@"%@, %@", Area,Country];
-             NSLog(@"%@",CountryArea);
-             //cell.detailTextLabel.text = Area;
-             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ at %@", localDateString, Area];
-         }
-         else
-         {
-             NSLog(@"Geocode failed with error %@", error);
-             NSLog(@"\nCurrent Location Not Detected\n");
-             //return;
-             //CountryArea = NULL;
-         }
-     }];
-    */
-
-    //PFUser *user = DiscoverItems[indexPath.row];
-    //cell.textLabel.text = user[PF_USER_FULLNAME];
-    
-
 
 
     

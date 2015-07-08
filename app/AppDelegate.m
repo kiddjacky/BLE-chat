@@ -446,24 +446,44 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
         NSTimeInterval distanceBetweeenDates = [[NSDate date] timeIntervalSinceDate:discoverUser.timeMeet];
         double secondsInMin = 60;
         NSInteger minsBetweenDates = distanceBetweeenDates / secondsInMin;
-        if (minsBetweenDates > 5 )
+        if (minsBetweenDates > 2 )
         {
-            NSLog(@"time meet for the same discover user is more than 5 mins, update location and time");
+            NSLog(@"time meet for the same discover user is more than 2 mins, update location and time");
             discoverUser.timeMeet = [NSDate date];
             double latitude = (double)[self.currentLocation coordinate].latitude;
             discoverUser.latitude = [NSNumber numberWithDouble:latitude];
             double longitude = (double)[self.currentLocation coordinate].longitude;
             discoverUser.longitude = [NSNumber numberWithDouble:longitude];
             
-            if (![self.DiscoverDatabaseContext save:&error]) {
-                NSLog(@"Couldn't save %@", [error localizedDescription]);
-            }
+            //find the actual full name
+            PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+            [query whereKey:PF_USER_USERNAME equalTo:discoverUser.userName];
+            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+             {
+                 if ([objects count] != 0)
+                 {
+                     NSLog(@"find pf user full name and thumbnail");
+                     PFUser *user = [objects firstObject];
+                     discoverUser.userFullName = user[PF_USER_FULLNAME];
+                     NSLog(@"found user %@, thumbnail is %@", discoverUser.userFullName, user[PF_USER_THUMBNAIL]);
+                     PFFile *discoverThumbnail = user[PF_USER_THUMBNAIL];
+                     [discoverThumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                         NSLog(@"in the block");
+                         if(!error) {
+                             NSLog(@"no error!");
+                             discoverUser.thumbnail = data;
+                             [self save_and_post];
+                             NSLog(@"thumbnail is %@", discoverUser.thumbnail);
+                         }
+                     }];
+                     //NSLog(@"save thumbnail %@", discoverUser.thumbnail);
+                     [self save_and_post];
+                     NSLog(@"save and post finished!");
+                     
+                 }
+             }];
             
-            //NSLog(@"Discover add is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
-            
-            //setup notification to other view controller that the context is avaiable.
-            NSDictionary *userInfo = self.DiscoverDatabaseContext ? @{DatabaseAvailabilityContext : self.DiscoverDatabaseContext } : nil;
-            [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
+            [self save_and_post];
         }
         else {
             NSLog(@"time meet for the same discover user is too soon to change");
@@ -493,7 +513,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
         discoverUser.latitude = [NSNumber numberWithDouble:latitude];
         double longitude = (double)[self.currentLocation coordinate].longitude;
         discoverUser.longitude = [NSNumber numberWithDouble:longitude];
-        
+                  NSLog(@"using parse query");
         //find the actual full name
         PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
         [query whereKey:PF_USER_USERNAME equalTo:discoverUser.userName];
@@ -501,31 +521,47 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
          {
              if ([objects count] != 0)
              {
-                 
+                 NSLog(@"find pf user full name and thumbnail");
                  PFUser *user = [objects firstObject];
-                 NSLog(@"found user %@", user[PF_USER_FULLNAME]);
                  discoverUser.userFullName = user[PF_USER_FULLNAME];
-                 discoverUser.thumbnail = user[PF_USER_THUMBNAIL];
+                 NSLog(@"found user %@, thumbnail is %@", discoverUser.userFullName, user[PF_USER_THUMBNAIL]);
+                 PFFile *discoverThumbnail = user[PF_USER_THUMBNAIL];
+                 [discoverThumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                     NSLog(@"in the block");
+                     if(!error) {
+                         NSLog(@"no error!");
+                         discoverUser.thumbnail = data;
+                        [self save_and_post];
+                         NSLog(@"thumbnail is %@", discoverUser.thumbnail);
+                     }
+                 }];
+                 //NSLog(@"save thumbnail %@", discoverUser.thumbnail);
+                 [self save_and_post];
+                 NSLog(@"save and post finished!");
+
              }
          }];
         
-        NSError *error=nil;
-        
-        NSLog(@"Discover add is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
-        
-        if (![self.DiscoverDatabaseContext save:&error]) {
-            NSLog(@"Couldn't save %@", [error localizedDescription]);
-        }
-        
-        //NSLog(@"Discover add is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
-        
-        //setup notification to other view controller that the context is avaiable.
-        NSDictionary *userInfo = self.DiscoverDatabaseContext ? @{DatabaseAvailabilityContext : self.DiscoverDatabaseContext } : nil;
-        [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
-        
-        NSLog(@"Post database notification!");
+        //[self save_and_post];
         
     }
+}
+
+-(void) save_and_post
+{
+    NSError *error=nil;
+    
+    if (![self.DiscoverDatabaseContext save:&error]) {
+        NSLog(@"Couldn't save %@", [error localizedDescription]);
+    }
+    
+    //NSLog(@"Discover add is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
+    
+    //setup notification to other view controller that the context is avaiable.
+    NSDictionary *userInfo = self.DiscoverDatabaseContext ? @{DatabaseAvailabilityContext : self.DiscoverDatabaseContext } : nil;
+    [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
+    
+    NSLog(@"Post database notification!");
 }
 
 /** If the connection fails for whatever reason, we need to deal with it.
