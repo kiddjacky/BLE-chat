@@ -9,7 +9,7 @@
 #import "DiscoversView.h"
 #import "detailsView.h"
 #import "DiscoverUser.h"
-
+#import "discoversCell.h"
 
 
 #import "DatabaseAvailability.h"
@@ -142,8 +142,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+    discoversCell *cell = (discoversCell *)[tableView dequeueReusableCellWithIdentifier:@"discoversCell"];
+    if (cell == nil) cell = (discoversCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discoversCell"];
     NSLog(@"update table view");
     DiscoverUser *discoverUser = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
@@ -156,7 +156,7 @@
     df.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[NSTimeZone localTimeZone].secondsFromGMT];
     NSString *localDateString = [df stringFromDate:discoverUser.timeMeet];
     
-    cell.detailTextLabel.text = localDateString;
+    cell.localDateTime.text = localDateString;
 
     /*
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
@@ -181,23 +181,23 @@
      }];
     */
 
-    cell.textLabel.text = discoverUser.userFullName;
+    cell.userFullName.text = discoverUser.userFullName;
 
      if (discoverUser.thumbnail == nil)
      {
-     cell.imageView.image = [UIImage imageNamed:@"Whale_preview_120.png"];
+     cell.imageUser.image = [UIImage imageNamed:@"Whale_preview_120.png"];
      
      }
      else
      {
          UIImage *image = [UIImage imageWithData:discoverUser.thumbnail];
-        cell.imageView.image = image;
+        cell.imageUser.image = image;
      }
 
 
     
     //if (cell.detailTextLabel.text == nil) cell.detailTextLabel.text = [NSString stringWithFormat:@"latitude %+.6f, longtitude %+.6f\n", location.coordinate.latitude, location.coordinate.longitude];
-    cell.detailTextLabel.textColor = [UIColor lightGrayColor];
+    //cell.detailTextLabel.textColor = [UIColor lightGrayColor];
     
     /*
     PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];

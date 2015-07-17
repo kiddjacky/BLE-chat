@@ -137,6 +137,8 @@
 		DEBB7B351AE2FD21009CD940 /* tab_discovers.png in Resources */ = {isa = PBXBuildFile; fileRef = DEBB7B341AE2FD21009CD940 /* tab_discovers.png */; };
 		DEBB7B481AE3753C009CD940 /* Discover.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DEBB7B461AE3753C009CD940 /* Discover.xcdatamodeld */; };
 		DEBF53C91B4CDA0D00891128 /* DiscoverUser.m in Sources */ = {isa = PBXBuildFile; fileRef = DEBF53C81B4CDA0D00891128 /* DiscoverUser.m */; };
+		DEBF53CD1B4CF9C900891128 /* discoversCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEBF53CB1B4CF9C900891128 /* discoversCell.m */; };
+		DEBF53CE1B4CF9C900891128 /* discoversCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEBF53CC1B4CF9C900891128 /* discoversCell.xib */; };
 		DEE855401B081778000AA5AC /* ContactsView.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE8553F1B081778000AA5AC /* ContactsView.m */; };
 		DEE855461B08232E000AA5AC /* contactDetailsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE855451B08232E000AA5AC /* contactDetailsVC.m */; };
 		DEE8554C1B09BE93000AA5AC /* Contacts.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE8554B1B09BE93000AA5AC /* Contacts.m */; };
@@ -383,6 +385,9 @@
 		DEBB7B471AE3753C009CD940 /* Discover.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Discover.xcdatamodel; sourceTree = "<group>"; };
 		DEBF53C71B4CDA0D00891128 /* DiscoverUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverUser.h; sourceTree = "<group>"; };
 		DEBF53C81B4CDA0D00891128 /* DiscoverUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverUser.m; sourceTree = "<group>"; };
+		DEBF53CA1B4CF9C900891128 /* discoversCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = discoversCell.h; sourceTree = "<group>"; };
+		DEBF53CB1B4CF9C900891128 /* discoversCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = discoversCell.m; sourceTree = "<group>"; };
+		DEBF53CC1B4CF9C900891128 /* discoversCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = discoversCell.xib; sourceTree = "<group>"; };
 		DEE8553E1B081778000AA5AC /* ContactsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsView.h; sourceTree = "<group>"; };
 		DEE8553F1B081778000AA5AC /* ContactsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsView.m; sourceTree = "<group>"; };
 		DEE855441B08232E000AA5AC /* contactDetailsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = contactDetailsVC.h; sourceTree = "<group>"; };
@@ -995,6 +1000,9 @@
 				DEBB7B461AE3753C009CD940 /* Discover.xcdatamodeld */,
 				DEBF53C71B4CDA0D00891128 /* DiscoverUser.h */,
 				DEBF53C81B4CDA0D00891128 /* DiscoverUser.m */,
+				DEBF53CA1B4CF9C900891128 /* discoversCell.h */,
+				DEBF53CB1B4CF9C900891128 /* discoversCell.m */,
+				DEBF53CC1B4CF9C900891128 /* discoversCell.xib */,
 				DEB34C2B1AF0A7DF000A42B8 /* detailsView.h */,
 				DEB34C2C1AF0A7DF000A42B8 /* detailsView.m */,
 				DE31A2DB1AF7152800FD8DE2 /* CoreDataTableViewController.h */,
@@ -1107,6 +1115,7 @@
 				689D00E91B1D9BFD003E21F3 /* contact-icon.png in Resources */,
 				29A531331AAEEF9500263CB1 /* profile_blank@2x.png in Resources */,
 				DEBB7B351AE2FD21009CD940 /* tab_discovers.png in Resources */,
+				DEBF53CE1B4CF9C900891128 /* discoversCell.xib in Resources */,
 				29A531311AAEEF9500263CB1 /* messages_blank@2x.png in Resources */,
 				29A531321AAEEF9500263CB1 /* messages_compose@2x.png in Resources */,
 				292338FC1AA37C4100A47A39 /* FacebookFriendsView.xib in Resources */,
@@ -1183,6 +1192,7 @@
 				292339C81AA38E0F00A47A39 /* JSQMessagesMediaPlaceholderView.m in Sources */,
 				DE31A2E31AF7321700FD8DE2 /* AppDelegate+MOC.m in Sources */,
 				DE31A2DD1AF7152800FD8DE2 /* CoreDataTableViewController.m in Sources */,
+				DEBF53CD1B4CF9C900891128 /* discoversCell.m in Sources */,
 				292339331AA38DBD00A47A39 /* UIRefreshControl+AFNetworking.m in Sources */,
 				292339A71AA38E0F00A47A39 /* UIDevice+JSQMessages.m in Sources */,
 				292339C11AA38E0F00A47A39 /* JSQMessagesCollectionViewCellOutgoing.m in Sources */,
