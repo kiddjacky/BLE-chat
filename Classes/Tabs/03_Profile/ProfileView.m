@@ -199,8 +199,10 @@
 			if (error == nil)
 			{
 				[ProgressHUD showSuccess:@"Saved."];
+                [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
 			}
 			else [ProgressHUD showError:@"Network error."];
+            
 		}];
 	}
 	else [ProgressHUD showError:@"Name field must be set."];

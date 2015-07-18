@@ -466,6 +466,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
                      PFUser *user = [objects firstObject];
                      discoverUser.userFullName = user[PF_USER_FULLNAME];
                      NSLog(@"found user %@, thumbnail is %@", discoverUser.userFullName, user[PF_USER_THUMBNAIL]);
+                     /*
                      PFFile *discoverThumbnail = user[PF_USER_THUMBNAIL];
                      [discoverThumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
                          NSLog(@"in the block");
@@ -476,6 +477,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
                              NSLog(@"thumbnail is %@", discoverUser.thumbnail);
                          }
                      }];
+                      */
                      //NSLog(@"save thumbnail %@", discoverUser.thumbnail);
                      [self save_and_post];
                      NSLog(@"save and post finished!");
@@ -525,6 +527,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
                  PFUser *user = [objects firstObject];
                  discoverUser.userFullName = user[PF_USER_FULLNAME];
                  NSLog(@"found user %@, thumbnail is %@", discoverUser.userFullName, user[PF_USER_THUMBNAIL]);
+                 /*
                  PFFile *discoverThumbnail = user[PF_USER_THUMBNAIL];
                  [discoverThumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
                      NSLog(@"in the block");
@@ -535,6 +538,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
                          NSLog(@"thumbnail is %@", discoverUser.thumbnail);
                      }
                  }];
+                  */
                  //NSLog(@"save thumbnail %@", discoverUser.thumbnail);
                  [self save_and_post];
                  NSLog(@"save and post finished!");

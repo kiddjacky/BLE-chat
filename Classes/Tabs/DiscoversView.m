@@ -112,11 +112,39 @@
     NSLog(@"into Discover view did load");
     geocoder = [[CLGeocoder alloc] init];
     
-    
+    // Initialize the refresh control.
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor purpleColor];
+    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self
+                            action:@selector(reloadData)
+                  forControlEvents:UIControlEventValueChanged];
+
 
      //setup observer before ask the appdelegate to post
      [[NSNotificationCenter defaultCenter] postNotificationName:DiscoverViewReady object:nil];
     
+}
+
+
+- (void)reloadData
+{
+    // Reload table data
+    [self.tableView reloadData];
+    
+    // End the refreshing
+    if (self.refreshControl) {
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MMM d, h:mm a"];
+        NSString *title = [NSString stringWithFormat:@"Last update: %@", [formatter stringFromDate:[NSDate date]]];
+        NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+                                                                    forKey:NSForegroundColorAttributeName];
+        NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attrsDictionary];
+        self.refreshControl.attributedTitle = attributedTitle;
+        
+        [self.refreshControl endRefreshing];
+    }
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -142,8 +170,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-    discoversCell *cell = (discoversCell *)[tableView dequeueReusableCellWithIdentifier:@"discoversCell"];
-    if (cell == nil) cell = (discoversCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discoversCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     NSLog(@"update table view");
     DiscoverUser *discoverUser = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
@@ -156,9 +184,9 @@
     df.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[NSTimeZone localTimeZone].secondsFromGMT];
     NSString *localDateString = [df stringFromDate:discoverUser.timeMeet];
     
-    cell.localDateTime.text = localDateString;
+    cell.detailTextLabel.text = localDateString;
 
-    /*
+    
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
     [query whereKey:PF_USER_USERNAME equalTo:discoverUser.userName];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
@@ -174,15 +202,16 @@
                      NSLog(@"no error!");
                      UIImage *image = [UIImage imageWithData:data];
                      NSLog(@"data is %@", data);
+                     //cell.imageView.image = image;
                      dispatch_async(dispatch_get_main_queue(), ^{ cell.imageView.image = image; });
                  }
              }];
          }
      }];
-    */
+    
 
-    cell.userFullName.text = discoverUser.userFullName;
-
+    cell.textLabel.text = discoverUser.userFullName;
+    /*
      if (discoverUser.thumbnail == nil)
      {
      cell.imageUser.image = [UIImage imageNamed:@"Whale_preview_120.png"];
@@ -193,7 +222,7 @@
          UIImage *image = [UIImage imageWithData:discoverUser.thumbnail];
         cell.imageUser.image = image;
      }
-
+   */
 
     
     //if (cell.detailTextLabel.text == nil) cell.detailTextLabel.text = [NSString stringWithFormat:@"latitude %+.6f, longtitude %+.6f\n", location.coordinate.latitude, location.coordinate.longitude];
