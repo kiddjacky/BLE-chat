@@ -12,8 +12,8 @@
 @interface discoversCell : UITableViewCell
 
 - (void)bindData:(PFObject *)discovered_users_;
-@property (retain, nonatomic) IBOutlet UIImageView *imageUser;
-@property (retain, nonatomic) IBOutlet UILabel *userFullName;
-@property (retain, nonatomic) IBOutlet UILabel *localDateTime;
+@property (nonatomic, weak) IBOutlet UIImageView *imageUser;
+@property (nonatomic, weak) IBOutlet UILabel *userFullName;
+@property (nonatomic, weak) IBOutlet UILabel *localDateTime;
 
 @end

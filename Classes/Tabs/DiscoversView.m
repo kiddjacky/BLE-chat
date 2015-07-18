@@ -112,6 +112,7 @@
     NSLog(@"into Discover view did load");
     geocoder = [[CLGeocoder alloc] init];
     
+    [self.tableView registerNib:[UINib nibWithNibName:@"discoversCell" bundle:nil] forCellReuseIdentifier:@"discoversCell"];
     // Initialize the refresh control.
     self.refreshControl = [[UIRefreshControl alloc] init];
     self.refreshControl.backgroundColor = [UIColor purpleColor];
@@ -120,7 +121,7 @@
                             action:@selector(reloadData)
                   forControlEvents:UIControlEventValueChanged];
 
-
+    //[self.tableView reloadData];
      //setup observer before ask the appdelegate to post
      [[NSNotificationCenter defaultCenter] postNotificationName:DiscoverViewReady object:nil];
     
@@ -170,8 +171,14 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    //if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+    discoversCell *cell = (discoversCell *)[tableView dequeueReusableCellWithIdentifier:@"discoversCell" forIndexPath:indexPath];
+    if (cell == nil) {
+
+        //cell = [[discoversCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discoversCell"];
+        cell = [tableView dequeueReusableCellWithIdentifier:@"discoversCell" forIndexPath:indexPath];
+    }
     NSLog(@"update table view");
     DiscoverUser *discoverUser = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
@@ -184,8 +191,12 @@
     df.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[NSTimeZone localTimeZone].secondsFromGMT];
     NSString *localDateString = [df stringFromDate:discoverUser.timeMeet];
     
-    cell.detailTextLabel.text = localDateString;
-
+    //cell.detailTextLabel.text = localDateString;
+    //cell.textLabel.text = discoverUser.userFullName;
+    cell.localDateTime.text = localDateString;
+    cell.userFullName.text = discoverUser.userFullName;
+    
+    
     
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
     [query whereKey:PF_USER_USERNAME equalTo:discoverUser.userName];
@@ -197,20 +208,20 @@
              PFUser *user = [objects firstObject];
              PFFile *discoverThumbnail = user[PF_USER_THUMBNAIL];
              [discoverThumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-                 NSLog(@"in the block");
+                 //NSLog(@"in the block");
                  if(!error) {
-                     NSLog(@"no error!");
+                     //NSLog(@"no error!");
                      UIImage *image = [UIImage imageWithData:data];
-                     NSLog(@"data is %@", data);
-                     //cell.imageView.image = image;
-                     dispatch_async(dispatch_get_main_queue(), ^{ cell.imageView.image = image; });
+                     //NSLog(@"data is %@", data);
+                     cell.imageUser.image = image;
+                     //dispatch_async(dispatch_get_main_queue(), ^{ cell.imageView.image = image; });
                  }
              }];
          }
      }];
     
 
-    cell.textLabel.text = discoverUser.userFullName;
+
     /*
      if (discoverUser.thumbnail == nil)
      {

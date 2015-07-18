@@ -34,6 +34,8 @@
 
 - (void)awakeFromNib {
     // Initialization code
+   // _userFullName.text = @"test1";
+   // _localDateTime.text = @"test2";
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
