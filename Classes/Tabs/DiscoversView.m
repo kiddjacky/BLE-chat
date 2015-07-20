@@ -124,6 +124,7 @@
     //[self.tableView reloadData];
      //setup observer before ask the appdelegate to post
      [[NSNotificationCenter defaultCenter] postNotificationName:DiscoverViewReady object:nil];
+    self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
     
 }
 
@@ -165,6 +166,11 @@
 -(void) loadDiscovers //load discover people or ibeacon
 {
     
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60.0f;
 }
 
 
