@@ -25,5 +25,30 @@
 @dynamic userFullName;
 @dynamic contacts;
 @dynamic discovers;
+@dynamic firstLetter;
+
+
+@end
+
+
+@interface Contacts (firstLetter)
+
+@end
+
+@implementation Contacts (firstLetter)
+
+- (NSString *)firstLetter {
+    [self willAccessValueForKey:@"firstLetter"];
+    NSString *aString = [[self valueForKey:@"userFullName"] uppercaseString];
+    
+    // support UTF-16:
+    NSString *stringToReturn = [aString substringWithRange:[aString rangeOfComposedCharacterSequenceAtIndex:0]];
+    
+    // OR no UTF-16 support:
+    //NSString *stringToReturn = [aString substringToIndex:1];
+    
+    [self didAccessValueForKey:@"firstLetter"];
+    return stringToReturn;
+}
 
 @end

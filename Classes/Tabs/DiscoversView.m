@@ -185,10 +185,14 @@
         //cell = [[discoversCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discoversCell"];
         cell = [tableView dequeueReusableCellWithIdentifier:@"discoversCell" forIndexPath:indexPath];
     }
+    
+    return cell;
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(discoversCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
     NSLog(@"update table view");
     DiscoverUser *discoverUser = [self.fetchedResultsController objectAtIndexPath:indexPath];
-
-    
     
     NSDateFormatter *df = [NSDateFormatter new];
     [df setDateFormat:@"dd/MM/yyyy HH:mm"];
@@ -197,8 +201,6 @@
     df.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[NSTimeZone localTimeZone].secondsFromGMT];
     NSString *localDateString = [df stringFromDate:discoverUser.timeMeet];
     
-    //cell.detailTextLabel.text = localDateString;
-    //cell.textLabel.text = discoverUser.userFullName;
     cell.localDateTime.text = localDateString;
     cell.userFullName.text = discoverUser.userFullName;
     
@@ -225,44 +227,9 @@
              }];
          }
      }];
-    
 
-
-    /*
-     if (discoverUser.thumbnail == nil)
-     {
-     cell.imageUser.image = [UIImage imageNamed:@"Whale_preview_120.png"];
-     
-     }
-     else
-     {
-         UIImage *image = [UIImage imageWithData:discoverUser.thumbnail];
-        cell.imageUser.image = image;
-     }
-   */
-
-    
-    //if (cell.detailTextLabel.text == nil) cell.detailTextLabel.text = [NSString stringWithFormat:@"latitude %+.6f, longtitude %+.6f\n", location.coordinate.latitude, location.coordinate.longitude];
-    //cell.detailTextLabel.textColor = [UIColor lightGrayColor];
-    
-    /*
-    PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [query whereKey:PF_CHAT_GROUPID equalTo:discover.objectId];
-    [query orderByDescending:PF_CHAT_CREATEDAT];
-    [query setLimit:1000];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-     {
-         if ([objects count] != 0)
-         {
-             PFObject *chat = [objects firstObject];
-             NSTimeInterval seconds = [[NSDate date] timeIntervalSinceDate:chat.createdAt];
-             cell.detailTextLabel.text = [NSString stringWithFormat:@"%d messages (%@)", (int) [objects count], TimeElapsed(seconds)];
-         }
-         else cell.detailTextLabel.text = @"No message";
-     }];
-    */
-    return cell;
 }
+
 
 #pragma mark - Table view delegate
 -(void)prepareViewController:(id)vc forSegue:(NSString *)segueIdentifier fromIndexPath:(NSIndexPath *)indexPath

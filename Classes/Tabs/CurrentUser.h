@@ -25,6 +25,7 @@
 @property (nonatomic, retain) NSString * userFullName;
 @property (nonatomic, retain) NSSet *contacts;
 @property (nonatomic, retain) NSSet *discovers;
+@property (nonatomic, retain) NSString *firstLetter;
 @end
 
 @interface CurrentUser (CoreDataGeneratedAccessors)

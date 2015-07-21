@@ -2,7 +2,7 @@
 //  Contacts.m
 //  app
 //
-//  Created by kiddjacky on 5/17/15.
+//  Created by kiddjacky on 7/21/15.
 //  Copyright (c) 2015 KZ. All rights reserved.
 //
 
@@ -11,12 +11,13 @@
 
 @implementation Contacts
 
-@dynamic userName;
-@dynamic userFullName;
 @dynamic age;
-@dynamic sex;
 @dynamic interest;
 @dynamic selfDescription;
+@dynamic sex;
 @dynamic thumbnail;
+@dynamic userFullName;
+@dynamic userName;
+@dynamic firstLetter;
 
 @end

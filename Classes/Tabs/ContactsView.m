@@ -54,8 +54,8 @@
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
                                                                         managedObjectContext:managedObjectContext
-                                                                          sectionNameKeyPath:nil
-                                                                                   cacheName:nil];
+                                                                          sectionNameKeyPath:@"firstLetter"
+                                                                                   cacheName:@"MyCache"];
     
     
     
@@ -66,7 +66,13 @@
     [super viewDidLoad];
     self.title = @"Contacts";
     self.tableView.tableFooterView = [[UIView alloc] init];
-    
+    // Initialize the refresh control.
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor purpleColor];
+    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self
+                            action:@selector(reloadData)
+                  forControlEvents:UIControlEventValueChanged];
 
     
 }
@@ -86,6 +92,27 @@
 }
 
 
+- (void)reloadData
+{
+    // Reload table data
+    [self.tableView reloadData];
+    
+    // End the refreshing
+    if (self.refreshControl) {
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MMM d, h:mm a"];
+        NSString *title = [NSString stringWithFormat:@"Last update: %@", [formatter stringFromDate:[NSDate date]]];
+        NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+                                                                    forKey:NSForegroundColorAttributeName];
+        NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attrsDictionary];
+        self.refreshControl.attributedTitle = attributedTitle;
+        
+        [self.refreshControl endRefreshing];
+    }
+}
+
+
 #pragma mark - table view
 
 
@@ -93,10 +120,12 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
-    NSLog(@"update contacts view");
+
+    
     Contacts *contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = contact.userFullName;
     cell.detailTextLabel.text = contact.selfDescription;
+        NSLog(@"update contacts view, first letter %@",contact.firstLetter);
     if (contact.thumbnail != nil) {
     cell.imageView.image = [UIImage imageWithData:contact.thumbnail];
     }
