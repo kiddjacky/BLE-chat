@@ -124,7 +124,7 @@
     //[self.tableView reloadData];
      //setup observer before ask the appdelegate to post
      [[NSNotificationCenter defaultCenter] postNotificationName:DiscoverViewReady object:nil];
-    self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
+    //self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
     
 }
 
@@ -170,7 +170,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60.0f;
+    return 70.0f;
 }
 
 

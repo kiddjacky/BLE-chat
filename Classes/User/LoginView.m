@@ -234,7 +234,9 @@
                           contact.interest = user[PF_USER_INTEREST];
                           contact.selfDescription = user[PF_USER_SELF_DESCRIPTION];
                           contact.thumbnail = user[PF_USER_THUMBNAIL];
-                          
+                          //SAVE CONTEXT
+                          NSError *contactSaveError = nil;
+                          [self.managedObjectContext save:&contactSaveError];
                       }
                   }];
                  
