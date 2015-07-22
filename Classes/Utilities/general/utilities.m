@@ -13,6 +13,21 @@
 #import "WelcomeView.h"
 #import "NavigationController.h"
 
+
+//for load user
+#import <Parse/Parse.h>
+
+#import <ParseUI/ParseUI.h>
+
+#import "ProgressHUD.h"
+
+#import "AppConstant.h"
+#import "DiscoverUser.h"
+#import "CurrentUser.h"
+#import "Contacts.h"
+#import "DatabaseAvailability.h"
+
+
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 void LoginUser(id target)
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -20,6 +35,7 @@ void LoginUser(id target)
 	NavigationController *navigationController = [[NavigationController alloc] initWithRootViewController:[[WelcomeView alloc] init]];
 	[target presentViewController:navigationController animated:YES completion:nil];
 }
+
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 void PostNotification(NSString *notification)

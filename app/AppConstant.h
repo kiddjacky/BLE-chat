@@ -34,6 +34,12 @@
 #define		PF_USER_FACEBOOKID					@"facebookId"			//	String
 #define		PF_USER_PICTURE						@"picture"				//	File
 #define		PF_USER_THUMBNAIL					@"thumbnail"			//	File
+#define     PF_USER_SEX                         @"sex"                  //  String
+#define     PF_USER_AGE                         @"age"                  //  Number
+#define     PF_USER_BIRTHDAY                    @"birthday"             //  String
+#define     PF_USER_INTEREST                    @"interest"             //  String
+#define     PF_USER_SELF_DESCRIPTION            @"selfDescription"      //  String
+#define     PF_USER_CONTACTS                    @"contacts"             //  Array of contact names
 //-----------------------------------------------------------------------
 #define		PF_CHAT_CLASS_NAME					@"Chat"					//	Class name
 #define		PF_CHAT_USER						@"user"					//	Pointer to User Class

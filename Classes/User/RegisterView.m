@@ -16,6 +16,12 @@
 #import "pushnotification.h"
 
 #import "RegisterView.h"
+#import "DatabaseAvailability.h"
+#import "utilities.h"
+#import "AppDelegate.h"
+#import "DiscoverUser.h"
+#import "CurrentUser.h"
+#import "Contacts.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @interface RegisterView()
@@ -91,6 +97,13 @@
 		{
 			ParsePushUserAssign();
 			[ProgressHUD showSuccess:@"Succeed."];
+            NSManagedObjectContext *context=((AppDelegate *) [UIApplication sharedApplication].delegate).DiscoverDatabaseContext;
+            [self loadUserDatabase:user.username fromContext:context];
+            //post notification
+            //setup notification to other view controller that the context is avaiable.
+            NSDictionary *userInfo = context ? @{DatabaseAvailabilityContext : context } : nil;
+            [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
+        
 			[self dismissViewControllerAnimated:YES completion:nil];
 		}
 		else [ProgressHUD showError:error.userInfo[@"error"]];
@@ -143,6 +156,73 @@
 		[self actionRegister:nil];
 	}
 	return YES;
+}
+
+-(void) loadUserDatabase:(NSString *)userName fromContext:(NSManagedObjectContext *)context
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"CurrentUser"];
+    request.predicate = nil;
+    NSError *error;
+    NSArray *matches = [context executeFetchRequest:request error:&error];
+    
+    //delete all existing database
+    //[request release];
+    for(NSManagedObject *user in matches) {
+        [context deleteObject:user];
+    }
+    
+    NSFetchRequest *dis_request = [NSFetchRequest fetchRequestWithEntityName:@"DiscoverUser"];
+    request.predicate = nil;
+    NSError *dis_error;
+    NSArray *dis_matches = [context executeFetchRequest:dis_request error:&dis_error];
+    
+    //[request release];
+    for(NSManagedObject *user in dis_matches) {
+        [context deleteObject:user];
+    }
+    
+    NSFetchRequest *con_request = [NSFetchRequest fetchRequestWithEntityName:@"Contacts"];
+    request.predicate = nil;
+    NSError *con_error;
+    NSArray *con_matches = [context executeFetchRequest:con_request error:&con_error];
+    
+    //[request release];
+    for(NSManagedObject *user in con_matches) {
+        [context deleteObject:user];
+    }
+    
+    NSError *saveError = nil;
+    [context save:&saveError];
+    
+    //load new database
+    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [query whereKey:PF_USER_USERNAME equalTo:userName];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+     {
+         if ([objects count] != 0)
+         {
+             NSLog(@"setup the current user after register");
+             PFUser *user = [objects firstObject];
+             CurrentUser *current_user = [NSEntityDescription
+                                          insertNewObjectForEntityForName:@"CurrentUser"
+                                          inManagedObjectContext:context];
+             current_user.userName = user.username;
+             current_user.userFullName = user[PF_USER_FULLNAME];
+             current_user.sex = user[PF_USER_SEX];
+             current_user.birthday = user[PF_USER_BIRTHDAY];
+             current_user.interest = user[PF_USER_INTEREST];
+             current_user.selfDescription = user[PF_USER_SELF_DESCRIPTION];
+             current_user.thumbnail = user[PF_USER_THUMBNAIL];
+             current_user.contactList = user[PF_USER_CONTACTS];
+             
+             
+             //SAVE CONTEXT
+             NSError *contactSaveError = nil;
+             [context save:&contactSaveError];
+             
+             
+         }
+     }];
 }
 
 @end
