@@ -12,6 +12,7 @@
 #import "AppConstant.h"
 #import "DatabaseAvailability.h"
 #import "utilities.h"
+#import "contactsCell.h"
 
 #import "Contacts.h"
 #import "contactDetailsVC.h"
@@ -66,6 +67,9 @@
     [super viewDidLoad];
     self.title = @"Contacts";
     self.tableView.tableFooterView = [[UIView alloc] init];
+    [self.tableView registerNib:[UINib nibWithNibName:@"contactsCell" bundle:nil] forCellReuseIdentifier:@"contactsCell"];
+
+    
     // Initialize the refresh control.
     self.refreshControl = [[UIRefreshControl alloc] init];
     self.refreshControl.backgroundColor = [UIColor purpleColor];
@@ -116,36 +120,34 @@
 #pragma mark - table view
 
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 70.0f;
+}
+
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+    contactsCell *cell = (contactsCell *)[tableView dequeueReusableCellWithIdentifier:@"contactsCell" forIndexPath:indexPath];
+    
+    if (cell == nil) {
+        
+        //cell = [[discoversCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discoversCell"];
+        cell = [tableView dequeueReusableCellWithIdentifier:@"contactsCell" forIndexPath:indexPath];
+    }
+    
 
     
+    
     Contacts *contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = contact.userFullName;
-    cell.detailTextLabel.text = contact.selfDescription;
+    cell.userFullName.text = contact.userFullName;
+    cell.localDateTime.text = contact.selfDescription;
         NSLog(@"update contacts view, first letter %@",contact.firstLetter);
     if (contact.thumbnail != nil) {
     cell.imageView.image = [UIImage imageWithData:contact.thumbnail];
     }
-    /*
-    cell.imageView.image = [UIImage imageWithData:contact.thumbnail];
-    if (!cell.imageView.image) {
-        dispatch_queue_t q = dispatch_queue_create("Thumbnail Contact Photo", 0);
-        dispatch_async(q, ^{
-            NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:contact.thumbnailURL]];
-            [self.managedObjectContext performBlock:^{
-                contact.thumbnail = imageData;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [cell setNeedsLayout];
-                });
-            }];
-        });
-    }
-    */
-    
-    return cell;
+     return cell;
 
 }
 
