@@ -47,6 +47,8 @@
 	imageUser.layer.cornerRadius = imageUser.frame.size.width/2;
 	imageUser.layer.masksToBounds = YES;
 	//---------------------------------------------------------------------------------------------------------------------------------------------
+    PFUser *usr = message[PF_MESSAGES_USER];
+    NSLog(@"message user is %@", message[PF_MESSAGES_USER]);
 	PFUser *lastUser = message[PF_MESSAGES_LASTUSER];
 	[imageUser setFile:lastUser[PF_USER_PICTURE]];
 	[imageUser loadInBackground];

@@ -82,7 +82,9 @@
 	self.messagesView = [[MessagesView alloc] init];
 	self.profileView = [[ProfileView alloc] init];
     self.discoversView = [[DiscoversView alloc] init];
+    //self.discoversView.managedObjectContext = self.DiscoverDatabaseContext;
     self.contactsView = [[ContactsView alloc] init];
+    //self.contactsView.managedObjectContext = self.DiscoverDatabaseContext;
 
 	NavigationController *navController1 = [[NavigationController alloc] initWithRootViewController:self.groupsView];
 	NavigationController *navController2 = [[NavigationController alloc] initWithRootViewController:self.messagesView];
@@ -101,8 +103,8 @@
 	//---------------------------------------------------------------------------------------------------------------------------------------------
     
     //create database
-    self.DiscoverDatabaseContext = [self createMainQueueManagedObjectContext];
-    
+    //self.DiscoverDatabaseContext = [self createMainQueueManagedObjectContext];
+        if (!self.DiscoverDatabaseContext) [self useDocument];
     
     // Start up the CBPeripheralManager
     _peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
@@ -142,6 +144,7 @@
 }
 
 //setup discover database
+/*
 -(void)setDiscoverDatabaseContext:(NSManagedObjectContext *)DiscoverDatabaseContext
 {
     _DiscoverDatabaseContext = DiscoverDatabaseContext;
@@ -152,7 +155,7 @@
     
     NSLog(@"Post database notification!");
     
-}
+}*/
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -990,5 +993,35 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     
 }
 
+
+#pragma mark - UIManagedDocument
+- (void)useDocument
+{
+    NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    url = [url URLByAppendingPathComponent:@"BLE_Document"];
+    UIManagedDocument *document = [[UIManagedDocument alloc] initWithFileURL:url];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
+        [document saveToURL:url
+           forSaveOperation:UIDocumentSaveForCreating
+          completionHandler:^(BOOL success) {
+              if (success) {
+                  self.DiscoverDatabaseContext = document.managedObjectContext;
+                  //[self refresh];
+                  NSLog(@"create uidocument");
+              }
+          }];
+    } else if (document.documentState == UIDocumentStateClosed) {
+        [document openWithCompletionHandler:^(BOOL success) {
+            if (success) {
+                self.DiscoverDatabaseContext = document.managedObjectContext;
+                NSLog(@"open uidocument");
+            }
+        }];
+    } else {
+        self.DiscoverDatabaseContext = document.managedObjectContext;
+        NSLog(@"just use ui document");
+    }
+}
 
 @end

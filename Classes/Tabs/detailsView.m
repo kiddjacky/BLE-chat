@@ -355,6 +355,7 @@
                  //add contact to current user contact list
                  PFUser *user = [PFUser currentUser];
                  NSLog(@"original contact list is %@", user[PF_USER_CONTACTS]);
+                 
                  NSMutableArray *contactList = [[NSMutableArray alloc] init];
                  [contactList addObject:contact.userName];
                  [contactList addObjectsFromArray:user[PF_USER_CONTACTS]];

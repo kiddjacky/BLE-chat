@@ -24,6 +24,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    
     [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
                                                       object:nil
                                                        queue:nil
@@ -51,7 +52,7 @@
     
     
     //NSLog(@"Discover set managed object context %@", managedObjectContext);
-    
+    NSLog(@"about to fetch contacts!" );
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
                                                                         managedObjectContext:managedObjectContext
@@ -61,6 +62,27 @@
     
     
 }
+/*
+-(void)setupFetchedResultsController
+{
+    if (self.managedObjectContext) {
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Contacts"];
+        request.predicate = nil;
+        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"userFullName"
+                                                                  ascending:YES
+                                                                   selector:@selector(localizedStandardCompare:)]];
+        
+        
+        //NSLog(@"Discover set managed object context %@", managedObjectContext);
+        
+        
+        self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
+                                                                            managedObjectContext:self.managedObjectContext
+                                                                              sectionNameKeyPath:@"firstLetter"
+                                                                                       cacheName:@"MyCache"];
+    }
+}
+*/
 
 -(void)viewDidLoad
 {
@@ -69,6 +91,8 @@
     self.tableView.tableFooterView = [[UIView alloc] init];
     [self.tableView registerNib:[UINib nibWithNibName:@"contactsCell" bundle:nil] forCellReuseIdentifier:@"contactsCell"];
 
+    //if (!self.managedObjectContext) [self useDocument];
+    //[self setupFetchedResultsController];
     
     // Initialize the refresh control.
     self.refreshControl = [[UIRefreshControl alloc] init];
@@ -77,7 +101,7 @@
     [self.refreshControl addTarget:self
                             action:@selector(reloadData)
                   forControlEvents:UIControlEventValueChanged];
-
+    
     
 }
 
@@ -143,10 +167,35 @@
     Contacts *contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.userFullName.text = contact.userFullName;
     cell.localDateTime.text = contact.selfDescription;
-        NSLog(@"update contacts view, first letter %@",contact.firstLetter);
+    NSLog(@"update contacts view, first letter %@",contact.firstLetter);
+    /*
     if (contact.thumbnail != nil) {
     cell.imageView.image = [UIImage imageWithData:contact.thumbnail];
     }
+    */
+    
+    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [query whereKey:PF_USER_USERNAME equalTo:contact.userName];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+     {
+         if ([objects count] != 0)
+         {
+             
+             PFUser *user = [objects firstObject];
+             PFFile *contactThumbnail = user[PF_USER_THUMBNAIL];
+             [contactThumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                 //NSLog(@"in the block");
+                 if(!error) {
+                     //NSLog(@"no error!");
+                     UIImage *image = [UIImage imageWithData:data];
+                     //NSLog(@"data is %@", data);
+                     cell.imageView.image = image;
+                     //dispatch_async(dispatch_get_main_queue(), ^{ cell.imageView.image = image; });
+                 }
+             }];
+         }
+     }];
+
      return cell;
 
 }
@@ -182,6 +231,32 @@
                   fromIndexPath:indexPath];
 }
 
+#pragma mark - UIManagedDocument
+- (void)useDocument
+{
+    NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    url = [url URLByAppendingPathComponent:@"BLE_Document"];
+    UIManagedDocument *document = [[UIManagedDocument alloc] initWithFileURL:url];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
+        [document saveToURL:url
+           forSaveOperation:UIDocumentSaveForCreating
+          completionHandler:^(BOOL success) {
+              if (success) {
+                  self.managedObjectContext = document.managedObjectContext;
+                  //[self refresh];
+              }
+          }];
+    } else if (document.documentState == UIDocumentStateClosed) {
+        [document openWithCompletionHandler:^(BOOL success) {
+            if (success) {
+                self.managedObjectContext = document.managedObjectContext;
+            }
+        }];
+    } else {
+        self.managedObjectContext = document.managedObjectContext;
+    }
+}
 
 
 @end

@@ -47,17 +47,23 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-
-    
+  /*
+    [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      NSLog(@"Get database notification");
+                                                      self.managedObjectContext = note.userInfo[DatabaseAvailabilityContext];
+                                                  }];*/
     return self;
 }
-
+/*
 - (void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
 {
     _managedObjectContext = managedObjectContext;
     
 }
-
+*/
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)viewDidLoad
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -74,6 +80,7 @@
 {
 	[super viewDidAppear:animated];
 	[fieldEmail becomeFirstResponder];
+    if (!self.managedObjectContext) [self useDocument];
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -102,14 +109,16 @@
 		{
 			ParsePushUserAssign();
 			[ProgressHUD showSuccess:[NSString stringWithFormat:@"Welcome back %@!", user[PF_USER_FULLNAME]]];
-            AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            self.managedObjectContext = appDelegate.DiscoverDatabaseContext;
-            [self loadUserDatabase];
+            //NSManagedObjectContext *context=((AppDelegate *) [UIApplication sharedApplication].delegate).DiscoverDatabaseContext;
+            [self loadUserDatabase:user.username fromContext:self.managedObjectContext];
+            //AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            //self.managedObjectContext = appDelegate.DiscoverDatabaseContext;
+            //[self loadUserDatabase];
             //post notification
             //setup notification to other view controller that the context is avaiable.
             NSDictionary *userInfo = self.managedObjectContext ? @{DatabaseAvailabilityContext : self.managedObjectContext } : nil;
             [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
-            
+            NSLog(@"dismiss login");
 			[self dismissViewControllerAnimated:YES completion:nil];
 		}
 		else [ProgressHUD showError:error.userInfo[@"error"]];
@@ -159,8 +168,9 @@
 	return YES;
 }
 
--(void) loadUserDatabase
+-(void) loadUserDatabase:(NSString *)userName fromContext:(NSManagedObjectContext *)context
 {
+    
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"CurrentUser"];
     request.predicate = nil;
     NSError *error;
@@ -203,17 +213,25 @@
              current_user = [NSEntityDescription
                                           insertNewObjectForEntityForName:@"CurrentUser"
                                           inManagedObjectContext:self.managedObjectContext];
+ 
              current_user.userName = user[PF_USER_USERNAME];
+                    NSLog(@"loaded1");
              current_user.userFullName = user[PF_USER_FULLNAME];
+                        NSLog(@"loaded2");
              current_user.sex = user[PF_USER_SEX];
+                        NSLog(@"loaded3");
              current_user.birthday = user[PF_USER_BIRTHDAY];
+                        NSLog(@"loaded4");
              current_user.interest = user[PF_USER_INTEREST];
+                        NSLog(@"loaded5");
              current_user.selfDescription = user[PF_USER_SELF_DESCRIPTION];
-             current_user.thumbnail = user[PF_USER_THUMBNAIL];
-             //current_user.contactList = user[PF_USER_CONTACTS];
-             
-             //NSLog(@"user name is %@, contact list is %@", current_user.userName, current_user.contactList);
-             
+                        NSLog(@"loaded6");
+             //current_user.thumbnail = user[PF_USER_THUMBNAIL];
+    NSLog(@"loaded7");
+             current_user.contactList = user[PF_USER_CONTACTS];
+                NSLog(@"loaded8");
+             NSLog(@"user name is %@, contact list is %@", current_user.userName, current_user.contactList);
+    
              //load contacts
              for (NSString * contact_name in user[PF_USER_CONTACTS]) {
                  NSLog(@"setup the contact %@", contact_name);
@@ -233,22 +251,45 @@
                           contact.age = user[PF_USER_AGE];
                           contact.interest = user[PF_USER_INTEREST];
                           contact.selfDescription = user[PF_USER_SELF_DESCRIPTION];
-                          contact.thumbnail = user[PF_USER_THUMBNAIL];
-                          //SAVE CONTEXT
-                          NSError *contactSaveError = nil;
-                          [self.managedObjectContext save:&contactSaveError];
+                          //contact.thumbnail = user[PF_USER_THUMBNAIL];
+                          NSLog(@"finished load contact!");
                       }
                   }];
                  
              }
-             //load discovers
-             //loadDiscover function
-             
-             //SAVE CONTEXT
-             NSError *contactSaveError = nil;
-             [self.managedObjectContext save:&contactSaveError];
-             
+
+    NSLog(@"finished load user!");
     
+}
+
+#pragma mark - UIManagedDocument
+- (void)useDocument
+{
+    NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    url = [url URLByAppendingPathComponent:@"BLE_Document"];
+    UIManagedDocument *document = [[UIManagedDocument alloc] initWithFileURL:url];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
+        [document saveToURL:url
+           forSaveOperation:UIDocumentSaveForCreating
+          completionHandler:^(BOOL success) {
+              if (success) {
+                  self.managedObjectContext = document.managedObjectContext;
+                  //[self refresh];
+                  NSLog(@"create uidocument");
+              }
+          }];
+    } else if (document.documentState == UIDocumentStateClosed) {
+        [document openWithCompletionHandler:^(BOOL success) {
+            if (success) {
+                self.managedObjectContext = document.managedObjectContext;
+                NSLog(@"open uidocument");
+            }
+        }];
+    } else {
+        self.managedObjectContext = document.managedObjectContext;
+        NSLog(@"just use ui document");
+    }
 }
 
 

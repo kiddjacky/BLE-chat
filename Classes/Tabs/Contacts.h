@@ -16,7 +16,7 @@
 @property (nonatomic, retain) NSString * interest;
 @property (nonatomic, retain) NSString * selfDescription;
 @property (nonatomic, retain) NSString * sex;
-@property (nonatomic, retain) id thumbnail;
+@property (nonatomic, retain) NSData * thumbnail;
 @property (nonatomic, retain) NSString * userFullName;
 @property (nonatomic, retain) NSString * userName;
 @property (nonatomic, retain) NSString * firstLetter;

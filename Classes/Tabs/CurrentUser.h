@@ -14,18 +14,17 @@
 @interface CurrentUser : NSManagedObject
 
 @property (nonatomic, retain) NSDecimalNumber * age;
-@property (nonatomic, retain) NSDate * birthday;
+@property (nonatomic, retain) NSString * birthday;
 @property (nonatomic, retain) NSString * interest;
 @property (nonatomic, retain) NSString * selfDescription;
 @property (nonatomic, retain) NSString * sex;
 @property (nonatomic, retain) NSString * userName;
-@property (nonatomic, retain) id thumbnail;
-@property (nonatomic, retain) id picture;
-@property (nonatomic, retain) NSData * contactList;
+@property (nonatomic, retain) NSData * thumbnail;
+@property (nonatomic, retain) NSData * picture;
+@property (nonatomic, retain) id contactList;
 @property (nonatomic, retain) NSString * userFullName;
 @property (nonatomic, retain) NSSet *contacts;
 @property (nonatomic, retain) NSSet *discovers;
-@property (nonatomic, retain) NSString *firstLetter;
 @end
 
 @interface CurrentUser (CoreDataGeneratedAccessors)
