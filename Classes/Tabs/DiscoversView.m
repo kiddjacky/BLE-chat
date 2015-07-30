@@ -54,7 +54,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
-        [self.tabBarItem setImage:[UIImage imageNamed:@"tab_discovers"]];
+        [self.tabBarItem setImage:[UIImage imageNamed:@"Find_User-100"]];
         self.tabBarItem.title = @"Discovers";
     }
     
