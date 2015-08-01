@@ -57,7 +57,6 @@
         [self.tabBarItem setImage:[UIImage imageNamed:@"Find_User-100"]];
         self.tabBarItem.title = @"Discovers";
     }
-    
     [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
                                                       object:nil
                                                        queue:nil
@@ -65,7 +64,6 @@
                                                       NSLog(@"Get database notification");
                                                       self.managedObjectContext = note.userInfo[DatabaseAvailabilityContext];
                                                   }];
-    
     return self;
 }
 
@@ -121,9 +119,11 @@
                             action:@selector(reloadData)
                   forControlEvents:UIControlEventValueChanged];
 
+    
+
     //[self.tableView reloadData];
      //setup observer before ask the appdelegate to post
-     [[NSNotificationCenter defaultCenter] postNotificationName:DiscoverViewReady object:nil];
+     //[[NSNotificationCenter defaultCenter] postNotificationName:DiscoverViewReady object:nil];
     //self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
     
 }
@@ -157,7 +157,7 @@
     //---------------------------------------------------------------------------------------------------------------------------------------------
     if ([PFUser currentUser] != nil)
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
+        //[[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
         [self loadDiscovers];
     }
     else LoginUser(self);

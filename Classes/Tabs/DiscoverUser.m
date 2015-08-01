@@ -17,5 +17,5 @@
 @dynamic timeMeet;
 @dynamic userFullName;
 @dynamic userName;
-
+@dynamic identifier;
 @end

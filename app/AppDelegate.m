@@ -48,13 +48,13 @@
 //CLLocation
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) CLLocation *currentLocation;
-
+@property (strong, nonatomic) NSTimer *scanTimer;
 @end
 
 
 #define NOTIFY_MTU      20
 #define DISCOVER_USER_LIMIT 3
-
+#define SCAN_INTERVAL (60)
 
 @implementation AppDelegate 
 
@@ -104,7 +104,7 @@
     
     //create database
     //self.DiscoverDatabaseContext = [self createMainQueueManagedObjectContext];
-        if (!self.DiscoverDatabaseContext) [self useDocument];
+    if (!self.DiscoverDatabaseContext) [self useDocument];
     
     // Start up the CBPeripheralManager
     _peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
@@ -119,8 +119,8 @@
     //_locationManager = [[CLLocationManager alloc] init];
     [self CurrentLocationIdentifier]; // call this method
 
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(post_context) name:DiscoverViewReady object:nil];
+    //[self post_context];
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(post_context) name:DiscoverViewReady object:nil];
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stop_scan) name:PFUSER_LOGOUT object:nil];
@@ -129,9 +129,13 @@
 	return YES;
 }
 
+
 -(void)stop_scan
 {
+    [self.scanTimer invalidate];
+    self.scanTimer = nil;
     [self.centralManager stopScan];
+
 }
 
 -(void)start_scan
@@ -140,8 +144,23 @@
         // In a real app, you'd deal with all the states correctly
         return;
     }
+    NSLog(@"central manager start to scan!");
+    [self scan];
+    NSLog(@"central manager setup scan timer");
+    self.scanTimer = [NSTimer scheduledTimerWithTimeInterval:SCAN_INTERVAL
+                                                                       target:self
+                                                                     selector:@selector(scan:)
+                                                                     userInfo:nil
+                                                                      repeats:YES];
+    
+    //[self scan];
+}
+
+-(void)scan:(NSTimer *)timer
+{
     [self scan];
 }
+
 
 //setup discover database
 /*
@@ -257,7 +276,7 @@
     // The state must be CBCentralManagerStatePoweredOn...
     
     // ... so start scanning
-    //[self scan];
+    [self start_scan];
     
 }
 
@@ -408,28 +427,98 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
  
     NSString *userName = [advertisementData objectForKey:CBAdvertisementDataLocalNameKey];
     NSLog(@"Discovered %@ at %@", userName, RSSI);
+    NSString *identifier = [peripheral.identifier UUIDString];
     
     if (userName!=NULL && userName.length > 0 ) {
-        [self get_info:userName];
+        [self get_info:userName with_identifier:identifier];
     }
     else { //if null, it is in back gorund, need ot connect
         //NSUUID *nsUUID = [[NSUUID UUID] initWithUUIDString:@"DD2468AB-1865-B926-7FA4-AE3755D479D8"];
         NSArray *known_peripherals = [self.centralManager retrievePeripheralsWithIdentifiers:[NSArray arrayWithObject:peripheral.identifier]];
         NSLog(@"peripeheral is %@", peripheral);
         NSLog(@"known_periperal is %@", known_peripherals);
-        if ([known_peripherals count] == 0) {
-        NSLog(@"peripheral is in background, try to connect");
-        if (peripheral.state == CBPeripheralStateDisconnected) {
-            NSLog(@"try to connect");
-            [self.centralManager connectPeripheral:peripheral options:nil];
-            self.connectingPeripheral = peripheral;
-        }
-        }
+          if ([known_peripherals count] == 0) {
+              NSLog(@"peripheral is in background, try to connect");
+              if (peripheral.state == CBPeripheralStateDisconnected) {
+                  NSLog(@"try to connect");
+                  [self.centralManager connectPeripheral:peripheral options:nil];
+                  self.connectingPeripheral = peripheral;
+              }
+           }
+          else {
+              //more than 5 mins reconnect again
+              NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"DiscoverUser"];
+              request.predicate = [NSPredicate predicateWithFormat:@"identifier = %@", identifier];
+              request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timeMeet"
+                                                                        ascending:NO]];
+              NSError *error;
+              NSArray *identifier_matches = [self.DiscoverDatabaseContext executeFetchRequest:request error:&error];
+              
+              if (error) {
+                  
+              } else if ([identifier_matches count]!=0) {
+                  NSLog(@"already matched");
+                  DiscoverUser *discoverUser = [identifier_matches firstObject];
+                  NSLog(@"already discover user is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
+                  //caculate time difference
+                  NSTimeInterval distanceBetweeenDates = [[NSDate date] timeIntervalSinceDate:discoverUser.timeMeet];
+                  double secondsInMin = 60;
+                  NSInteger minsBetweenDates = distanceBetweeenDates / secondsInMin;
+                  if (minsBetweenDates >= 2 )
+                  {
+                      NSLog(@"time meet for the same discover user is more than 2 mins, update location and time");
+                      discoverUser.timeMeet = [NSDate date];
+                      double latitude = (double)[self.currentLocation coordinate].latitude;
+                      discoverUser.latitude = [NSNumber numberWithDouble:latitude];
+                      double longitude = (double)[self.currentLocation coordinate].longitude;
+                      discoverUser.longitude = [NSNumber numberWithDouble:longitude];
+                      discoverUser.identifier = identifier;
+                      
+                      //find the actual full name
+                      PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+                      [query whereKey:PF_USER_USERNAME equalTo:discoverUser.userName];
+                      [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+                       {
+                           if ([objects count] != 0)
+                           {
+                               NSLog(@"find pf user full name and thumbnail");
+                               PFUser *user = [objects firstObject];
+                               discoverUser.userFullName = user[PF_USER_FULLNAME];
+                               [self save_and_post];
+                               NSLog(@"save and post finished!");
+                               
+                           }
+                       }];
+                      
+                      [self save_and_post];
+                  }
+                  else {
+                      NSLog(@"Background time meet for the same discover user is too soon to change");
+                  }
+
+              }
+              /* sort make sure the first object is latest
+              else if ([identifier_matches count]>1) {
+                  //with more than one match, should choose the most up-to date one to update
+              }*/
+              else {
+                  //no identifier match, might be the MOC haven't update, wait
+                 
+                  NSLog(@"2 peripheral is in background, try to connect");
+                  if (peripheral.state == CBPeripheralStateDisconnected) {
+                      NSLog(@"2 try to connect");
+                      [self.centralManager connectPeripheral:peripheral options:nil];
+                      self.connectingPeripheral = peripheral;
+                  }
+                
+                  //NSLog(@"wait for MOC to update identifier");
+              }
+          }
     }
 }
 
 
--(void) get_info:(NSString *)userName
+-(void) get_info:(NSString *)userName with_identifier:(NSString *)identifier
 {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"DiscoverUser"];
     request.predicate = [NSPredicate predicateWithFormat:@"userName = %@", userName];
@@ -447,9 +536,9 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
         NSLog(@"already discover user is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
         //caculate time difference
         NSTimeInterval distanceBetweeenDates = [[NSDate date] timeIntervalSinceDate:discoverUser.timeMeet];
-        double secondsInMin = 60;
-        NSInteger minsBetweenDates = distanceBetweeenDates / secondsInMin;
-        if (minsBetweenDates > 2 )
+        double secondsInMin = 1;
+        NSInteger secondsBetweenDates = distanceBetweeenDates / secondsInMin;
+        if (secondsBetweenDates >= 100 )
         {
             NSLog(@"time meet for the same discover user is more than 2 mins, update location and time");
             discoverUser.timeMeet = [NSDate date];
@@ -457,6 +546,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
             discoverUser.latitude = [NSNumber numberWithDouble:latitude];
             double longitude = (double)[self.currentLocation coordinate].longitude;
             discoverUser.longitude = [NSNumber numberWithDouble:longitude];
+            discoverUser.identifier = identifier;
             
             //find the actual full name
             PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
@@ -518,6 +608,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
         discoverUser.latitude = [NSNumber numberWithDouble:latitude];
         double longitude = (double)[self.currentLocation coordinate].longitude;
         discoverUser.longitude = [NSNumber numberWithDouble:longitude];
+        discoverUser.identifier = identifier;
                   NSLog(@"using parse query");
         //find the actual full name
         PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
@@ -657,14 +748,14 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
         NSLog(@"Error discovering characteristics: %@", [error localizedDescription]);
         return;
     }
-    
+    NSString *identifier = [peripheral.identifier UUIDString];
     NSString *stringFromData = [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding];
     NSLog(@"characteristic is %@", stringFromData);
     // Have we got everything we need?
     if (stringFromData != nil) {
         
         // We have, so show the data,
-        [self get_info:stringFromData];
+        [self get_info:stringFromData with_identifier:identifier];
         
         // Cancel our subscription to the characteristic
         [peripheral setNotifyValue:NO forCharacteristic:characteristic];
@@ -779,12 +870,12 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(btle_seq) name:PFUSER_READY object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stop_ad) name:PFUSER_LOGOUT object:nil];
-    /*
+    
     if ([PFUser currentUser] != nil) {
         [self btle_seq];
     } else {
         return;
-    }*/
+    }
     /*
      // Start with the CBMutableCharacteristic
      self.transferCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]
@@ -959,8 +1050,9 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 - (void)btle_seq
 {
     PFUser *user = [PFUser currentUser];
-    [self.peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]] , CBAdvertisementDataLocalNameKey : user.username  }];
-    NSLog(@"send out advertisment data, user name is %@", user.username);
+
+    
+    [self.peripheralManager removeAllServices];
     // create our characteristics
     CBMutableCharacteristic *characteristic =
     [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]
@@ -971,8 +1063,11 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     // create the service with the characteristics
     CBMutableService *service = [[CBMutableService alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID] primary:YES];
     service.characteristics = @[characteristic];
+
     [self.peripheralManager addService:service];
     
+    [self.peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]] , CBAdvertisementDataLocalNameKey : user.username  }];
+    NSLog(@"send out advertisment data, user name is %@", user.username);
 
     //self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(btle_switch_mode:) userInfo:nil repeats:YES];
 }
@@ -1009,6 +1104,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
                   self.DiscoverDatabaseContext = document.managedObjectContext;
                   //[self refresh];
                   NSLog(@"create uidocument");
+                  [self post_context];
               }
           }];
     } else if (document.documentState == UIDocumentStateClosed) {
@@ -1016,11 +1112,13 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
             if (success) {
                 self.DiscoverDatabaseContext = document.managedObjectContext;
                 NSLog(@"open uidocument");
+                [self post_context];
             }
         }];
     } else {
         self.DiscoverDatabaseContext = document.managedObjectContext;
         NSLog(@"just use ui document");
+        [self post_context];
     }
 }
 

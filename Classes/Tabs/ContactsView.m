@@ -19,11 +19,30 @@
 
 @implementation ContactsView
 
+/*
+-(void)awakeFromNib
+{
+    [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      NSLog(@"Get Contact database notification");
+                                                      self.managedObjectContext = note.userInfo[DatabaseAvailabilityContext];
+                                                  }];
+}
+*/
+
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    
+    if (self)
+    {
+        [self.tabBarItem setImage:[UIImage imageNamed:@"contact-icon"]];
+        self.tabBarItem.title = @"Contacts";
+    }
     
     [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
                                                       object:nil
@@ -32,11 +51,6 @@
                                                       NSLog(@"Get Contact database notification");
                                                       self.managedObjectContext = note.userInfo[DatabaseAvailabilityContext];
                                                   }];
-    if (self)
-    {
-        [self.tabBarItem setImage:[UIImage imageNamed:@"contact-icon"]];
-        self.tabBarItem.title = @"Contacts";
-    }
     return self;
 }
 
@@ -62,27 +76,6 @@
     
     
 }
-/*
--(void)setupFetchedResultsController
-{
-    if (self.managedObjectContext) {
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Contacts"];
-        request.predicate = nil;
-        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"userFullName"
-                                                                  ascending:YES
-                                                                   selector:@selector(localizedStandardCompare:)]];
-        
-        
-        //NSLog(@"Discover set managed object context %@", managedObjectContext);
-        
-        
-        self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
-                                                                            managedObjectContext:self.managedObjectContext
-                                                                              sectionNameKeyPath:@"firstLetter"
-                                                                                       cacheName:@"MyCache"];
-    }
-}
-*/
 
 -(void)viewDidLoad
 {
@@ -101,8 +94,7 @@
     [self.refreshControl addTarget:self
                             action:@selector(reloadData)
                   forControlEvents:UIControlEventValueChanged];
-    
-    
+
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -113,7 +105,7 @@
     //---------------------------------------------------------------------------------------------------------------------------------------------
     if ([PFUser currentUser] != nil)
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
+        //[[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
         //[self loadContacts];
     }
     else LoginUser(self);

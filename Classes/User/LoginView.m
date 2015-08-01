@@ -47,14 +47,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-  /*
-    [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
-                                                      object:nil
-                                                       queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      NSLog(@"Get database notification");
-                                                      self.managedObjectContext = note.userInfo[DatabaseAvailabilityContext];
-                                                  }];*/
+
     return self;
 }
 /*
@@ -116,8 +109,8 @@
             //[self loadUserDatabase];
             //post notification
             //setup notification to other view controller that the context is avaiable.
-            NSDictionary *userInfo = self.managedObjectContext ? @{DatabaseAvailabilityContext : self.managedObjectContext } : nil;
-            [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
+
+            [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
             NSLog(@"dismiss login");
 			[self dismissViewControllerAnimated:YES completion:nil];
 		}
@@ -182,6 +175,7 @@
         [self.managedObjectContext deleteObject:user];
     }
     
+    /*dont remove discover user
     NSFetchRequest *dis_request = [NSFetchRequest fetchRequestWithEntityName:@"DiscoverUser"];
     request.predicate = nil;
     NSError *dis_error;
@@ -191,6 +185,7 @@
     for(NSManagedObject *user in dis_matches) {
         [self.managedObjectContext deleteObject:user];
     }
+    */
     
     NSFetchRequest *con_request = [NSFetchRequest fetchRequestWithEntityName:@"Contacts"];
     request.predicate = nil;
@@ -253,6 +248,8 @@
                           contact.selfDescription = user[PF_USER_SELF_DESCRIPTION];
                           //contact.thumbnail = user[PF_USER_THUMBNAIL];
                           NSLog(@"finished load contact!");
+                          NSDictionary *userInfo = self.managedObjectContext ? @{DatabaseAvailabilityContext : self.managedObjectContext } : nil;
+                          [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
                       }
                   }];
                  

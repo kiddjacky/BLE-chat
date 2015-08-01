@@ -110,7 +110,7 @@
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	if ([PFUser currentUser] != nil)
 	{
-        [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
+        //[[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
 		[self loadUser];
 	}
 	else LoginUser(self);

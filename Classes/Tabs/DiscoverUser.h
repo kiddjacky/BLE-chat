@@ -18,5 +18,5 @@
 @property (nonatomic, retain) NSDate * timeMeet;
 @property (nonatomic, retain) NSString * userFullName;
 @property (nonatomic, retain) NSString * userName;
-
+@property (nonatomic, retain) NSString * identifier;
 @end

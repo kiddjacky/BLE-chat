@@ -59,6 +59,7 @@
 {
 	[super viewDidAppear:animated];
 	[fieldName becomeFirstResponder];
+    if (!self.managedObjectContext) [self useDocument];
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -97,12 +98,11 @@
 		{
 			ParsePushUserAssign();
 			[ProgressHUD showSuccess:@"Succeed."];
-            NSManagedObjectContext *context=((AppDelegate *) [UIApplication sharedApplication].delegate).DiscoverDatabaseContext;
-            [self loadUserDatabase:user.username fromContext:context];
+            //NSManagedObjectContext *context=((AppDelegate *) [UIApplication sharedApplication].delegate).DiscoverDatabaseContext;
+            [self loadUserDatabase:user.username fromContext:self.managedObjectContext];
             //post notification
             //setup notification to other view controller that the context is avaiable.
-            NSDictionary *userInfo = context ? @{DatabaseAvailabilityContext : context } : nil;
-            [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
+
         
 			[self dismissViewControllerAnimated:YES completion:nil];
 		}
@@ -170,7 +170,7 @@
     for(NSManagedObject *user in matches) {
         [context deleteObject:user];
     }
-    
+    /* don't remove discover user
     NSFetchRequest *dis_request = [NSFetchRequest fetchRequestWithEntityName:@"DiscoverUser"];
     request.predicate = nil;
     NSError *dis_error;
@@ -180,7 +180,7 @@
     for(NSManagedObject *user in dis_matches) {
         [context deleteObject:user];
     }
-    
+    */
     NSFetchRequest *con_request = [NSFetchRequest fetchRequestWithEntityName:@"Contacts"];
     request.predicate = nil;
     NSError *con_error;
@@ -195,34 +195,63 @@
     [context save:&saveError];
     
     //load new database
-    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    [query whereKey:PF_USER_USERNAME equalTo:userName];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-     {
-         if ([objects count] != 0)
-         {
-             NSLog(@"setup the current user after register");
-             PFUser *user = [objects firstObject];
-             CurrentUser *current_user = [NSEntityDescription
-                                          insertNewObjectForEntityForName:@"CurrentUser"
-                                          inManagedObjectContext:context];
-             current_user.userName = user.username;
-             current_user.userFullName = user[PF_USER_FULLNAME];
-             current_user.sex = user[PF_USER_SEX];
-             current_user.birthday = user[PF_USER_BIRTHDAY];
-             current_user.interest = user[PF_USER_INTEREST];
-             current_user.selfDescription = user[PF_USER_SELF_DESCRIPTION];
-             current_user.thumbnail = user[PF_USER_THUMBNAIL];
-             current_user.contactList = user[PF_USER_CONTACTS];
-             
-             
-             //SAVE CONTEXT
-             NSError *contactSaveError = nil;
-             [context save:&contactSaveError];
-             
-             
-         }
-     }];
+    CurrentUser *current_user = nil;
+    NSLog(@"setup the current user after login");
+    PFUser *user = [PFUser currentUser];
+    NSLog(@"setup setp1 load currentUser %@", user.username);
+    current_user = [NSEntityDescription
+                    insertNewObjectForEntityForName:@"CurrentUser"
+                    inManagedObjectContext:self.managedObjectContext];
+    
+    current_user.userName = user[PF_USER_USERNAME];
+    NSLog(@"loaded1");
+    current_user.userFullName = user[PF_USER_FULLNAME];
+    NSLog(@"loaded2");
+    current_user.sex = user[PF_USER_SEX];
+    NSLog(@"loaded3");
+    current_user.birthday = user[PF_USER_BIRTHDAY];
+    NSLog(@"loaded4");
+    current_user.interest = user[PF_USER_INTEREST];
+    NSLog(@"loaded5");
+    current_user.selfDescription = user[PF_USER_SELF_DESCRIPTION];
+    current_user.contactList = user[PF_USER_CONTACTS];
+    NSLog(@"user name is %@, contact list is %@", current_user.userName, current_user.contactList);
+
+    
+    NSDictionary *userInfo = self.managedObjectContext ? @{DatabaseAvailabilityContext : self.managedObjectContext } : nil;
+    [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
+    [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
+}
+
+
+#pragma mark - UIManagedDocument
+- (void)useDocument
+{
+    NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    url = [url URLByAppendingPathComponent:@"BLE_Document"];
+    UIManagedDocument *document = [[UIManagedDocument alloc] initWithFileURL:url];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
+        [document saveToURL:url
+           forSaveOperation:UIDocumentSaveForCreating
+          completionHandler:^(BOOL success) {
+              if (success) {
+                  self.managedObjectContext = document.managedObjectContext;
+                  //[self refresh];
+                  NSLog(@"create uidocument");
+              }
+          }];
+    } else if (document.documentState == UIDocumentStateClosed) {
+        [document openWithCompletionHandler:^(BOOL success) {
+            if (success) {
+                self.managedObjectContext = document.managedObjectContext;
+                NSLog(@"open uidocument");
+            }
+        }];
+    } else {
+        self.managedObjectContext = document.managedObjectContext;
+        NSLog(@"just use ui document");
+    }
 }
 
 @end
