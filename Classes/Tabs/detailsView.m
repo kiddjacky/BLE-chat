@@ -339,6 +339,7 @@
                  contact.interest = user[PF_USER_INTEREST];
                  contact.selfDescription = user[PF_USER_SELF_DESCRIPTION];
                  //contact.thumbnail = user[PF_USER_THUMBNAIL];
+                 /*
                  PFFile *contactThumbnail = user[PF_USER_THUMBNAIL];
                  [contactThumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
 
@@ -347,8 +348,8 @@
                          [self save_and_post];
                      }
                  }];
-
-                 [self save_and_post];
+                  */
+                 //[self save_and_post];
 
                  
                  

@@ -135,7 +135,7 @@
     [self.scanTimer invalidate];
     self.scanTimer = nil;
     [self.centralManager stopScan];
-
+    NSLog(@"stop scan!");
 }
 
 -(void)start_scan
@@ -276,7 +276,7 @@
     // The state must be CBCentralManagerStatePoweredOn...
     
     // ... so start scanning
-    [self start_scan];
+    [self scan];
     
 }
 
@@ -485,7 +485,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
                                PFUser *user = [objects firstObject];
                                discoverUser.userFullName = user[PF_USER_FULLNAME];
                                [self save_and_post];
-                               NSLog(@"save and post finished!");
+                               //NSLog(@"save and post finished!");
                                
                            }
                        }];
@@ -555,7 +555,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
              {
                  if ([objects count] != 0)
                  {
-                     NSLog(@"find pf user full name and thumbnail");
+                     //NSLog(@"find pf user full name and thumbnail");
                      PFUser *user = [objects firstObject];
                      discoverUser.userFullName = user[PF_USER_FULLNAME];
                      NSLog(@"found user %@, thumbnail is %@", discoverUser.userFullName, user[PF_USER_THUMBNAIL]);
@@ -573,7 +573,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
                       */
                      //NSLog(@"save thumbnail %@", discoverUser.thumbnail);
                      [self save_and_post];
-                     NSLog(@"save and post finished!");
+                     //NSLog(@"save and post finished!");
                      
                  }
              }];
@@ -640,7 +640,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
              }
          }];
         
-        //[self save_and_post];
+        [self save_and_post];
         
     }
 }
@@ -678,8 +678,8 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     NSLog(@"Peripheral Connected");
     
     // Stop scanning
-    [self.centralManager stopScan];
-    NSLog(@"Scanning stopped");
+    //[self.centralManager stopScan];
+    //NSLog(@"Scanning stopped");
     
     // Clear the data that we may already have
     [self.data setLength:0];
@@ -807,7 +807,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     self.discoveredPeripheral = nil;
     
     // We're disconnected, so start scanning again
-    [self scan];
+    //[self scan];
 }
 
 

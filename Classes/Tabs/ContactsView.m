@@ -106,9 +106,14 @@
     if ([PFUser currentUser] != nil)
     {
         //[[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
-        //[self loadContacts];
+        [self loadContacts];
     }
     else LoginUser(self);
+}
+
+-(void) loadContacts
+{
+    //[self reloadData];
 }
 
 
@@ -180,9 +185,10 @@
                  if(!error) {
                      //NSLog(@"no error!");
                      UIImage *image = [UIImage imageWithData:data];
-                     //NSLog(@"data is %@", data);
-                     cell.imageView.image = image;
-                     //dispatch_async(dispatch_get_main_queue(), ^{ cell.imageView.image = image; });
+                     NSLog(@"load contact %@ image ", contact.userFullName);
+                     cell.imageUser.image = image;
+                     //dispatch_async(dispatch_get_main_queue(), ^{ NSLog(@"in main queue, load cell image");
+                     //    cell.imageUser.image = image; });
                  }
              }];
          }

@@ -165,7 +165,7 @@
 
 -(void) loadDiscovers //load discover people or ibeacon
 {
-    
+   // [self reloadData];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -191,7 +191,7 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(discoversCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"update table view");
+    NSLog(@"update discover table view");
     DiscoverUser *discoverUser = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     NSDateFormatter *df = [NSDateFormatter new];

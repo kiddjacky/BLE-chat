@@ -136,6 +136,12 @@
 		DEB34C2D1AF0A7DF000A42B8 /* detailsView.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB34C2C1AF0A7DF000A42B8 /* detailsView.m */; };
 		DEB793941B68C6E400046815 /* contactsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB793921B68C6E400046815 /* contactsCell.m */; };
 		DEB793951B68C6E400046815 /* contactsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEB793931B68C6E400046815 /* contactsCell.xib */; };
+		DEB7939C1B6C45E100046815 /* Binoculars-50.png in Resources */ = {isa = PBXBuildFile; fileRef = DEB793961B6C45E100046815 /* Binoculars-50.png */; };
+		DEB7939D1B6C45E100046815 /* Binoculars-100.png in Resources */ = {isa = PBXBuildFile; fileRef = DEB793971B6C45E100046815 /* Binoculars-100.png */; };
+		DEB7939E1B6C45E100046815 /* Binoculars-200.png in Resources */ = {isa = PBXBuildFile; fileRef = DEB793981B6C45E100046815 /* Binoculars-200.png */; };
+		DEB7939F1B6C45E100046815 /* contact-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DEB793991B6C45E100046815 /* contact-icon@2x.png */; };
+		DEB793A01B6C45E100046815 /* Find_User-100@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DEB7939A1B6C45E100046815 /* Find_User-100@2x.png */; };
+		DEB793A11B6C45E100046815 /* tab_discovers_2.png in Resources */ = {isa = PBXBuildFile; fileRef = DEB7939B1B6C45E100046815 /* tab_discovers_2.png */; };
 		DEBB7B351AE2FD21009CD940 /* tab_discovers.png in Resources */ = {isa = PBXBuildFile; fileRef = DEBB7B341AE2FD21009CD940 /* tab_discovers.png */; };
 		DEBB7B481AE3753C009CD940 /* Discover.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DEBB7B461AE3753C009CD940 /* Discover.xcdatamodeld */; };
 		DEBCFF6B1B5E2C5E003A47B2 /* Contacts.m in Sources */ = {isa = PBXBuildFile; fileRef = DEBCFF6A1B5E2C5E003A47B2 /* Contacts.m */; };
@@ -386,6 +392,12 @@
 		DEB793911B68C6E400046815 /* contactsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = contactsCell.h; sourceTree = "<group>"; };
 		DEB793921B68C6E400046815 /* contactsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = contactsCell.m; sourceTree = "<group>"; };
 		DEB793931B68C6E400046815 /* contactsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = contactsCell.xib; sourceTree = "<group>"; };
+		DEB793961B6C45E100046815 /* Binoculars-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Binoculars-50.png"; sourceTree = "<group>"; };
+		DEB793971B6C45E100046815 /* Binoculars-100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Binoculars-100.png"; sourceTree = "<group>"; };
+		DEB793981B6C45E100046815 /* Binoculars-200.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Binoculars-200.png"; sourceTree = "<group>"; };
+		DEB793991B6C45E100046815 /* contact-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-icon@2x.png"; sourceTree = "<group>"; };
+		DEB7939A1B6C45E100046815 /* Find_User-100@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Find_User-100@2x.png"; sourceTree = "<group>"; };
+		DEB7939B1B6C45E100046815 /* tab_discovers_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_discovers_2.png; sourceTree = "<group>"; };
 		DEBB7B341AE2FD21009CD940 /* tab_discovers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_discovers.png; sourceTree = "<group>"; };
 		DEBB7B471AE3753C009CD940 /* Discover.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Discover.xcdatamodel; sourceTree = "<group>"; };
 		DEBCFF691B5E2C5E003A47B2 /* Contacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Contacts.h; path = Classes/Tabs/Contacts.h; sourceTree = "<group>"; };
@@ -891,6 +903,12 @@
 			isa = PBXGroup;
 			children = (
 				689D00E81B1D9BFD003E21F3 /* contact-icon.png */,
+				DEB793961B6C45E100046815 /* Binoculars-50.png */,
+				DEB793971B6C45E100046815 /* Binoculars-100.png */,
+				DEB793981B6C45E100046815 /* Binoculars-200.png */,
+				DEB793991B6C45E100046815 /* contact-icon@2x.png */,
+				DEB7939A1B6C45E100046815 /* Find_User-100@2x.png */,
+				DEB7939B1B6C45E100046815 /* tab_discovers_2.png */,
 				29A5312D1AAEEF9500263CB1 /* tab_groups@2x.png */,
 				29A5312E1AAEEF9500263CB1 /* tab_messages@2x.png */,
 				29A5312F1AAEEF9500263CB1 /* tab_profile@2x.png */,
@@ -1108,27 +1126,33 @@
 				292338C81AA350A400A47A39 /* AddressBookView.xib in Resources */,
 				29EB241919E9292500D7AA97 /* LaunchScreen.xib in Resources */,
 				685AE2511B1DA8F600C8D9E9 /* Whale_preview_180.png in Resources */,
+				DEB793A01B6C45E100046815 /* Find_User-100@2x.png in Resources */,
 				292339C01AA38E0F00A47A39 /* JSQMessagesCollectionViewCellIncoming.xib in Resources */,
 				292338CC1AA350A400A47A39 /* MessagesView.xib in Resources */,
 				292339C71AA38E0F00A47A39 /* JSQMessagesLoadEarlierHeaderView.xib in Resources */,
 				685AE2531B1DAB5000C8D9E9 /* Whale_preview_120.png in Resources */,
 				29A531341AAEEF9500263CB1 /* tab_groups@2x.png in Resources */,
+				DEB7939C1B6C45E100046815 /* Binoculars-50.png in Resources */,
 				292338CA1AA350A400A47A39 /* MessagesCell.xib in Resources */,
 				292338F71AA374C300A47A39 /* SelectMultipleView.xib in Resources */,
 				292338CE1AA350A400A47A39 /* ProfileView.xib in Resources */,
 				292339A31AA38E0F00A47A39 /* JSQMessages.strings in Resources */,
 				292339A21AA38E0F00A47A39 /* JSQMessagesAssets.bundle in Resources */,
 				292338C61AA350A400A47A39 /* SelectSingleView.xib in Resources */,
+				DEB7939D1B6C45E100046815 /* Binoculars-100.png in Resources */,
 				29A531361AAEEF9500263CB1 /* tab_profile@2x.png in Resources */,
 				689D00E91B1D9BFD003E21F3 /* contact-icon.png in Resources */,
 				29A531331AAEEF9500263CB1 /* profile_blank@2x.png in Resources */,
 				DEBB7B351AE2FD21009CD940 /* tab_discovers.png in Resources */,
 				DEBF53CE1B4CF9C900891128 /* discoversCell.xib in Resources */,
 				29A531311AAEEF9500263CB1 /* messages_blank@2x.png in Resources */,
+				DEB7939F1B6C45E100046815 /* contact-icon@2x.png in Resources */,
 				29A531321AAEEF9500263CB1 /* messages_compose@2x.png in Resources */,
+				DEB793A11B6C45E100046815 /* tab_discovers_2.png in Resources */,
 				292338FC1AA37C4100A47A39 /* FacebookFriendsView.xib in Resources */,
 				29EB241619E9292500D7AA97 /* Images.xcassets in Resources */,
 				292338D41AA350A400A47A39 /* WelcomeView.xib in Resources */,
+				DEB7939E1B6C45E100046815 /* Binoculars-200.png in Resources */,
 				29A531301AAEEF9500263CB1 /* chat_blank@2x.png in Resources */,
 				292339C21AA38E0F00A47A39 /* JSQMessagesCollectionViewCellOutgoing.xib in Resources */,
 				DEB793951B68C6E400046815 /* contactsCell.xib in Resources */,
