@@ -83,7 +83,7 @@
     //[self.view addConstraints:constraint_POS_H_image];
     
     
-    //[self.chat addTarget:self action:@selector(actionChat) forControlEvents:UIControlEventTouchUpInside];
+    [self.chat addTarget:self action:@selector(actionChat) forControlEvents:UIControlEventTouchUpInside];
     
 }
 
