@@ -37,6 +37,8 @@
 @property UIButton *chat;
 @property PFImageView *imageUser;
 @property UILabel *label;
+@property UILabel *subLabel;
+@property UIView *subLabelContainerView;
 
 @end
 
@@ -53,8 +55,8 @@
     
     
 
-    NSLog(@"corner radius =  %f", self.imageUser.frame.size.width / 2);
-//    self.imageUser.layer.cornerRadius = 10;
+
+    //self.imageUser.layer.cornerRadius = 20;
     self.imageUser.layer.masksToBounds = YES;
 //    [self.imageUser setBackgroundColor:[UIColor grayColor]];
     self.imageUser.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -65,7 +67,7 @@
 
     self.label = [[UILabel alloc] init];
     //   [self.label setBackgroundColor:[UIColor redColor]];
-    self.label.text = self.discoverUser.userName;
+    self.label.text = self.discoverUser.userFullName;
     [self.label setFont:[UIFont fontWithName:@"System" size:30]];
     NSLog(@"text label =  %@", self.label.text);
     self.label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -73,6 +75,19 @@
     self.labelContainerView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.labelContainerView addSubview:self.label];
     [self.view addSubview:self.labelContainerView];
+    
+    //sub label
+    self.subLabel = [[UILabel alloc] init];
+    //   [self.label setBackgroundColor:[UIColor redColor]];
+    //self.subLabel.text = self.discoverUser.description;
+    [self.subLabel setFont:[UIFont fontWithName:@"System" size:20]];
+    NSLog(@"sub label =  %@", self.subLabel.text);
+    self.subLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.subLabelContainerView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.subLabelContainerView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.subLabelContainerView addSubview:self.subLabel];
+    [self.view addSubview:self.subLabelContainerView];
+
     
     
     //self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
@@ -123,13 +138,13 @@
     
     [self.view addSubview:self.mapContainerView];
     
-    // Width constraint, half of parent view width
+    // Width constraint, full of parent view width
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.mapContainerView
                                                           attribute:NSLayoutAttributeWidth
                                                           relatedBy:NSLayoutRelationEqual
                                                              toItem:self.view
                                                           attribute:NSLayoutAttributeWidth
-                                                         multiplier:0.5
+                                                         multiplier:1
                                                            constant:0]];
     
     // Height constraint, half of parent view height
@@ -160,47 +175,62 @@
                                                            constant:0.0]];
     */
     
-    NSDictionary *viewsDictionary = @{@"mapView":self.mapContainerView, @"poke_view":self.pokeContainerView, @"chat_view":self.chatContainerView, @"imageView":self.imageContainerView, @"labelView":self.labelContainerView};
+    NSDictionary *viewsDictionary = @{@"mapView":self.mapContainerView, @"poke_view":self.pokeContainerView, @"chat_view":self.chatContainerView, @"imageView":self.imageContainerView, @"labelView":self.labelContainerView, @"subLabelView":self.subLabelContainerView};
     
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.imageContainerView
                                                           attribute:NSLayoutAttributeHeight
                                                           relatedBy:NSLayoutRelationEqual
                                                              toItem:self.view
                                                           attribute:NSLayoutAttributeHeight
-                                                         multiplier:0.2
-                                                           constant:0.0]];
+                                                         multiplier:0
+                                                           constant:80.0]];
     
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.imageContainerView
                                                           attribute:NSLayoutAttributeWidth
                                                           relatedBy:NSLayoutRelationEqual
                                                              toItem:self.view
                                                           attribute:NSLayoutAttributeWidth
-                                                         multiplier:0.2
-                                                           constant:0.0]];
+                                                         multiplier:0
+                                                           constant:80.0]];
     
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.labelContainerView
                                                           attribute:NSLayoutAttributeHeight
                                                           relatedBy:NSLayoutRelationEqual
                                                              toItem:self.view
                                                           attribute:NSLayoutAttributeHeight
-                                                         multiplier:0.1
-                                                           constant:0.0]];
+                                                         multiplier:0
+                                                           constant:30]];
  
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.labelContainerView
                                                           attribute:NSLayoutAttributeWidth
                                                           relatedBy:NSLayoutRelationEqual
                                                              toItem:self.view
                                                           attribute:NSLayoutAttributeWidth
-                                                         multiplier:0.6
-                                                           constant:0.0]];
+                                                         multiplier:0
+                                                           constant:100]];
+ 
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.subLabelContainerView
+                                                          attribute:NSLayoutAttributeHeight
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeHeight
+                                                         multiplier:0
+                                                           constant:30]];
     
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.subLabelContainerView
+                                                          attribute:NSLayoutAttributeWidth
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeWidth
+                                                         multiplier:0
+                                                           constant:200]];
 
-    NSArray *constraint_POS_V_image = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[imageView]"
+    NSArray *constraint_POS_V_image = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[imageView]"
                                                                               options:0
                                                                               metrics:nil
                                                                                 views:viewsDictionary];
     
-    NSArray *constraint_POS_H_image = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[imageView]"
+    NSArray *constraint_POS_H_image = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-15-[imageView]"
                                                                               options:0
                                                                               metrics:nil
                                                                                 views:viewsDictionary];
@@ -210,16 +240,27 @@
                                                                         metrics:nil
                                                                           views:viewsDictionary];
 
-    NSArray *constraint_POS_H_label = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[imageView]-10-[labelView]"
+    NSArray *constraint_POS_H_label = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[imageView]-20-[labelView]"
+                                                                              options:0
+                                                                              metrics:nil
+                                                                                views:viewsDictionary];
+    
+    NSArray *constraint_POS_V_subLabel = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[labelView]-10-[subLabelView]"
+                                                                              options:0
+                                                                              metrics:nil
+                                                                                views:viewsDictionary];
+    
+    NSArray *constraint_POS_H_subLabel = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[imageView]-20-[subLabelView]"
                                                                               options:0
                                                                               metrics:nil
                                                                                 views:viewsDictionary];
     
     
-    NSArray *constraint_POS_V = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-100-[mapView]-100-|"
+    NSArray *constraint_POS_V = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[imageView]-20-[mapView]"
                                                                         options:0
                                                                         metrics:nil
                                                                           views:viewsDictionary];
+    
   
     NSArray *constraint_POS_V_button1 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[mapView]-20-[poke_view]"
                                                                         options:0
@@ -268,8 +309,8 @@
                                                           attribute:NSLayoutAttributeWidth
                                                          multiplier:1.0
                                                            constant:0.0]];
-    /*
-    NSArray *constraint_POS_H = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[mapView]-10-|"
+    
+    /*NSArray *constraint_POS_H = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[mapView]-10-|"
                                                                         options:0
                                                                         metrics:nil
                                                                           views:viewsDictionary];
@@ -280,6 +321,8 @@
     [self.view addConstraints:constraint_POS_H_image];
     [self.view addConstraints:constraint_POS_V_label];
     [self.view addConstraints:constraint_POS_H_label];
+    [self.view addConstraints:constraint_POS_V_subLabel];
+    [self.view addConstraints:constraint_POS_H_subLabel];
     [self.view addConstraints:constraint_POS_H_button1];
     [self.view addConstraints:constraint_POS_H_button2];
     [self.view addConstraints:constraint_POS_H_button3];
@@ -439,7 +482,9 @@
              NSLog(@"debug 2 = %@ objects count = %lu" , self.discoverUser.userName, (unsigned long)[objects count]);
              PFUser *user = [objects firstObject];
              //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
+             self.subLabel.text = user[PF_USER_SELF_DESCRIPTION];
     self.imageUser.layer.cornerRadius = self.imageUser.frame.size.width / 2;
+                 NSLog(@"corner radius =  %f", self.imageUser.layer.cornerRadius);
              [self.imageUser setFile:user[PF_USER_PICTURE]];
             [self.imageUser loadInBackground];
          }

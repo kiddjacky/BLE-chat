@@ -53,7 +53,7 @@
 
 
 #define NOTIFY_MTU      20
-#define DISCOVER_USER_LIMIT 3
+#define DISCOVER_USER_LIMIT 50
 #define SCAN_INTERVAL (60)
 
 @implementation AppDelegate 
@@ -276,7 +276,10 @@
     // The state must be CBCentralManagerStatePoweredOn...
     
     // ... so start scanning
-    [self scan];
+    /*
+    if (self.DiscoverDatabaseContext) {
+        [self start_scan];
+    }*/
     
 }
 

@@ -203,8 +203,24 @@
     Contacts *contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     contactDetailsVC *ivc = [[contactDetailsVC alloc] init];
-    ivc.contact = contact;
-    [self.navigationController pushViewController:ivc animated:YES];
+    
+    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [query whereKey:PF_USER_USERNAME equalTo:contact.userName];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+     {
+         if ([objects count] != 0)
+         {
+             
+             PFUser *user = [objects firstObject];
+             contact.userFullName = user[PF_USER_FULLNAME];
+             contact.sex = user[PF_USER_SEX];
+             contact.interest = user[PF_USER_INTEREST];
+             contact.selfDescription = user[PF_USER_SELF_DESCRIPTION];
+             ivc.contact = contact;
+             [self.navigationController pushViewController:ivc animated:YES];
+         }
+     }];
+
 }
 
 #pragma mark - Table view delegate
