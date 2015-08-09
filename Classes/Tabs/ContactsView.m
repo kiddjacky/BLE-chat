@@ -71,7 +71,7 @@
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
                                                                         managedObjectContext:managedObjectContext
                                                                           sectionNameKeyPath:@"firstLetter"
-                                                                                   cacheName:@"MyCache"];
+                                                                                   cacheName:nil];
     
     
     
@@ -223,6 +223,41 @@
 
 }
 
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+{
+    return YES;
+}
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+{
+    PFUser *user = [PFUser currentUser];
+        Contacts *contact = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    [self.fetchedResultsController.managedObjectContext deleteObject:contact];
+    
+    
+    
+    NSMutableArray *contactList = user[PF_USER_CONTACTS];
+    NSLog(@"old contact list is %@", contactList);
+    [contactList removeObject:contact.userName];
+        NSLog(@"new contact list is %@", contactList);
+    user[PF_USER_CONTACTS] = contactList;
+    
+    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+     {
+         if (error == nil)
+         {
+             [ProgressHUD showSuccess:@"Delete Contact!"];
+         }
+         else [ProgressHUD showError:@"Network error."];
+     }];
+}
+
+
 #pragma mark - Table view delegate
 -(void)prepareViewController:(id)vc forSegue:(NSString *)segueIdentifier fromIndexPath:(NSIndexPath *)indexPath
 {
@@ -245,32 +280,6 @@
                   fromIndexPath:indexPath];
 }
 
-#pragma mark - UIManagedDocument
-- (void)useDocument
-{
-    NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-    url = [url URLByAppendingPathComponent:@"BLE_Document"];
-    UIManagedDocument *document = [[UIManagedDocument alloc] initWithFileURL:url];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
-        [document saveToURL:url
-           forSaveOperation:UIDocumentSaveForCreating
-          completionHandler:^(BOOL success) {
-              if (success) {
-                  self.managedObjectContext = document.managedObjectContext;
-                  //[self refresh];
-              }
-          }];
-    } else if (document.documentState == UIDocumentStateClosed) {
-        [document openWithCompletionHandler:^(BOOL success) {
-            if (success) {
-                self.managedObjectContext = document.managedObjectContext;
-            }
-        }];
-    } else {
-        self.managedObjectContext = document.managedObjectContext;
-    }
-}
 
 
 @end

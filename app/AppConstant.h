@@ -51,6 +51,8 @@
 //-----------------------------------------------------------------------
 #define		PF_GROUPS_CLASS_NAME				@"Groups"				//	Class name
 #define		PF_GROUPS_NAME						@"name"					//	String
+#define     PF_GROUPS_LATITUDE                  @"latitude"             //  Latitude
+#define     PF_GROUPS_LONGTITUDE                @"longtitude"           //  Longtitude
 //-----------------------------------------------------------------------
 #define		PF_MESSAGES_CLASS_NAME				@"Messages"				//	Class name
 #define		PF_MESSAGES_USER					@"user"					//	Pointer to User Class
