@@ -276,11 +276,10 @@
     // The state must be CBCentralManagerStatePoweredOn...
     
     // ... so start scanning
-    /*
-    if (self.DiscoverDatabaseContext) {
-        [self start_scan];
-    }*/
     
+    if (self.DiscoverDatabaseContext && self.scanTimer==nil) {
+        [self start_scan];
+    }
 }
 
 
@@ -1108,6 +1107,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
                   //[self refresh];
                   NSLog(@"create uidocument");
                   [self post_context];
+                  [self start_scan];
               }
           }];
     } else if (document.documentState == UIDocumentStateClosed) {
@@ -1116,12 +1116,14 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
                 self.DiscoverDatabaseContext = document.managedObjectContext;
                 NSLog(@"open uidocument");
                 [self post_context];
+                [self start_scan];
             }
         }];
     } else {
         self.DiscoverDatabaseContext = document.managedObjectContext;
         NSLog(@"just use ui document");
         [self post_context];
+        [self start_scan];
     }
 }
 
