@@ -245,13 +245,24 @@
                      //NSLog(@"no error!");
                      UIImage *image = [UIImage imageWithData:data];
  //                    UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
-                     NSLog(@"%@ no error is %@",discoverUser.userName, data);
-                        cell.imageUser.image = image;
+  //                   NSLog(@"%@ no error is %@",discoverUser.userName, data);
+  //                      cell.imageUser.image = image;
                   }
                  
              }
             progressBlock:^(int percentDone)
               {
+                  if (percentDone == 100)
+                  {
+                      NSLog(@"download done!!!!");
+                  }
+                  
+                  else
+                  {
+                      UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
+                      cell.imageUser.image = def_image;
+                  }
+                  
 
                          }
 
