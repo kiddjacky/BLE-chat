@@ -25,6 +25,9 @@
 #import "Contacts.h"
 #import "CurrentUser.h"
 #import "DatabaseAvailability.h"
+#import "detailsImageView.h"
+
+#import <objc/runtime.h>
 
 @interface detailsView ()
 @property MKMapView *mapView;
@@ -40,12 +43,14 @@
 @property UILabel *subLabel;
 @property UIView *subLabelContainerView;
 
+
 @end
 
 
 @implementation detailsView
 
 @synthesize location;
+
 
 -(void)viewDidLoad {
     [super viewDidLoad];
@@ -64,6 +69,24 @@
     self.imageContainerView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.imageContainerView addSubview:self.imageUser];
     [self.view addSubview:self.imageContainerView];
+    
+    
+ //   UIImageView* ivExpand = [[UIImageView alloc] initWithImage: self.imageUser.image];
+ //   self.imageUser.contentMode = self.imageUser.contentMode;
+     self.imageUser.userInteractionEnabled = YES;
+    self.imageUser.clipsToBounds = YES;
+//     self.imageUser.userInteractionEnabled = YES;
+    
+    UITapGestureRecognizer *tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(onTap:)];
+    
+    tapGesture1.numberOfTapsRequired = 1;
+//    [tapGesture1 setDelegate:self];
+    [self.imageUser addGestureRecognizer:tapGesture1];
+    
+//    [tapGesture1 release];
+    
+    
+    
 
     self.label = [[UILabel alloc] init];
     //   [self.label setBackgroundColor:[UIColor redColor]];
@@ -334,6 +357,16 @@
     
 }
 
+- (void) onTap: (UITapGestureRecognizer*) tgr
+{
+    detailsImageView *destinationImageView = [[detailsImageView alloc] init];
+
+//    destinationImageView.mImg = [UIImage imageNamed:@"tab_discovers_2"];
+    destinationImageView.mImg = self.imageUser.image;
+   [self.navigationController pushViewController:destinationImageView animated:NO];
+    
+}
+
 -(void)loadView
 {
     CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
@@ -479,7 +512,7 @@
      {
          if ([objects count] != 0)
          {
-             NSLog(@"debug 2 = %@ objects count = %lu" , self.discoverUser.userName, (unsigned long)[objects count]);
+ //            NSLog(@"debug 2 = %@ objects count = %lu" , self.discoverUser.userName, (unsigned long)[objects count]);
              PFUser *user = [objects firstObject];
              //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
              self.subLabel.text = user[PF_USER_SELF_DESCRIPTION];
