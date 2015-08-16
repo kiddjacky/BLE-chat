@@ -23,6 +23,10 @@
 
 #import "ChatView.h"
 
+#import "UIImageView+AFNetworking.h"
+#import "AFHTTPRequestOperationManager.h"
+#import "NSObject+associatedObject.h"
+
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @interface DiscoversView()
 {
@@ -189,6 +193,17 @@
     return cell;
 }
 
+- (AFHTTPRequestOperationManager *)operationManager
+{
+    if (!_operationManager)
+    {
+        _operationManager = [[AFHTTPRequestOperationManager alloc] init];
+        _operationManager.responseSerializer = [AFImageResponseSerializer serializer];
+    };
+    
+    return _operationManager;
+}
+
 -(void)tableView:(UITableView *)tableView willDisplayCell:(discoversCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"update discover table view");
@@ -208,23 +223,40 @@
     
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
     [query whereKey:PF_USER_USERNAME equalTo:discoverUser.userName];
+        NSLog(@"%@ before object count is ",discoverUser.userName);
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+
      {
          if ([objects count] != 0)
          {
              
              PFUser *user = [objects firstObject];
              PFFile *discoverThumbnail = user[PF_USER_THUMBNAIL];
+             NSLog(@"%@ after object count is ",discoverUser.userName);
+             if (user[PF_USER_THUMBNAIL] == nil)
+             {
+                UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
+                cell.imageUser.image = def_image;
+             }
              [discoverThumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
                  //NSLog(@"in the block");
+                 
                  if(!error) {
                      //NSLog(@"no error!");
                      UIImage *image = [UIImage imageWithData:data];
-                     //NSLog(@"data is %@", data);
-                     cell.imageUser.image = image;
-                     //dispatch_async(dispatch_get_main_queue(), ^{ cell.imageView.image = image; });
-                 }
-             }];
+ //                    UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
+                     NSLog(@"%@ no error is %@",discoverUser.userName, data);
+                        cell.imageUser.image = image;
+                  }
+                 
+             }
+            progressBlock:^(int percentDone)
+              {
+
+                         }
+
+              ];
+
          }
      }];
 
