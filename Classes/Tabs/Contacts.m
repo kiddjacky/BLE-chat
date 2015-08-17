@@ -19,6 +19,8 @@
 @dynamic userFullName;
 @dynamic userName;
 @dynamic firstLetter;
+@dynamic address;
+//@dynamic pfUser;
 
 @end
 

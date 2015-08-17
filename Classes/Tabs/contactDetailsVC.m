@@ -21,6 +21,8 @@
 #import "ChatView.h"
 #import "Contacts.h"
 
+#import "contactDetailCell.h"
+
 @interface contactDetailsVC ()
 @property UIButton *chat;
 @property UILabel *userFullName;
@@ -28,46 +30,32 @@
 @property UILabel *interest;
 @property UILabel *selfDescription;
 
-@property UIView *chatContainerView;
+
 @property UIView *labelContainerView;
 @property UILabel *label;
 
 @property PFImageView *imageUser;
-@property UIView *imageContainerView;
+
 @property NSMutableArray *info;
-//@property UITableView *contactDetailsTV;
-//@property UIView *tableContainerView;
+@property PFUser *target;
 
 @end
 
 
 @implementation contactDetailsVC
-/*
-- (id)initWithNibName:(NSString*)nibName bundle:(NSBundle*)bundleName
-{
-    self = [super initWithNibName:nibName bundle:bundleName];
-    if (self)
-    {
-        self.contactDetailsTV = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
-        self.contactDetailsTV.dataSource = self;
-        self.contactDetailsTV.delegate = self;
-        [self.view addSubview:self.contactDetailsTV];
-        NSLog(@"add subview contact details TV");
-    }
-    
-    return self;
-}*/
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"contactDetailCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"contactDetailCell"];
+    
+    [self.tableView registerClass:[contactDetailCell class] forCellReuseIdentifier:@"contactDetailCell"];
+    
     self.imageUser = [[PFImageView alloc] init];
     [self loadView];
     [self loadUser];
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
-    
-
-    
     
     _chat = [UIButton buttonWithType:UIButtonTypeCustom];
     self.chat.layer.cornerRadius = 10;
@@ -75,12 +63,6 @@
     [self.chat setTitle:@"Chat" forState:UIControlStateNormal];
     [self.chat setBackgroundColor:[UIColor blueColor]];
     self.chat.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    
-
-    //[self.view addConstraints:constraint_POS_V_label];
-    //[self.view addConstraints:constraint_POS_H_label];
-    //[self.view addConstraints:constraint_POS_V_image];
-    //[self.view addConstraints:constraint_POS_H_image];
     
     
     [self.chat addTarget:self action:@selector(actionChat) forControlEvents:UIControlEventTouchUpInside];
@@ -99,37 +81,18 @@
 
 -(void)actionChat
 {
-    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    [query whereKey:PF_USER_USERNAME equalTo:self.contact.userName];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-     {
-         if ([objects count] != 0)
-         {
-             PFUser *user = [objects firstObject];
-             //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
-             NSString *discoverId = StartPrivateChat([PFUser currentUser], user);
+             NSString *discoverId = StartPrivateChat([PFUser currentUser], self.target);
              //---------------------------------------------------------------------------------------------------------------------------------------------
              ChatView *chatView = [[ChatView alloc] initWith:discoverId];
              chatView.hidesBottomBarWhenPushed = YES;
              [self.navigationController pushViewController:chatView animated:YES];
-         }
-     }];
-    
-    //NSString *discoverId = discover.objectId;
-    //---------------------------------------------------------------------------------------------------------------------------------------------
-    
+
 }
 
 
 - (void)loadUser
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-    
-    
-    //    PFUser *user = [PFUser currentUser];
-    
-    
-    //    self.label.text = user[PF_USER_FULLNAME];
     NSLog(@"debug = %@", self.contact.userName);
     
     
@@ -140,12 +103,12 @@
          if ([objects count] != 0)
          {
              NSLog(@"debug 2 = %@ objects count = %lu" , self.contact.userName, (unsigned long)[objects count]);
-             PFUser *user = [objects firstObject];
+             self.target = [objects firstObject];
              //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
              //self.subLabel.text = user[PF_USER_SELF_DESCRIPTION];
              self.imageUser.layer.cornerRadius = self.imageUser.frame.size.width / 2;
              NSLog(@"corner radius =  %f", self.imageUser.layer.cornerRadius);
-             [self.imageUser setFile:user[PF_USER_PICTURE]];
+             [self.imageUser setFile:self.target[PF_USER_PICTURE]];
              [self.imageUser loadInBackground];
          }
      }];
@@ -155,13 +118,19 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // return number of rows
-    NSInteger row = 1;
+    NSInteger row = 0;
     self.info = [[NSMutableArray alloc] init];
-    if (self.contact.age) {
-        NSLog(@"age is %@", self.contact.age);
+    if (![self.contact.userFullName isEqualToString:@""] && !(self.contact.userFullName == nil)) {
+        NSLog(@"user full name is %@", self.contact.userFullName);
         row = row + 1;
-            NSString *age = [NSString stringWithFormat:@"Age                %@", self.contact.age ];
-        [self.info addObject:age];
+        NSString *full_name = [NSString stringWithFormat:@"Name          %@", self.contact.userFullName ];
+        [self.info addObject:full_name];
+    }
+    if (![self.contact.address isEqualToString:@""] && !(self.contact.address == nil)) {
+        NSLog(@"age is %@", self.contact.address);
+        row = row + 1;
+            NSString *address = [NSString stringWithFormat:@"Meet At             %@", self.contact.address ];
+        [self.info addObject:address];
     }
     if (![self.contact.sex isEqualToString:@""] && !(self.contact.sex == nil)) {
         row = row + 1;
@@ -184,32 +153,50 @@
         [self.info addObject:self_description];
     
     }
-    NSLog(@"row is %d", row);
+    NSLog(@"row is %ld", (long)row);
     return row;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+    contactDetailCell *cell = (contactDetailCell *)[tableView dequeueReusableCellWithIdentifier:@"contactDetailCell" forIndexPath:indexPath];
+    if (cell == nil) {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"contactDetailCell" owner:self options:nil];
+        cell = [nib objectAtIndex:0];
+        
+    }
+    
+    //cell.content.text = [self.info objectAtIndex:indexPath.row];
     
     return cell;
 }
 
-
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+-(void)tableView:(UITableView *)tableView willDisplayCell:(contactDetailCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //need to update contact info here
-
-    NSString *full_name = [NSString stringWithFormat:@"Name          %@", self.contact.userFullName ];
-
-    if(indexPath.row==0) cell.textLabel.text = full_name;
-    if(indexPath.row==1) cell.textLabel.text = [self.info objectAtIndex:0];
-    if(indexPath.row==2) cell.textLabel.text = [self.info objectAtIndex:1];
-    if(indexPath.row==3) cell.textLabel.text = [self.info objectAtIndex:2];
-    if(indexPath.row==4) cell.textLabel.text = [self.info objectAtIndex:3];
     
 }
+
+/*
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    NSString *cellText = [self.info objectAtIndex:indexPath.row];
+    UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:17.0];
+    
+    NSAttributedString *attributedText =
+    [[NSAttributedString alloc]
+     initWithString:cellText
+     attributes:@
+     {
+     NSFontAttributeName: cellFont
+     }];
+    CGRect rect = [attributedText boundingRectWithSize:CGSizeMake(tableView.bounds.size.width, CGFLOAT_MAX)
+                                               options:NSStringDrawingUsesLineFragmentOrigin
+                                               context:nil];
+    return rect.size.height + 20;
+}
+*/
+
 
 -(NSMutableAttributedString *)changeColor:(NSString *)string
 {
@@ -236,19 +223,17 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView *sectionHeaderView = [[UIView alloc] initWithFrame:CGRectZero];
+    UIView *sectionHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 100)];
     //sectionHeaderView.backgroundColor = [UIColor cyanColor];
     
     self.imageUser.layer.masksToBounds = YES;
-    //    [self.imageUser setBackgroundColor:[UIColor grayColor]];
-    self.imageUser.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.imageContainerView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.imageContainerView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.imageContainerView addSubview:self.imageUser];
+    self.imageUser.autoresizingMask = UIViewAutoresizingFlexibleHeight |UIViewAutoresizingFlexibleWidth;
+    self.imageUser.translatesAutoresizingMaskIntoConstraints = NO;
+
     
-    [sectionHeaderView addSubview:self.imageContainerView];
+    [sectionHeaderView addSubview:self.imageUser];
     
-    [sectionHeaderView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageContainerView
+    [sectionHeaderView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageUser
                                                                                       attribute:NSLayoutAttributeHeight
                                                                                       relatedBy:NSLayoutRelationEqual
                                                                                          toItem:sectionHeaderView
@@ -256,7 +241,7 @@
                                                                                      multiplier:0
                                                                                        constant:80.0]];
     
-    [sectionHeaderView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageContainerView
+    [sectionHeaderView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageUser
                                                                                       attribute:NSLayoutAttributeWidth
                                                                                       relatedBy:NSLayoutRelationEqual
                                                                                          toItem:sectionHeaderView
@@ -265,7 +250,7 @@
                                                                                        constant:80.0]];
     
     // Center horizontally
-    [sectionHeaderView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageContainerView
+    [sectionHeaderView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageUser
                                                                                       attribute:NSLayoutAttributeCenterX
                                                                                       relatedBy:NSLayoutRelationEqual
                                                                                          toItem:sectionHeaderView
@@ -274,7 +259,7 @@
                                                                                        constant:0.0]];
     
     // Center horizontally
-    [sectionHeaderView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageContainerView
+    [sectionHeaderView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageUser
                                                                   attribute:NSLayoutAttributeCenterY
                                                                   relatedBy:NSLayoutRelationEqual
                                                                      toItem:sectionHeaderView
@@ -287,21 +272,21 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return self.view.frame.size.height/4;
+    return 100;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    UIView *sectionFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    UIView *sectionFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 100)];
     
-    self.chatContainerView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.chatContainerView.translatesAutoresizingMaskIntoConstraints = NO;
+    //self.chatContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 100)];
+    self.chat.translatesAutoresizingMaskIntoConstraints = NO;
     
-    [self.chatContainerView addSubview:self.chat];
-    [sectionFooterView addSubview:self.chatContainerView];
+    //[self.chatContainerView addSubview:self.chat];
+    [sectionFooterView addSubview:self.chat];
     
-    NSDictionary *viewsDictionary = @{@"chat_view":self.chatContainerView};
-    
+    NSDictionary *viewsDictionary = @{@"chat_view":self.chat};
+    /*
     [sectionFooterView addConstraint:[NSLayoutConstraint constraintWithItem:self.chatContainerView
                                                           attribute:NSLayoutAttributeHeight
                                                           relatedBy:NSLayoutRelationEqual
@@ -318,21 +303,28 @@
                                                                  multiplier:1
                                                                    constant:0.0]];
     
-    
+    */
     NSArray *constraint_POS_H_chat = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-50-[chat_view]-50-|"
                                                                              options:0
                                                                              metrics:nil
                                                                                views:viewsDictionary];
     
+    
+    NSArray *constraint_POS_V_chat = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[chat_view]-30-|"
+                                                                             options:0
+                                                                             metrics:nil
+                                                                               views:viewsDictionary];
 
     [sectionFooterView addConstraints:constraint_POS_H_chat];
+
+    [sectionFooterView addConstraints:constraint_POS_V_chat];
     
     return sectionFooterView;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return self.view.frame.size.height/4;
+    return 100;
 }
 
 

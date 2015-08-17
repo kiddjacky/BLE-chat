@@ -208,7 +208,7 @@
              current_user = [NSEntityDescription
                                           insertNewObjectForEntityForName:@"CurrentUser"
                                           inManagedObjectContext:self.managedObjectContext];
- 
+    
              current_user.userName = user[PF_USER_USERNAME];
                     NSLog(@"loaded1");
              current_user.userFullName = user[PF_USER_FULLNAME];
@@ -240,6 +240,7 @@
                           Contacts *contact = [NSEntityDescription
                                                insertNewObjectForEntityForName:@"Contacts"
                                                inManagedObjectContext:self.managedObjectContext];
+                          //contact.pfUser = user;
                           contact.userName = user.username;
                           contact.userFullName = user[PF_USER_FULLNAME];
                           contact.sex = user[PF_USER_SEX];
