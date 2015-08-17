@@ -10,6 +10,7 @@
 // THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
+#import "CoreDataTableViewController.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @protocol SelectMultipleDelegate
@@ -20,9 +21,11 @@
 @end
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-@interface SelectMultipleView : UITableViewController
+@interface SelectMultipleView : CoreDataTableViewController
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 @property (nonatomic, assign) IBOutlet id<SelectMultipleDelegate>delegate;
+
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
 @end

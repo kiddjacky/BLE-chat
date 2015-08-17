@@ -302,7 +302,7 @@
     
     // Check for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
     if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [self.locationManager requestWhenInUseAuthorization];
+        [self.locationManager requestAlwaysAuthorization];
     }
     
     
@@ -375,28 +375,7 @@
     
 }
 
-/*
- -(NSString *)geocoder:(CLGeocoder *)geocoder location:(CLLocation *)location;
- {
- NSLog(@"Resolving the Address");
- NSString *address;
- [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray *placemarks, NSError *error) {
- NSLog(@"Found placemarks: %@, error: %@", placemarks, error);
- if (error == nil && [placemarks count] > 0) {
- placemark = [placemarks lastObject];
- address = [NSString stringWithFormat:@"%@ %@\n%@ %@\n%@\n%@",
- placemark.subThoroughfare, placemark.thoroughfare,
- placemark.postalCode, placemark.locality,
- placemark.administrativeArea,
- placemark.country];
- } else {
- NSLog(@"%@", error.debugDescription);
- }
- } ];
- 
- }
- 
- */
+
 -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
     NSLog(@"%@", error.localizedDescription);
 }

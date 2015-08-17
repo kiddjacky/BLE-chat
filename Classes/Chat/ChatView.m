@@ -241,7 +241,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil
-											   otherButtonTitles:@"Take photo", @"Choose existing photo", @"Choose existing video", nil];
+											   otherButtonTitles:@"Take photo", @"Choose existing photo", nil];
 	[action showInView:self.view];
 }
 
@@ -451,7 +451,7 @@
 	{
 		if (buttonIndex == 0)	ShouldStartCamera(self, YES);
 		if (buttonIndex == 1)	ShouldStartPhotoLibrary(self, YES);
-		if (buttonIndex == 2)	ShouldStartVideoLibrary(self, YES);
+		//if (buttonIndex == 2)	ShouldStartVideoLibrary(self, YES);
 	}
 }
 

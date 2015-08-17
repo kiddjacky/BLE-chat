@@ -39,6 +39,7 @@
 @property UILabel *label;
 @property UILabel *subLabel;
 @property UIView *subLabelContainerView;
+@property PFUser *target;
 
 @end
 
@@ -329,7 +330,9 @@
     [self.view addConstraints:constraint_POS_V_button1];
     [self.view addConstraints:constraint_POS_V_button2];
     
+    self.chat.showsTouchWhenHighlighted = YES;
     [self.chat addTarget:self action:@selector(actionChat) forControlEvents:UIControlEventTouchUpInside];
+    self.poke.showsTouchWhenHighlighted = YES;
     [self.poke addTarget:self action:@selector(actionAdd) forControlEvents:UIControlEventTouchUpInside];
     
 }
@@ -345,17 +348,10 @@
 }
 
 -(void)actionAdd {
-    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    NSLog(@"discover user to be added is %@",self.discoverUser.userName);
-    [query whereKey:PF_USER_USERNAME equalTo:self.discoverUser.userName];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-     {
-         if ([objects count] != 0)
-         {
-             NSLog(@"add discover user as contact!");
-             PFUser *user = [objects firstObject];
+    NSLog(@"add discover user as contact!");
+
              NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Contacts"];
-             request.predicate = [NSPredicate predicateWithFormat:@"userName = %@", user[PF_USER_USERNAME]];
+             request.predicate = [NSPredicate predicateWithFormat:@"userName = %@", self.target[PF_USER_USERNAME]];
              NSError *error;
              NSArray *matches = [self.context executeFetchRequest:request error:&error];
              Contacts *contact = nil;
@@ -365,35 +361,43 @@
                  NSLog(@"request error!");
              }
              else if ([matches count]>=1) {
-                     //they are already friend?
-                     NSLog(@"is this user in the contact list?");
-                     contact = [matches firstObject];
-                     NSLog(@"the name of contact is %@", user.username);
+                //they are already friend?
+                NSLog(@"is this user in the contact list?");
+                contact = [matches firstObject];
+                NSString *warning = [NSString stringWithFormat:@"%@ is already in Contacts!", self.target[PF_USER_FULLNAME]];
+                 //contact.pfUser = self.target;
+                [ProgressHUD showSuccess:warning];
                  
              }
              else {
 
                  contact = [NSEntityDescription insertNewObjectForEntityForName:@"Contacts"
                                                                     inManagedObjectContext:self.context];
-                 contact.userName = user.username;
-                 contact.userFullName  = user[PF_USER_FULLNAME];
-                 contact.sex = user[PF_USER_SEX];
-                 contact.age = user[PF_USER_AGE];
-                 contact.interest = user[PF_USER_INTEREST];
-                 contact.selfDescription = user[PF_USER_SELF_DESCRIPTION];
-                 //contact.thumbnail = user[PF_USER_THUMBNAIL];
-                 /*
-                 PFFile *contactThumbnail = user[PF_USER_THUMBNAIL];
-                 [contactThumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-
-                     if(!error) {
-                         contact.thumbnail = data;
-                         [self save_and_post];
+                 //contact.pfUser = self.target;
+                 contact.userName = self.target.username;
+                 contact.userFullName  = self.target[PF_USER_FULLNAME];
+                 contact.sex = self.target[PF_USER_SEX];
+                 contact.age = self.target[PF_USER_AGE];
+                 contact.interest = self.target[PF_USER_INTEREST];
+                 contact.selfDescription = self.target[PF_USER_SELF_DESCRIPTION];
+                 CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+                 [geocoder reverseGeocodeLocation:self.location completionHandler:^(NSArray *placemarks, NSError *error) {
+                     //NSLog(@"Found placemarks: %@, error: %@", placemarks, error);
+                     NSString *address;
+                     if (error == nil && [placemarks count] > 0) {
+                         CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                         //placemark = [placemarks lastObject];
+                         contact.address = [NSString stringWithFormat:@"%@ %@, %@, %@, %@",
+                                    placemark.subThoroughfare, placemark.thoroughfare,
+                                    placemark.locality, placemark.administrativeArea, placemark.country];
+                         //return address;
+                     } else {
+                         NSLog(@"%@", error.debugDescription);
+                         contact.address = @"unkown";
+                         //return @"cannot find placemark";
                      }
+                    NSLog(@"address is %@", address);
                  }];
-                  */
-                 //[self save_and_post];
-
                  
                  
                  //add contact to current user contact list
@@ -414,11 +418,11 @@
                       else [ProgressHUD showError:@"Network error."];
                   }];
              }
-             
-         }
-     }];
 
 }
+
+
+ 
 
 -(void) save_and_post
 {
@@ -438,24 +442,13 @@
 
 -(void)actionChat
 {
-    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    [query whereKey:PF_USER_USERNAME equalTo:self.discoverUser.userName];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-     {
-         if ([objects count] != 0)
-         {
-             PFUser *user = [objects firstObject];
-             //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
-             NSString *discoverId = StartPrivateChat([PFUser currentUser], user);
-             //---------------------------------------------------------------------------------------------------------------------------------------------
-             ChatView *chatView = [[ChatView alloc] initWith:discoverId];
-             chatView.hidesBottomBarWhenPushed = YES;
-             [self.navigationController pushViewController:chatView animated:YES];
-         }
-     }];
     
-    //NSString *discoverId = discover.objectId;
-    //---------------------------------------------------------------------------------------------------------------------------------------------
+    NSString *discoverId = StartPrivateChat([PFUser currentUser], self.target);
+    
+    ChatView *chatView = [[ChatView alloc] initWith:discoverId];
+    chatView.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:chatView animated:YES];
+  
 
 }
 
@@ -480,12 +473,12 @@
          if ([objects count] != 0)
          {
              NSLog(@"debug 2 = %@ objects count = %lu" , self.discoverUser.userName, (unsigned long)[objects count]);
-             PFUser *user = [objects firstObject];
+             self.target = [objects firstObject];
              //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
-             self.subLabel.text = user[PF_USER_SELF_DESCRIPTION];
-    self.imageUser.layer.cornerRadius = self.imageUser.frame.size.width / 2;
+             self.subLabel.text = self.target[PF_USER_SELF_DESCRIPTION];
+             self.imageUser.layer.cornerRadius = self.imageUser.frame.size.width / 2;
                  NSLog(@"corner radius =  %f", self.imageUser.layer.cornerRadius);
-             [self.imageUser setFile:user[PF_USER_PICTURE]];
+             [self.imageUser setFile:self.target[PF_USER_PICTURE]];
             [self.imageUser loadInBackground];
          }
      }];

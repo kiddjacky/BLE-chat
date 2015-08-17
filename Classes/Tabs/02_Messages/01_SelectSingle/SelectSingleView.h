@@ -10,6 +10,7 @@
 // THE SOFTWARE.
 
 #import <Parse/Parse.h>
+#import "CoreDataTableViewController.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @protocol SelectSingleDelegate
@@ -20,9 +21,11 @@
 @end
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-@interface SelectSingleView : UITableViewController <UISearchBarDelegate>
+@interface SelectSingleView : CoreDataTableViewController <UISearchBarDelegate>
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 @property (nonatomic, assign) IBOutlet id<SelectSingleDelegate>delegate;
+
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
 @end
