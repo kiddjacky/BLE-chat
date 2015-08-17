@@ -25,6 +25,9 @@
 #import "Contacts.h"
 #import "CurrentUser.h"
 #import "DatabaseAvailability.h"
+#import "detailsImageView.h"
+
+#import <objc/runtime.h>
 
 @interface detailsView ()
 @property MKMapView *mapView;
@@ -41,12 +44,14 @@
 @property UIView *subLabelContainerView;
 @property PFUser *target;
 
+
 @end
 
 
 @implementation detailsView
 
 @synthesize location;
+
 
 -(void)viewDidLoad {
     [super viewDidLoad];
@@ -65,6 +70,24 @@
     self.imageContainerView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.imageContainerView addSubview:self.imageUser];
     [self.view addSubview:self.imageContainerView];
+    
+    
+ //   UIImageView* ivExpand = [[UIImageView alloc] initWithImage: self.imageUser.image];
+ //   self.imageUser.contentMode = self.imageUser.contentMode;
+     self.imageUser.userInteractionEnabled = YES;
+    self.imageUser.clipsToBounds = YES;
+//     self.imageUser.userInteractionEnabled = YES;
+    
+    UITapGestureRecognizer *tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(onTap:)];
+    
+    tapGesture1.numberOfTapsRequired = 1;
+//    [tapGesture1 setDelegate:self];
+    [self.imageUser addGestureRecognizer:tapGesture1];
+    
+//    [tapGesture1 release];
+    
+    
+    
 
     self.label = [[UILabel alloc] init];
     //   [self.label setBackgroundColor:[UIColor redColor]];
@@ -337,6 +360,16 @@
     
 }
 
+- (void) onTap: (UITapGestureRecognizer*) tgr
+{
+    detailsImageView *destinationImageView = [[detailsImageView alloc] init];
+
+//    destinationImageView.mImg = [UIImage imageNamed:@"tab_discovers_2"];
+    destinationImageView.mImg = self.imageUser.image;
+   [self.navigationController pushViewController:destinationImageView animated:NO];
+    
+}
+
 -(void)loadView
 {
     CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
@@ -474,6 +507,7 @@
          {
              NSLog(@"debug 2 = %@ objects count = %lu" , self.discoverUser.userName, (unsigned long)[objects count]);
              self.target = [objects firstObject];
+
              //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
              self.subLabel.text = self.target[PF_USER_SELF_DESCRIPTION];
              self.imageUser.layer.cornerRadius = self.imageUser.frame.size.width / 2;
