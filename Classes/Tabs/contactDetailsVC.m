@@ -37,7 +37,9 @@
 @property PFImageView *imageUser;
 
 @property NSMutableArray *info;
+@property NSMutableArray *cellTitle;
 @property PFUser *target;
+@property (nonatomic, strong) contactDetailCell *prototypeCell;
 
 @end
 
@@ -46,16 +48,15 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    
-    [self.tableView registerNib:[UINib nibWithNibName:@"contactDetailCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"contactDetailCell"];
-    
-    [self.tableView registerClass:[contactDetailCell class] forCellReuseIdentifier:@"contactDetailCell"];
-    
     self.imageUser = [[PFImageView alloc] init];
     [self loadView];
     [self loadUser];
+    self.info = [[NSMutableArray alloc] init];
+    self.cellTitle= [[NSMutableArray alloc] init];
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+    [self.tableView registerNib:[UINib nibWithNibName:@"contactDetailCell" bundle:nil] forCellReuseIdentifier:@"contactDetailCell"];
+    self.prototypeCell  = [self.tableView dequeueReusableCellWithIdentifier:@"contactDetailCell"];
     
     _chat = [UIButton buttonWithType:UIButtonTypeCustom];
     self.chat.layer.cornerRadius = 10;
@@ -68,6 +69,7 @@
     [self.chat addTarget:self action:@selector(actionChat) forControlEvents:UIControlEventTouchUpInside];
     
 }
+
 
 -(void)loadView
 {
@@ -104,8 +106,7 @@
          {
              NSLog(@"debug 2 = %@ objects count = %lu" , self.contact.userName, (unsigned long)[objects count]);
              self.target = [objects firstObject];
-             //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
-             //self.subLabel.text = user[PF_USER_SELF_DESCRIPTION];
+
              self.imageUser.layer.cornerRadius = self.imageUser.frame.size.width / 2;
              NSLog(@"corner radius =  %f", self.imageUser.layer.cornerRadius);
              [self.imageUser setFile:self.target[PF_USER_PICTURE]];
@@ -119,38 +120,45 @@
 {
     // return number of rows
     NSInteger row = 0;
-    self.info = [[NSMutableArray alloc] init];
+
     if (![self.contact.userFullName isEqualToString:@""] && !(self.contact.userFullName == nil)) {
         NSLog(@"user full name is %@", self.contact.userFullName);
         row = row + 1;
-        NSString *full_name = [NSString stringWithFormat:@"Name          %@", self.contact.userFullName ];
-        [self.info addObject:full_name];
+        NSString *title = @"Name";
+        //NSString *full_name = [NSString stringWithFormat:@"Name          %@", self.contact.userFullName ];
+        [self.info addObject:self.contact.userFullName];
+        [self.cellTitle addObject:title];
     }
     if (![self.contact.address isEqualToString:@""] && !(self.contact.address == nil)) {
         NSLog(@"age is %@", self.contact.address);
         row = row + 1;
-            NSString *address = [NSString stringWithFormat:@"Meet At             %@", self.contact.address ];
-        [self.info addObject:address];
+        //NSString *address = [NSString stringWithFormat:@"Meet At             %@", self.contact.address ];
+        [self.info addObject:self.contact.address];
+        NSString *title = @"Meet At";
+        [self.cellTitle addObject:title];
     }
     if (![self.contact.sex isEqualToString:@""] && !(self.contact.sex == nil)) {
         row = row + 1;
                 NSLog(@"sex is %@", self.contact.sex);
-            NSString *sex = [NSString stringWithFormat:@"Sex               %@", self.contact.sex ];
-        [self.info addObject:sex];
+        //NSString *sex = [NSString stringWithFormat:@"Sex               %@", self.contact.sex ];
+        [self.info addObject:self.contact.sex];
+        [self.cellTitle addObject:@"Sex"];
     }
     if (![self.contact.interest isEqualToString:@""] && !(self.contact.interest == nil)) {
                 NSLog(@"interest is %@", self.contact.interest);
         row = row + 1;
-            NSString *interest = [NSString stringWithFormat:@"Interest         %@", self.contact.interest ];
-        [self.info addObject:interest];
+        //NSString *interest = [NSString stringWithFormat:@"Interest         %@", self.contact.interest ];
+        [self.info addObject:self.contact.interest];
+        [self.cellTitle addObject:@"Interest"];
     
     }
     
     if (![self.contact.selfDescription isEqualToString:@""] && !(self.contact.selfDescription == nil)) {
         NSLog(@"SD is %@", self.contact.selfDescription);
         row = row + 1;
-            NSString *self_description = [NSString stringWithFormat:@"Description   %@", self.contact.selfDescription ];
-        [self.info addObject:self_description];
+           // NSString *self_description = [NSString stringWithFormat:@"Description   %@", self.contact.selfDescription ];
+        [self.info addObject:self.contact.selfDescription];
+        [self.cellTitle addObject:@"Signature"];
     
     }
     NSLog(@"row is %ld", (long)row);
@@ -160,29 +168,34 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     contactDetailCell *cell = (contactDetailCell *)[tableView dequeueReusableCellWithIdentifier:@"contactDetailCell" forIndexPath:indexPath];
+    //contactDetailCell *cell = [[contactDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"contactDetailCell"];
     if (cell == nil) {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"contactDetailCell" owner:self options:nil];
-        cell = [nib objectAtIndex:0];
-        
+        //NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"contactDetailCell" owner:self options:nil];
+        //cell = [nib objectAtIndex:0];
+        cell = [[contactDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"contactDetailCell"];
     }
-    
-    //cell.content.text = [self.info objectAtIndex:indexPath.row];
-    
+    NSLog(@"assign cell");
+    cell.content.text = [self.info objectAtIndex:indexPath.row];
+    cell.title.text = [self.cellTitle objectAtIndex:indexPath.row];
+
     return cell;
 }
 
+
 -(void)tableView:(UITableView *)tableView willDisplayCell:(contactDetailCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    //cell.content.text = [self.info objectAtIndex:indexPath.row];
+    //cell.title.text = @"title";
 }
 
-/*
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    //contactDetailCell *cell = (contactDetailCell *)[tableView cellForRowAtIndexPath:indexPath];
+    contactDetailCell *cell = self.prototypeCell;
     NSString *cellText = [self.info objectAtIndex:indexPath.row];
     UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:17.0];
-    
+
     NSAttributedString *attributedText =
     [[NSAttributedString alloc]
      initWithString:cellText
@@ -190,12 +203,16 @@
      {
      NSFontAttributeName: cellFont
      }];
-    CGRect rect = [attributedText boundingRectWithSize:CGSizeMake(tableView.bounds.size.width, CGFLOAT_MAX)
+    CGRect rect = [attributedText boundingRectWithSize:CGSizeMake(cell.content.frame.size.width, CGFLOAT_MAX)
                                                options:NSStringDrawingUsesLineFragmentOrigin
                                                context:nil];
-    return rect.size.height + 20;
+    return rect.size.height + 30;
+    
+    //CGSize size = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+    //NSLog(@"h=%f", size.height + 1);
+    //return 1  + size.height;
 }
-*/
+
 
 
 -(NSMutableAttributedString *)changeColor:(NSString *)string

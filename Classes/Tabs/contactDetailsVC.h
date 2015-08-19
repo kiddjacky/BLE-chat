@@ -10,7 +10,7 @@
 #import "Contacts.h"
 #import "DiscoverUser.h"
 
-@interface contactDetailsVC : UITableViewController <UITableViewDelegate, UITableViewDataSource>
+@interface contactDetailsVC : UITableViewController 
 @property (strong, nonatomic) Contacts *contact;
 //@property (strong, nonatomic) DiscoverUser *discoverUser;
 

@@ -25,9 +25,10 @@
 #import "Contacts.h"
 #import "CurrentUser.h"
 #import "DatabaseAvailability.h"
-#import "detailsImageView.h"
 
-#import <objc/runtime.h>
+//#import "detailsImageView.h"
+
+//#import <objc/runtime.h>
 
 @interface detailsView ()
 @property MKMapView *mapView;
@@ -78,11 +79,11 @@
     self.imageUser.clipsToBounds = YES;
 //     self.imageUser.userInteractionEnabled = YES;
     
-    UITapGestureRecognizer *tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(onTap:)];
+//    UITapGestureRecognizer *tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(onTap:)];
     
-    tapGesture1.numberOfTapsRequired = 1;
+//    tapGesture1.numberOfTapsRequired = 1;
 //    [tapGesture1 setDelegate:self];
-    [self.imageUser addGestureRecognizer:tapGesture1];
+//    [self.imageUser addGestureRecognizer:tapGesture1];
     
 //    [tapGesture1 release];
     
@@ -360,6 +361,7 @@
     
 }
 
+/*
 - (void) onTap: (UITapGestureRecognizer*) tgr
 {
     detailsImageView *destinationImageView = [[detailsImageView alloc] init];
@@ -368,7 +370,7 @@
     destinationImageView.mImg = self.imageUser.image;
    [self.navigationController pushViewController:destinationImageView animated:NO];
     
-}
+}*/
 
 -(void)loadView
 {

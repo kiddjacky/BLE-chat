@@ -23,10 +23,6 @@
 
 #import "ChatView.h"
 
-#import "UIImageView+AFNetworking.h"
-#import "AFHTTPRequestOperationManager.h"
-//#import "NSObject+associatedObject.h"
-
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @interface DiscoversView()
 {
@@ -39,18 +35,18 @@
 
 @implementation DiscoversView
 /*
-- (void)awakeFromNib
-{
-    NSLog(@"load into the discover awakeFromNib");
-    [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
-                                                      object:nil
-                                                       queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      NSLog(@"Get database notification");
-                                                      self.managedObjectContext = note.userInfo[DatabaseAvailabilityContext];
-                                                  }];
-}
-*/
+ - (void)awakeFromNib
+ {
+ NSLog(@"load into the discover awakeFromNib");
+ [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
+ object:nil
+ queue:nil
+ usingBlock:^(NSNotification *note) {
+ NSLog(@"Get database notification");
+ self.managedObjectContext = note.userInfo[DatabaseAvailabilityContext];
+ }];
+ }
+ */
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -122,12 +118,12 @@
     [self.refreshControl addTarget:self
                             action:@selector(reloadData)
                   forControlEvents:UIControlEventValueChanged];
-
     
-
+    
+    
     //[self.tableView reloadData];
-     //setup observer before ask the appdelegate to post
-     //[[NSNotificationCenter defaultCenter] postNotificationName:DiscoverViewReady object:nil];
+    //setup observer before ask the appdelegate to post
+    //[[NSNotificationCenter defaultCenter] postNotificationName:DiscoverViewReady object:nil];
     //self.tableView.separatorStyle = UITableViewCellSelectionStyleNone;
     
 }
@@ -169,7 +165,7 @@
 
 -(void) loadDiscovers //load discover people or ibeacon
 {
-   // [self reloadData];
+    // [self reloadData];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -185,23 +181,12 @@
     //if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     discoversCell *cell = (discoversCell *)[tableView dequeueReusableCellWithIdentifier:@"discoversCell" forIndexPath:indexPath];
     if (cell == nil) {
-
+        
         //cell = [[discoversCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discoversCell"];
         cell = [tableView dequeueReusableCellWithIdentifier:@"discoversCell" forIndexPath:indexPath];
     }
     
     return cell;
-}
-
-- (AFHTTPRequestOperationManager *)operationManager
-{
-    if (!_operationManager)
-    {
-        _operationManager = [[AFHTTPRequestOperationManager alloc] init];
-        _operationManager.responseSerializer = [AFImageResponseSerializer serializer];
-    };
-    
-    return _operationManager;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(discoversCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -223,54 +208,26 @@
     
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
     [query whereKey:PF_USER_USERNAME equalTo:discoverUser.userName];
-        NSLog(@"%@ before object count is ",discoverUser.userName);
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-
      {
          if ([objects count] != 0)
          {
              
              PFUser *user = [objects firstObject];
              PFFile *discoverThumbnail = user[PF_USER_THUMBNAIL];
-             NSLog(@"%@ after object count is ",discoverUser.userName);
-             if (user[PF_USER_THUMBNAIL] == nil)
-             {
-                UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
-                cell.imageUser.image = def_image;
-             }
              [discoverThumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
                  //NSLog(@"in the block");
-                 
                  if(!error) {
                      //NSLog(@"no error!");
                      UIImage *image = [UIImage imageWithData:data];
- //                    UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
-  //                   NSLog(@"%@ no error is %@",discoverUser.userName, data);
-  //                      cell.imageUser.image = image;
-                  }
-                 
-             }
-            progressBlock:^(int percentDone)
-              {
-                  if (percentDone == 100)
-                  {
-                      NSLog(@"download done!!!!");
-                  }
-                  
-                  else
-                  {
-                      UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
-                      cell.imageUser.image = def_image;
-                  }
-                  
-
-                         }
-
-              ];
-
+                     //NSLog(@"data is %@", data);
+                     cell.imageUser.image = image;
+                     //dispatch_async(dispatch_get_main_queue(), ^{ cell.imageView.image = image; });
+                 }
+             }];
          }
      }];
-
+    
 }
 
 
@@ -301,12 +258,12 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
     /*
-    id detailvc = [self.splitViewController.viewControllers lastObject];
-    if([detailvc isKindOfClass:[UINavigationController class]]) {
-        detailvc = [((UINavigationController *)detailvc).viewControllers firstObject];
-        [self prepareViewController:detailvc forSegue:nil fromIndexPath:indexPath];
-    }
-    */
+     id detailvc = [self.splitViewController.viewControllers lastObject];
+     if([detailvc isKindOfClass:[UINavigationController class]]) {
+     detailvc = [((UINavigationController *)detailvc).viewControllers firstObject];
+     [self prepareViewController:detailvc forSegue:nil fromIndexPath:indexPath];
+     }
+     */
     
     DiscoverUser *discoverUser = [self.fetchedResultsController objectAtIndexPath:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -319,16 +276,16 @@
     dv.context = self.managedObjectContext;
     [self.navigationController pushViewController:dv animated:YES];
     /*
-    //---------------------------------------------------------------------------------------------------------------------------------------------
-    PFUser *user = DiscoverItems[indexPath.row];
-    //NSString *discoverId = discover.objectId;
-    //---------------------------------------------------------------------------------------------------------------------------------------------
-    //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
-    NSString *discoverId = StartPrivateChat([PFUser currentUser], user);
-    //---------------------------------------------------------------------------------------------------------------------------------------------
-    ChatView *chatView = [[ChatView alloc] initWith:discoverId];
-    chatView.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:chatView animated:YES];
+     //---------------------------------------------------------------------------------------------------------------------------------------------
+     PFUser *user = DiscoverItems[indexPath.row];
+     //NSString *discoverId = discover.objectId;
+     //---------------------------------------------------------------------------------------------------------------------------------------------
+     //CreateMessageItem([PFUser currentUser], discoverId, discover[PF_GROUPS_NAME]);
+     NSString *discoverId = StartPrivateChat([PFUser currentUser], user);
+     //---------------------------------------------------------------------------------------------------------------------------------------------
+     ChatView *chatView = [[ChatView alloc] initWith:discoverId];
+     chatView.hidesBottomBarWhenPushed = YES;
+     [self.navigationController pushViewController:chatView animated:YES];
      */
 }
 
