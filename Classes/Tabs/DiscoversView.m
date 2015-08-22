@@ -208,13 +208,20 @@
     
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
     [query whereKey:PF_USER_USERNAME equalTo:discoverUser.userName];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+    
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
      {
          if ([objects count] != 0)
          {
              
              PFUser *user = [objects firstObject];
              PFFile *discoverThumbnail = user[PF_USER_THUMBNAIL];
+             if (user[PF_USER_THUMBNAIL] == nil)
+             {
+                 UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
+                 cell.imageUser.image = def_image;
+             }
+
              [discoverThumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
                  //NSLog(@"in the block");
                  if(!error) {
