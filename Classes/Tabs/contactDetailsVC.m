@@ -20,6 +20,7 @@
 
 #import "ChatView.h"
 #import "Contacts.h"
+#import "detailsImageView.h"
 
 #import "contactDetailCell.h"
 
@@ -68,6 +69,8 @@
     
     [self.chat addTarget:self action:@selector(actionChat) forControlEvents:UIControlEventTouchUpInside];
     
+
+    
 }
 
 
@@ -113,6 +116,17 @@
              [self.imageUser loadInBackground];
          }
      }];
+    
+}
+
+- (void) onTap: (UITapGestureRecognizer*) tgr
+{
+    detailsImageView *destinationImageView = [[detailsImageView alloc] init];
+    
+    //    destinationImageView.mImg = [UIImage imageNamed:@"tab_discovers_2"];
+    destinationImageView.mImg = self.imageUser.image;
+    destinationImageView.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:destinationImageView animated:NO];
     
 }
 
@@ -246,7 +260,13 @@
     self.imageUser.layer.masksToBounds = YES;
     self.imageUser.autoresizingMask = UIViewAutoresizingFlexibleHeight |UIViewAutoresizingFlexibleWidth;
     self.imageUser.translatesAutoresizingMaskIntoConstraints = NO;
-
+    self.imageUser.userInteractionEnabled = YES;
+    self.imageUser.clipsToBounds = YES;
+    UITapGestureRecognizer *tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(onTap:)];
+    
+    tapGesture1.numberOfTapsRequired = 1;
+    //[tapGesture1 setDelegate:self];
+    [self.imageUser addGestureRecognizer:tapGesture1];
     
     [sectionHeaderView addSubview:self.imageUser];
     

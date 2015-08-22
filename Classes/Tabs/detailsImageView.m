@@ -29,7 +29,7 @@
     self.imageView.layer.masksToBounds = YES;
     self.imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
-    //self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     
     //[imgview startAnimating];
     [self.view addSubview:self.imageView];
