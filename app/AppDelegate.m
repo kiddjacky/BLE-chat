@@ -125,6 +125,14 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stop_scan) name:PFUSER_LOGOUT object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(start_scan) name:PFUSER_READY object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      NSLog(@"appDelegate get notification");
+                                                      self.DiscoverDatabaseContext= note.userInfo[DatabaseAvailabilityContext];
+                                                  }];
     
 	return YES;
 }
@@ -628,6 +636,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 
 -(void) save_and_post
 {
+    
     NSError *error=nil;
     
     if (![self.DiscoverDatabaseContext save:&error]) {

@@ -21,6 +21,12 @@
 #import "WelcomeView.h"
 #import "LoginView.h"
 #import "RegisterView.h"
+#import "DataBaseAvailability.h"
+#import "DiscoverUser.h"
+#import "CurrentUser.h"
+#import "Contacts.h"
+#import "utilities.h"
+#import "AppDelegate.h"
 
 @implementation WelcomeView
 
@@ -33,6 +39,16 @@
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
 	[self.navigationItem setBackBarButtonItem:backButton];
+    
+}
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+- (void)viewDidAppear:(BOOL)animated
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+{
+    [super viewDidAppear:animated];
+
+    if (!self.managedObjectContext) [self useDocument];
 }
 
 #pragma mark - User actions
@@ -42,6 +58,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	RegisterView *registerView = [[RegisterView alloc] init];
+    [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_LOGOUT object:nil];
 	[self.navigationController pushViewController:registerView animated:YES];
 }
 
@@ -50,6 +67,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	LoginView *loginView = [[LoginView alloc] init];
+    [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_LOGOUT object:nil];
 	[self.navigationController pushViewController:loginView animated:YES];
 }
 
@@ -60,6 +78,8 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	[ProgressHUD show:@"Signing in..." Interaction:NO];
+    [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_LOGOUT object:nil];
+    [self clearDatabase];
 	[PFFacebookUtils logInWithPermissions:@[@"public_profile", @"email", @"user_friends"] block:^(PFUser *user, NSError *error)
 	{
 		if (user != nil)
@@ -68,7 +88,10 @@
 			{
 				[self requestFacebook:user];
 			}
-			else [self userLoggedIn:user];
+            else {
+                NSLog(@"no fb request");
+                [self userLoggedIn:user];
+            }
 		}
 		else [ProgressHUD showError:error.userInfo[@"error"]];
 	}];
@@ -98,6 +121,7 @@
 - (void)processFacebook:(PFUser *)user UserData:(NSDictionary *)userData
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
+    NSLog(@"process facebook data!");
 	NSString *link = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=large", userData[@"id"]];
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:link]];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
@@ -156,8 +180,127 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	ParsePushUserAssign();
+    [self LoadContact];
 	[ProgressHUD showSuccess:[NSString stringWithFormat:@"Welcome back %@!", user[PF_USER_FULLNAME]]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
+    NSLog(@"dismiss facebook login");
 	[self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)LoadContact {
+    PFUser *user = [PFUser currentUser];
+    //load contacts
+    for (NSString * contact_name in user[PF_USER_CONTACTS]) {
+        NSLog(@"setup the contact %@", contact_name);
+        PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+        [query whereKey:PF_USER_USERNAME equalTo:contact_name];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+         {
+             if ([objects count] != 0)
+             {
+                 PFUser *user = [objects firstObject];
+                 Contacts *contact = [NSEntityDescription
+                                      insertNewObjectForEntityForName:@"Contacts"
+                                      inManagedObjectContext:self.managedObjectContext];
+                 //contact.pfUser = user;
+                 contact.userName = user.username;
+                 contact.userFullName = user[PF_USER_FULLNAME];
+                 contact.sex = user[PF_USER_SEX];
+                 contact.age = user[PF_USER_AGE];
+                 contact.interest = user[PF_USER_INTEREST];
+                 contact.selfDescription = user[PF_USER_SELF_DESCRIPTION];
+                 //contact.thumbnail = user[PF_USER_THUMBNAIL];
+                 NSLog(@"finished load contact!");
+                 
+                 if (![self.managedObjectContext save:&error]) {
+                     NSLog(@"Couldn't save %@", [error localizedDescription]);
+                 }
+                
+                 NSDictionary *userInfo = self.managedObjectContext ? @{DatabaseAvailabilityContext : self.managedObjectContext } : nil;
+                 [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
+             }
+         }];
+    }
+}
+
+-(void)clearDatabase
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"CurrentUser"];
+    request.predicate = nil;
+    NSError *error;
+    NSArray *matches = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
+    //delete all existing database
+    //[request release];
+    for(NSManagedObject *user in matches) {
+        [self.managedObjectContext deleteObject:user];
+    }
+    
+    /*dont remove discover user
+     NSFetchRequest *dis_request = [NSFetchRequest fetchRequestWithEntityName:@"DiscoverUser"];
+     request.predicate = nil;
+     NSError *dis_error;
+     NSArray *dis_matches = [self.managedObjectContext executeFetchRequest:dis_request error:&dis_error];
+     
+     //[request release];
+     for(NSManagedObject *user in dis_matches) {
+     [self.managedObjectContext deleteObject:user];
+     }
+     */
+    
+    NSFetchRequest *con_request = [NSFetchRequest fetchRequestWithEntityName:@"Contacts"];
+    request.predicate = nil;
+    NSError *con_error;
+    NSArray *con_matches = [self.managedObjectContext executeFetchRequest:con_request error:&con_error];
+    
+    //[request release];
+    for(NSManagedObject *user in con_matches) {
+        [self.managedObjectContext deleteObject:user];
+    }
+    
+    NSError *saveError = nil;
+    [self.managedObjectContext save:&saveError];
+    
+    NSDictionary *userInfo = self.managedObjectContext ? @{DatabaseAvailabilityContext : self.managedObjectContext } : nil;
+    [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
+    NSLog(@"clear all contacts!");
+     
+}
+
+#pragma mark - UIManagedDocument
+- (void)useDocument
+{
+    NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    url = [url URLByAppendingPathComponent:@"BLE_Document"];
+    UIManagedDocument *document = [[UIManagedDocument alloc] initWithFileURL:url];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
+        [document saveToURL:url
+           forSaveOperation:UIDocumentSaveForCreating
+          completionHandler:^(BOOL success) {
+              if (success) {
+                  self.managedObjectContext = document.managedObjectContext;
+                  //[self refresh];
+                  NSLog(@"create welcome uidocument");
+                  //[self clearDatabase];
+                //[[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_LOGOUT object:nil];
+              }
+          }];
+    } else if (document.documentState == UIDocumentStateClosed) {
+        [document openWithCompletionHandler:^(BOOL success) {
+            if (success) {
+                self.managedObjectContext = document.managedObjectContext;
+                NSLog(@"open welcome uidocument");
+                //[self clearDatabase];
+                //[[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_LOGOUT object:nil];
+            }
+        }];
+    } else {
+        self.managedObjectContext = document.managedObjectContext;
+        NSLog(@"just use welcome uidocument");
+        //[self clearDatabase];
+        //[[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_LOGOUT object:nil];
+    }
 }
 
 @end

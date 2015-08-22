@@ -109,7 +109,6 @@
             //[self loadUserDatabase];
             //post notification
             //setup notification to other view controller that the context is avaiable.
-
             [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
             NSLog(@"dismiss login");
 			[self dismissViewControllerAnimated:YES completion:nil];
@@ -197,8 +196,10 @@
         [self.managedObjectContext deleteObject:user];
     }
     
+    /*
     NSError *saveError = nil;
     [self.managedObjectContext save:&saveError];
+    */
     
     //load new database
     CurrentUser *current_user = nil;
@@ -249,6 +250,10 @@
                           contact.selfDescription = user[PF_USER_SELF_DESCRIPTION];
                           //contact.thumbnail = user[PF_USER_THUMBNAIL];
                           NSLog(@"finished load contact!");
+                          
+                          if (![self.managedObjectContext save:&error]) {
+                              NSLog(@"Couldn't save %@", [error localizedDescription]);
+                          }
                           NSDictionary *userInfo = self.managedObjectContext ? @{DatabaseAvailabilityContext : self.managedObjectContext } : nil;
                           [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
                       }
