@@ -26,7 +26,7 @@
 #import "CurrentUser.h"
 #import "DatabaseAvailability.h"
 
-//#import "detailsImageView.h"
+#import "detailsImageView.h"
 
 //#import <objc/runtime.h>
 
@@ -79,13 +79,13 @@
     self.imageUser.clipsToBounds = YES;
 //     self.imageUser.userInteractionEnabled = YES;
     
-//    UITapGestureRecognizer *tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(onTap:)];
+    UITapGestureRecognizer *tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(onTap:)];
     
-//    tapGesture1.numberOfTapsRequired = 1;
-//    [tapGesture1 setDelegate:self];
-//    [self.imageUser addGestureRecognizer:tapGesture1];
+   tapGesture1.numberOfTapsRequired = 1;
+    //[tapGesture1 setDelegate:self];
+    [self.imageUser addGestureRecognizer:tapGesture1];
     
-//    [tapGesture1 release];
+
     
     
     
@@ -121,7 +121,7 @@
     self.poke.layer.cornerRadius = 10;
     self.poke.clipsToBounds = YES;
     [self.poke setTitle:@"Add" forState:UIControlStateNormal];
-   [self.poke setBackgroundColor:[UIColor blueColor]];
+    [self.poke setBackgroundColor:[UIColor blueColor]];
 
     self.poke.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 
@@ -361,16 +361,17 @@
     
 }
 
-/*
+
 - (void) onTap: (UITapGestureRecognizer*) tgr
 {
     detailsImageView *destinationImageView = [[detailsImageView alloc] init];
 
 //    destinationImageView.mImg = [UIImage imageNamed:@"tab_discovers_2"];
     destinationImageView.mImg = self.imageUser.image;
+    destinationImageView.hidesBottomBarWhenPushed = YES;
    [self.navigationController pushViewController:destinationImageView animated:NO];
     
-}*/
+}
 
 -(void)loadView
 {

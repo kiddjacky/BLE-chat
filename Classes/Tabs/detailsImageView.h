@@ -8,13 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface detailsImageView : UIViewController {
-    UIImageView* mImageView;
-    UIImage *mImg;
+@interface detailsImageView : UIViewController 
 
-}
-
-@property (nonatomic, retain) UIImageView* imageView;
-@property (nonatomic, retain) UIImage *mImg;
+@property (nonatomic, strong) UIImageView* imageView;
+@property (nonatomic, strong) UIImage *mImg;
 
 @end
