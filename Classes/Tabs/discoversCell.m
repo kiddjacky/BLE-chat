@@ -16,7 +16,7 @@
 
 @interface discoversCell()
 {
-    PFObject *discovered_users;
+    //PFUser *discovered_users;
 }
 /*
 @property (strong, nonatomic) IBOutlet UIImageView *imageUser;
@@ -27,10 +27,10 @@
 
 @implementation discoversCell
 
-@synthesize imageUser = _imageUser;
 @synthesize userFullName = _userFullName;
 @synthesize localDateTime = _localDateTime;
 
+@synthesize pfImageView = _pfImageView;
 
 - (void)awakeFromNib {
     // Initialization code
@@ -44,23 +44,33 @@
     // Configure the view for the selected state
 }
 
-- (void)bindData:(PFObject *)discovered_users_
+- (void)bindData:(PFUser *)discovered_user
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-    /*
-    discovered_users = discovered_users_;
+    self.pfImageView.frame = CGRectMake(10, 10, 50, 50);
+    //self.pfImageView.layer.cornerRadius = self.pfImageView.frame.size.width/2;
+    self.pfImageView.layer.masksToBounds = YES;
+    [self.pfImageView setContentMode:UIViewContentModeScaleAspectFit];
+    //discovered_users = discovered_users_;
+    if (discovered_user[PF_USER_PICTURE]) {
+        PFFile *discoverThumbnail = discovered_user[PF_USER_THUMBNAIL];
+        self.pfImageView.file = discoverThumbnail;
+        [self.pfImageView loadInBackground];
+    }
+
     
-    imageUser.layer.cornerRadius = imageUser.frame.size.width/2;
-    imageUser.layer.masksToBounds = YES;
+    //self.imageUser.layer.cornerRadius = self.imageUser.frame.size.width/2;
+    //self.imageUser.layer.masksToBounds = YES;
     //---------------------------------------------------------------------------------------------------------------------------------------------
+    
+    //PFUser *user = discovered_users;
+    
+    //[self.imageUser setFile:lastUser[PF_USER_PICTURE]];
+    //[self.imageUser loadInBackground];
 
-    PFUser *lastUser = discovered_users[PF_MESSAGES_LASTUSER];
-    [imageUser setFile:lastUser[PF_USER_PICTURE]];
-    [imageUser loadInBackground];
-
-    userFullName.text = @"test";
-    localDateTime.text = @"test";
-    */
+    //userFullName.text = @"test";
+    //localDateTime.text = @"test";
+    
 
 }
 

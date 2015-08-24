@@ -453,6 +453,8 @@
                       }
                       else [ProgressHUD showError:@"Network error."];
                   }];
+                 
+                 [self save_and_post];
              }
 
 }

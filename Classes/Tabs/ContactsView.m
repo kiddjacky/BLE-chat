@@ -181,8 +181,17 @@
      {
          if ([objects count] != 0)
          {
-             
-             PFUser *user = [objects firstObject];
+             PFUser *pfuser = [objects firstObject];
+             if (pfuser[PF_USER_THUMBNAIL] == nil)
+             {
+                 UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
+                 //UIImage *def_image = [UIImage imageNamed:@"profile_blank@2x.png"];
+                 cell.imageUser.image = def_image;
+                 
+             } else {
+                 [cell bindData:pfuser];
+             }
+             /*
              PFFile *contactThumbnail = user[PF_USER_THUMBNAIL];
              [contactThumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
                  //NSLog(@"in the block");
@@ -194,7 +203,7 @@
                      //dispatch_async(dispatch_get_main_queue(), ^{ NSLog(@"in main queue, load cell image");
                      //    cell.imageUser.image = image; });
                  }
-             }];
+             }];*/
          }
      }];
 

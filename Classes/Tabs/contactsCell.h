@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
+#import <ParseUI/ParseUI.h>
 
 @interface contactsCell : UITableViewCell
 
-- (void)bindData:(PFObject *)discovered_users_;
-@property (nonatomic, weak) IBOutlet UIImageView *imageUser;
+- (void)bindData:(PFUser *)discovered_user;
+@property (nonatomic, weak) IBOutlet PFImageView *imageUser;
 @property (nonatomic, weak) IBOutlet UILabel *userFullName;
 @property (nonatomic, weak) IBOutlet UILabel *localDateTime;
 

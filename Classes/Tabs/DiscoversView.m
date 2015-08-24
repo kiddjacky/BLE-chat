@@ -186,9 +186,46 @@
         cell = [tableView dequeueReusableCellWithIdentifier:@"discoversCell" forIndexPath:indexPath];
     }
     
+
+    DiscoverUser *discoverUser = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    NSDateFormatter *df = [NSDateFormatter new];
+    [df setDateFormat:@"dd/MM/yyyy HH:mm"];
+    //df.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+    
+    df.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[NSTimeZone localTimeZone].secondsFromGMT];
+    NSString *localDateString = [df stringFromDate:discoverUser.timeMeet];
+    
+    cell.userFullName.text = discoverUser.userFullName;
+    cell.localDateTime.text = localDateString;
+    //UIImage *def_image = [UIImage imageNamed:@"messages_blank.png"];
+    //cell.pfImageView.image = def_image;
+    
+    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [query whereKey:PF_USER_USERNAME equalTo:discoverUser.userName];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+     {
+         if ([objects count] != 0)
+         {
+             
+             PFUser *user = [objects firstObject];
+             if (user[PF_USER_THUMBNAIL] == nil)
+             {
+                 UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
+                 //UIImage *def_image = [UIImage imageNamed:@"profile_blank@2x.png"];
+                 cell.pfImageView.image = def_image;
+
+             } else {
+                 [cell bindData:user];
+             }
+         }
+     }];
+
+    
     return cell;
 }
-
+/*
 -(void)tableView:(UITableView *)tableView willDisplayCell:(discoversCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"update discover table view");
@@ -236,7 +273,7 @@
      }];
     
 }
-
+*/
 
 #pragma mark - Table view delegate
 -(void)prepareViewController:(id)vc forSegue:(NSString *)segueIdentifier fromIndexPath:(NSIndexPath *)indexPath

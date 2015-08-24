@@ -70,23 +70,30 @@
     // Configure the view for the selected state
 }
 
-- (void)bindData:(PFObject *)discovered_users_
+- (void)bindData:(PFObject *)discovered_user
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-    /*
-     discovered_users = discovered_users_;
+    
+     //discovered_user = discovered_user;
      
-     imageUser.layer.cornerRadius = imageUser.frame.size.width/2;
-     imageUser.layer.masksToBounds = YES;
+     //self.imageUser.layer.cornerRadius = imageUser.frame.size.width/2;
+    
+    self.imageUser.frame = CGRectMake(10, 10, 50, 50);
+    self.imageUser.layer.masksToBounds = YES;
      //---------------------------------------------------------------------------------------------------------------------------------------------
-     
-     PFUser *lastUser = discovered_users[PF_MESSAGES_LASTUSER];
-     [imageUser setFile:lastUser[PF_USER_PICTURE]];
-     [imageUser loadInBackground];
-     
-     userFullName.text = @"test";
-     localDateTime.text = @"test";
-     */
+    [self.imageUser setContentMode:UIViewContentModeScaleAspectFit];
+     //PFUser *lastUser = discovered_users[PF_MESSAGES_LASTUSER];
+     //[self.imageUser setFile:discovered_user[PF_USER_PICTURE]];
+     //[self.imageUser loadInBackground];
+    
+    if (discovered_user[PF_USER_PICTURE]) {
+        PFFile *discoverThumbnail = discovered_user[PF_USER_THUMBNAIL];
+        self.imageUser.file = discoverThumbnail;
+        [self.imageUser loadInBackground];
+    }
+     //userFullName.text = @"test";
+     //localDateTime.text = @"test";
+    
     
 }
 

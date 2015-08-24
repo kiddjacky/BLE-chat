@@ -112,8 +112,14 @@
 
              self.imageUser.layer.cornerRadius = self.imageUser.frame.size.width / 2;
              NSLog(@"corner radius =  %f", self.imageUser.layer.cornerRadius);
+             if (self.target[PF_USER_PICTURE]) {
              [self.imageUser setFile:self.target[PF_USER_PICTURE]];
              [self.imageUser loadInBackground];
+             }
+             else {
+                 UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
+                 self.imageUser.image = def_image;
+             }
          }
      }];
     

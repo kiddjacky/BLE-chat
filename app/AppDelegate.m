@@ -88,9 +88,9 @@
 
 	NavigationController *navController1 = [[NavigationController alloc] initWithRootViewController:self.groupsView];
 	NavigationController *navController2 = [[NavigationController alloc] initWithRootViewController:self.messagesView];
-	NavigationController *navController3 = [[NavigationController alloc] initWithRootViewController:self.profileView];
+	NavigationController *navController3 = [[NavigationController alloc] initWithRootViewController:self.contactsView];
     NavigationController *navController4 = [[NavigationController alloc] initWithRootViewController:self.discoversView];
-    NavigationController *navController5 = [[NavigationController alloc] initWithRootViewController:self.contactsView];
+    NavigationController *navController5 = [[NavigationController alloc] initWithRootViewController:self.profileView];
     
 
 	self.tabBarController = [[UITabBarController alloc] init];
