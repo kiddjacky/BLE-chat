@@ -198,6 +198,10 @@
     
     cell.userFullName.text = discoverUser.userFullName;
     cell.localDateTime.text = localDateString;
+    
+    UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
+    //UIImage *def_image = [UIImage imageNamed:@"profile_blank@2x.png"];
+    cell.pfImageView.image = def_image;
     //UIImage *def_image = [UIImage imageNamed:@"messages_blank.png"];
     //cell.pfImageView.image = def_image;
     
