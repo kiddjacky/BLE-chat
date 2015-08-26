@@ -385,6 +385,13 @@
 
 -(void)actionAdd {
     NSLog(@"add discover user as contact!");
+    if (self.target == nil)
+    {
+        NSLog(@"self target nil");
+        
+    }
+    else
+    {
 
              NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Contacts"];
              request.predicate = [NSPredicate predicateWithFormat:@"userName = %@", self.target[PF_USER_USERNAME]];
@@ -392,6 +399,7 @@
              NSArray *matches = [self.context executeFetchRequest:request error:&error];
              Contacts *contact = nil;
              //CurrentUser *currentUser = nil;
+            NSLog(@"match is %d", [matches count]);
              
              if (error) {
                  NSLog(@"request error!");
@@ -439,10 +447,15 @@
                  //add contact to current user contact list
                  PFUser *user = [PFUser currentUser];
                  NSLog(@"original contact list is %@", user[PF_USER_CONTACTS]);
-                 
+                 NSLog(@"contact.username = %@, self.target.username = %@", contact.userName, self.target.username);
                  NSMutableArray *contactList = [[NSMutableArray alloc] init];
-                 [contactList addObject:contact.userName];
-                 [contactList addObjectsFromArray:user[PF_USER_CONTACTS]];
+                 
+//                 if (![user[ containsObject:contact.userName])
+//                 {
+                     [contactList addObject:contact.userName];
+//                 NSLog(@"Crashes here*********");
+                     [contactList addObjectsFromArray:user[PF_USER_CONTACTS]];
+//                 }
                  NSLog(@"now contact list is %@", contactList);
                  user[PF_USER_CONTACTS] = contactList;
                  [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
@@ -456,6 +469,7 @@
                  
                  [self save_and_post];
              }
+    }
 
 }
 
