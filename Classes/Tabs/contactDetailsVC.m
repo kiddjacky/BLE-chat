@@ -86,12 +86,18 @@
 
 -(void)actionChat
 {
+    if (self.target == nil)
+    {
+        NSLog(@"self target nil");
+        
+    }
+    else {
              NSString *discoverId = StartPrivateChat([PFUser currentUser], self.target);
              //---------------------------------------------------------------------------------------------------------------------------------------------
              ChatView *chatView = [[ChatView alloc] initWith:discoverId];
              chatView.hidesBottomBarWhenPushed = YES;
              [self.navigationController pushViewController:chatView animated:YES];
-
+    }
 }
 
 

@@ -22,3 +22,5 @@ void		DeleteMessageItem			(PFObject *message);
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 void		UpdateMessageCounter		(NSString *groupId, NSString *lastMessage);
 void		ClearMessageCounter			(NSString *groupId);
+
+void        UpdateMessageUserCount      (NSString *groupId);

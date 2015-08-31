@@ -51,8 +51,12 @@
 //-----------------------------------------------------------------------
 #define		PF_GROUPS_CLASS_NAME				@"Groups"				//	Class name
 #define		PF_GROUPS_NAME						@"name"					//	String
-#define     PF_GROUPS_LATITUDE                  @"latitude"             //  Latitude
-#define     PF_GROUPS_LONGTITUDE                @"longtitude"           //  Longtitude
+#define     PF_GROUPS_UP                        @"up"                   //  Number
+#define     PF_GROUPS_DOWN                      @"down"                 //  Number
+#define		PF_GROUPS_TOPIC                     @"topic"				//  String
+#define		PF_GROUPS_DESCRIPTION				@"description"			//	String
+#define     PF_GROUPS_PICTURE                   @"picture"              //  File
+#define     PF_GROUPS_NUM_CHAT                  @"numChat"              //  Number
 //-----------------------------------------------------------------------
 #define		PF_MESSAGES_CLASS_NAME				@"Messages"				//	Class name
 #define		PF_MESSAGES_USER					@"user"					//	Pointer to User Class

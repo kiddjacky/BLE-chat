@@ -16,7 +16,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Signature" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hmC-tD-aP0">
-                        <rect key="frame" x="18" y="77.5" width="78" height="20.5"/>
+                        <rect key="frame" x="18" y="78" width="78" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="78" id="8IH-1V-myU"/>
                         </constraints>
