@@ -57,14 +57,14 @@
     
     _name = [[UITextField alloc] initWithFrame:CGRectZero];
     self.name.translatesAutoresizingMaskIntoConstraints = NO;
-    self.name.text = @"discussion Name";
+    self.name.text = @"Topic";
     self.name.layer.masksToBounds = YES;
     self.name.layer.borderWidth = 1.0f;
     [self.view addSubview:self.name];
     
     _detail = [[UITextView alloc] initWithFrame:CGRectZero];
     self.detail.translatesAutoresizingMaskIntoConstraints = NO;
-    self.detail.text = @"discussion Detail";
+    self.detail.text = @"Let's Vote and join the discussion!";
     self.detail.layer.masksToBounds = YES;
     self.detail.layer.borderWidth = 1.0f;
     [self.view addSubview:self.detail];
@@ -370,9 +370,11 @@
         //object[PF_GROUPS_DOWN] = self.noNumber.text;
                         NSLog(@"setup group info 4");
         [object setObject:[NSNumber numberWithInteger:0] forKey:PF_GROUPS_NUM_CHAT];
+        if (self.picFile) {
         [object setObject:self.picFile forKey:PF_GROUPS_PICTURE];
         //object[PF_GROUPS_NUM_CHAT] = @"0";
                 NSLog(@"setup group info");
+        }
         [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
          {
              if (error == nil)

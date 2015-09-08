@@ -31,6 +31,7 @@
     NSMutableArray *up;
     NSMutableArray *down;
     NSMutableArray *join;
+    NSMutableArray *vote; //0 means didn't vote, 1 means yes, 2 means no
 }
 @end
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -61,15 +62,18 @@
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.allowsSelection = NO;
-    //self.tableView.backgroundColor = [UIColor lightGrayColor];
+    self.tableView.backgroundColor = [UIColor lightGrayColor];
     self.tableView.separatorColor = [UIColor clearColor];
-        [self.tableView registerNib:[UINib nibWithNibName:@"discussionCell" bundle:nil] forCellReuseIdentifier:@"discussionCell"];
+    [self.tableView registerClass:[discussionCell class] forCellReuseIdentifier:@"discussionCell"];
+    
+    //[self.tableView registerNib:[UINib nibWithNibName:@"discussionCell" bundle:nil] forCellReuseIdentifier:@"discussionCell"];
     
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	groups = [[NSMutableArray alloc] init];
     up = [[NSMutableArray alloc] init];
     down = [[NSMutableArray alloc] init];
     join = [[NSMutableArray alloc] init];
+    vote = [[NSMutableArray alloc] init];
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -99,11 +103,19 @@
 		{
 			[groups removeAllObjects];
 			[groups addObjectsFromArray:objects];
+            [up removeAllObjects];
+            [down removeAllObjects];
+            [join removeAllObjects];
+            [vote removeAllObjects];
             [up addObjectsFromArray:[objects valueForKey:PF_GROUPS_UP]];
             [down addObjectsFromArray:[objects valueForKey:PF_GROUPS_DOWN]];
             [join addObjectsFromArray:[objects valueForKey:PF_GROUPS_NUM_CHAT]];
+            NSInteger size = [objects count];
+            for (int i=0; i<size; i++) {
+                [vote addObject:[NSNumber numberWithInt:0]];
+            }
 			[self.tableView reloadData];
-            NSLog(@"groups is %@, up is %@, down is %@, join is %@", groups, up, down, join);
+            NSLog(@"groups is %@, up is %@, down is %@, join is %@, vote is %@", groups, up, down, join, vote);
 		}
 		else [ProgressHUD showError:@"Network error."];
 	}];
@@ -180,7 +192,7 @@
 	PFObject *group = groups[indexPath.row];
 	cell.topic.text = group[PF_GROUPS_NAME];
     cell.topicDescription.text = group[PF_GROUPS_DESCRIPTION];
-    cell.status.text = [NSString stringWithFormat:@"YES %@ VS NO %@", group[PF_GROUPS_UP], group[PF_GROUPS_DOWN]];
+    //cell.status.text = [NSString stringWithFormat:@"YES %@ VS NO %@", group[PF_GROUPS_UP], group[PF_GROUPS_DOWN]];
     cell.group = group;
     [cell.join setTag:[indexPath row]];
     [cell.up setTag:[indexPath row]];
@@ -189,6 +201,17 @@
     [cell.join addTarget:self action:@selector(actionChat:) forControlEvents:UIControlEventTouchUpInside];
     [cell.up addTarget:self action:@selector(actionUp:) forControlEvents:UIControlEventTouchUpInside];
     [cell.down addTarget:self action:@selector(actionDown:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if([vote[indexPath.row] integerValue]==0) {
+        cell.up.userInteractionEnabled = YES;
+        cell.down.userInteractionEnabled = YES;
+    } else if ([vote[indexPath.row] integerValue]==1) {
+        cell.up.userInteractionEnabled = NO;
+        cell.down.userInteractionEnabled = YES;
+    } else if  ([vote[indexPath.row] integerValue]==2) {
+        cell.up.userInteractionEnabled = YES;
+        cell.down.userInteractionEnabled = NO;
+    }
     
     if (up[indexPath.row]==nil) {
         [cell.up setTitle:@"YES 0" forState:UIControlStateNormal];
@@ -208,7 +231,8 @@
         [cell.join setTitle:@"JOIN" forState:UIControlStateNormal];
         join[indexPath.row] = @"0";
     } else {
-        [cell.join setTitle:[NSString stringWithFormat:@"JOIN %@", join[indexPath.row]] forState:UIControlStateNormal];
+        //[cell.join setTitle:[NSString stringWithFormat:@"JOIN %@", join[indexPath.row]] forState:UIControlStateNormal];
+        [cell.join setTitle:@"JOIN" forState:UIControlStateNormal];
     }
     
     if (group[PF_GROUPS_PICTURE]==nil) {
@@ -218,6 +242,7 @@
         //[cell bindData:group];
         cell.image.file = group[PF_GROUPS_PICTURE];
         [cell.image loadInBackground];
+        //cell.image.contentMode = UIViewContentModeScaleAspectFit;
     }
     
     /*
@@ -281,7 +306,7 @@
     CGRect rect = [attributedText boundingRectWithSize:CGSizeMake(cell.topicDescription.frame.size.width, CGFLOAT_MAX)
                                                options:NSStringDrawingUsesLineFragmentOrigin
                                                context:nil];
-    return rect.size.height + 200;
+    return rect.size.height + 400;
     
     //CGSize size = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
     //NSLog(@"h=%f", size.height + 1);
@@ -312,6 +337,14 @@
     NSLog(@"up is now %@", up[row]);
     [self.tableView reloadData];
     sender.userInteractionEnabled = NO;
+    if([vote[row] integerValue]==2) {
+        NSInteger disagree = [[group objectForKey:PF_GROUPS_DOWN] intValue];
+        [group setObject:[NSNumber numberWithInteger:(disagree-1)] forKey:PF_GROUPS_DOWN];
+        [down setObject:[NSNumber numberWithInteger:(disagree-1)] atIndexedSubscript:row  ];
+        NSLog(@"down now is %@", down[row]);
+    }
+    vote[row] = [NSNumber numberWithInt:1];
+    NSLog(@"vote is now %@", vote[row]);
     [group saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
      {
          if (error == nil)
@@ -334,6 +367,14 @@
     NSLog(@"down now is %@", down[row]);
     [self.tableView reloadData];
     sender.userInteractionEnabled = NO;
+    if([vote[row] integerValue]==1) {
+        NSInteger agree = [[group objectForKey:PF_GROUPS_UP] intValue];
+        [group setObject:[NSNumber numberWithInteger:(agree-1)] forKey:PF_GROUPS_UP];
+        [up setObject:[NSNumber numberWithInteger:(agree - 1)] atIndexedSubscript:row  ];
+        NSLog(@"up is now %@", up[row]);
+    }
+    vote[row] = [NSNumber numberWithInt:2];
+        NSLog(@"vote is now %@", vote[row]);
     [group saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
      {
          if (error == nil)

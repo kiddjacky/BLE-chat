@@ -22,8 +22,6 @@
         <attribute name="thumbnail" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="userFullName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="contacts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Contacts" syncable="YES"/>
-        <relationship name="discovers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DiscoverUser" syncable="YES"/>
     </entity>
     <entity name="DiscoverUser" representedClassName="DiscoverUser" syncable="YES">
         <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
@@ -36,7 +34,7 @@
     </entity>
     <elements>
         <element name="Contacts" positionX="207" positionY="99" width="128" height="180"/>
-        <element name="CurrentUser" positionX="-54" positionY="18" width="128" height="223"/>
+        <element name="CurrentUser" positionX="-54" positionY="18" width="128" height="30"/>
         <element name="DiscoverUser" positionX="-18" positionY="228" width="128" height="150"/>
     </elements>
 </model>

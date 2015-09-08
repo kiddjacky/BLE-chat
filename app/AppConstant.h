@@ -40,6 +40,7 @@
 #define     PF_USER_INTEREST                    @"interest"             //  String
 #define     PF_USER_SELF_DESCRIPTION            @"selfDescription"      //  String
 #define     PF_USER_CONTACTS                    @"contacts"             //  Array of contact names
+#define     PF_USER_VOTE                        @"votes"                //  Array of votes
 //-----------------------------------------------------------------------
 #define		PF_CHAT_CLASS_NAME					@"Chat"					//	Class name
 #define		PF_CHAT_USER						@"user"					//	Pointer to User Class
