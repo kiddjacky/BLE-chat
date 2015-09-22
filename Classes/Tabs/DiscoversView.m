@@ -196,7 +196,11 @@
     df.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[NSTimeZone localTimeZone].secondsFromGMT];
     NSString *localDateString = [df stringFromDate:discoverUser.timeMeet];
     
-    cell.userFullName.text = discoverUser.userFullName;
+    if (discoverUser.userFullName == nil) {
+        cell.userFullName.text = @"Anonymous";
+    } else {
+        cell.userFullName.text = discoverUser.userFullName;
+    }
     cell.localDateTime.text = localDateString;
     
     UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
@@ -214,6 +218,37 @@
          {
              
              PFUser *user = [objects firstObject];
+             
+             if (discoverUser.userFullName == nil) {
+                 NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"DiscoverUser"];
+                 request.predicate = [NSPredicate predicateWithFormat:@"userName = %@", user.username];
+                 
+                 NSError *error;
+                 NSArray *matches = [self.managedObjectContext executeFetchRequest:request error:&error];
+                 
+                 if (error) {
+                     
+                 } else {
+                     DiscoverUser *discover = [matches firstObject];
+                    discover.userFullName = user[PF_USER_FULLNAME];
+                     cell.userFullName.text = user[PF_USER_FULLNAME];
+                 }
+                 
+                 NSError *save_error=nil;
+                 
+                 if (![self.managedObjectContext save:&save_error]) {
+                     NSLog(@"Couldn't save %@", [error localizedDescription]);
+                 }
+                 
+                 //NSLog(@"Discover add is %@, %@, %@, %@", discoverUser.userName, discoverUser.timeMeet, discoverUser.latitude, discoverUser.longitude);
+                 
+                 //setup notification to other view controller that the context is avaiable.
+                 NSDictionary *userInfo = self.managedObjectContext ? @{DatabaseAvailabilityContext : self.managedObjectContext } : nil;
+                 [[NSNotificationCenter defaultCenter] postNotificationName:DatabaseAvailabilityNotification object:self userInfo:userInfo];
+                 
+                 NSLog(@"Post database notification!");
+                 
+             }
              if (user[PF_USER_THUMBNAIL] == nil)
              {
                  UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];

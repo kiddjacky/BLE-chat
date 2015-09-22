@@ -8,8 +8,6 @@
 
 #import "discussionView.h"
 
-#import <Parse/Parse.h>
-#import <ParseUI/ParseUI.h>
 #import "ProgressHUD.h"
 
 #import "AppConstant.h"
@@ -29,7 +27,7 @@
 @property (strong, nonatomic) UIButton *save;
 @property (strong, nonatomic) PFImageView *picture;
 @property (strong, nonatomic) UIView *customeView;
-@property (strong, nonatomic) PFObject *group;
+
 @property (strong, nonatomic) PFFile *picFile;
 @end
 
@@ -48,6 +46,15 @@
     self.picture.translatesAutoresizingMaskIntoConstraints = NO;
     self.picture.userInteractionEnabled = YES;
     self.picture.clipsToBounds = YES;
+    
+    if (self.group[PF_GROUPS_PICTURE]==nil) {
+        UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
+        self.picture.image = def_image;
+    } else {
+        self.picture.file = self.group[PF_GROUPS_PICTURE];
+        [self.picture loadInBackground];
+    }
+    
     UITapGestureRecognizer *tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(actionPhoto:)];
     
     tapGesture1.numberOfTapsRequired = 1;
@@ -57,51 +64,53 @@
     
     _name = [[UITextField alloc] initWithFrame:CGRectZero];
     self.name.translatesAutoresizingMaskIntoConstraints = NO;
-    self.name.text = @"Topic";
+    self.name.text = self.group[PF_GROUPS_NAME];
     self.name.layer.masksToBounds = YES;
     self.name.layer.borderWidth = 1.0f;
     [self.view addSubview:self.name];
     
     _detail = [[UITextView alloc] initWithFrame:CGRectZero];
     self.detail.translatesAutoresizingMaskIntoConstraints = NO;
-    self.detail.text = @"Let's Vote and join the discussion!";
+    self.detail.text = self.group[PF_GROUPS_DESCRIPTION]; //@"Let's Vote and join the discussion!";
     self.detail.layer.masksToBounds = YES;
     self.detail.layer.borderWidth = 1.0f;
     [self.view addSubview:self.detail];
     
     _yesName = [[UITextField alloc] initWithFrame:CGRectZero];
     self.yesName.translatesAutoresizingMaskIntoConstraints = NO;
-    self.yesName.text = @"YES";
+    self.yesName.text = self.group[PF_GROUPS_UP_NAME];
     self.yesName.layer.masksToBounds = YES;
     self.yesName.layer.borderWidth = 1.0f;
     [self.view addSubview:self.yesName];
     
     _yesNumber = [[UITextField alloc] initWithFrame:CGRectZero];
     self.yesNumber.translatesAutoresizingMaskIntoConstraints = NO;
-    self.yesNumber.text = @"0";
+    self.yesNumber.text = [self.group[PF_GROUPS_UP] stringValue];
     self.yesNumber.layer.masksToBounds = YES;
     self.yesNumber.layer.borderWidth = 1.0f;
     [self.view addSubview:self.yesNumber];
     
     _noName = [[UITextField alloc] initWithFrame:CGRectZero];
     self.noName.translatesAutoresizingMaskIntoConstraints = NO;
-    self.noName.text = @"No";
+    self.noName.text = self.group[PF_GROUPS_DOWN_NAME];
     self.noName.layer.masksToBounds = YES;
     self.noName.layer.borderWidth = 1.0f;
     [self.view addSubview:self.noName];
     
     _noNumber = [[UITextField alloc] initWithFrame:CGRectZero];
     self.noNumber.translatesAutoresizingMaskIntoConstraints = NO;
-    self.noNumber.text = @"0";
+    self.noNumber.text = [self.group[PF_GROUPS_DOWN] stringValue];
     self.noNumber.layer.masksToBounds = YES;
     self.noNumber.layer.borderWidth = 1.0f;
     [self.view addSubview:self.noNumber];
     
     _save = [[UIButton alloc] initWithFrame:CGRectZero];
     self.save.translatesAutoresizingMaskIntoConstraints = NO;
-    self.save.titleLabel.text = @"Save";
     self.save.layer.masksToBounds= YES;
     self.save.layer.borderWidth = 1.0f;
+    self.save.backgroundColor = [UIColor whiteColor];
+    [self.save setTitle:@"Save" forState:UIControlStateNormal];
+    [self.save setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [self.view addSubview:self.save];
 
     // Width constraint, full of parent view width
@@ -120,6 +129,14 @@
                                                           attribute:NSLayoutAttributeCenterX
                                                          multiplier:1
                                                            constant:0.0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.save
+                                                          attribute:NSLayoutAttributeHeight
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeHeight
+                                                         multiplier:0
+                                                           constant:50]];
 
     // Width constraint, full of parent view width
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.picture
@@ -356,26 +373,20 @@
     NSLog(@"save discussion");
     if (self.name.hasText)
     {
-
-        PFObject *object  = [PFObject objectWithClassName:PF_GROUPS_CLASS_NAME];
-        object[PF_GROUPS_NAME] = self.name.text;
-                        NSLog(@"setup group info 1");
-        object[PF_GROUPS_DESCRIPTION] = self.detail.text;
-                        NSLog(@"setup group info 2");
-        //object[PF_GROUPS_UP] = self.yesNumber.text;
-
-        [object setObject:[NSNumber numberWithInteger:0] forKey:PF_GROUPS_DOWN];
-        [object setObject:[NSNumber numberWithInteger:0] forKey:PF_GROUPS_UP];
-                        NSLog(@"setup group info 3");
-        //object[PF_GROUPS_DOWN] = self.noNumber.text;
-                        NSLog(@"setup group info 4");
-        [object setObject:[NSNumber numberWithInteger:0] forKey:PF_GROUPS_NUM_CHAT];
+        self.group[PF_GROUPS_NAME] = self.name.text;
+        self.group[PF_GROUPS_DESCRIPTION] = self.detail.text;
+        NSNumber *upNumber = [NSNumber numberWithInt:[self.yesNumber.text intValue]];
+        NSNumber *downNumber = [NSNumber numberWithInt:[self.noNumber.text intValue]];
+        [self.group setObject:downNumber forKey:PF_GROUPS_DOWN];
+        [self.group setObject:upNumber forKey:PF_GROUPS_UP];
+        self.group[PF_GROUPS_DOWN_NAME] = self.noName.text;
+        self.group[PF_GROUPS_UP_NAME] = self.yesName.text;
+        [self.group setObject:[NSNumber numberWithInteger:0] forKey:PF_GROUPS_NUM_CHAT];
         if (self.picFile) {
-        [object setObject:self.picFile forKey:PF_GROUPS_PICTURE];
-        //object[PF_GROUPS_NUM_CHAT] = @"0";
-                NSLog(@"setup group info");
+            [self.group setObject:self.picFile forKey:PF_GROUPS_PICTURE];
+            NSLog(@"setup group info");
         }
-        [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+        [self.group saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
          {
              if (error == nil)
              {

@@ -22,6 +22,7 @@
 #import "DatabaseAvailability.h"
 #import "discussionCell.h"
 #import "discussionView.h"
+#import "feedbackCell.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @interface GroupsView()
@@ -46,7 +47,7 @@
 	if (self)
 	{
 		[self.tabBarItem setImage:[UIImage imageNamed:@"tab_groups"]];
-		self.tabBarItem.title = @"Groups";
+		self.tabBarItem.title = @"Discussions";
 	}
 	return self;
 }
@@ -56,16 +57,16 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	[super viewDidLoad];
-	self.title = @"Groups";
+	self.title = @"Discussions";
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self  action:@selector(actionNew)];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	self.tableView.tableFooterView = [[UIView alloc] init];
-    self.tableView.allowsSelection = NO;
+    //self.tableView.allowsSelection = NO;
     self.tableView.backgroundColor = [UIColor lightGrayColor];
     self.tableView.separatorColor = [UIColor clearColor];
     [self.tableView registerClass:[discussionCell class] forCellReuseIdentifier:@"discussionCell"];
-    
+    [self.tableView registerClass:[feedbackCell class] forCellReuseIdentifier:@"feedbackCell"];
     //[self.tableView registerNib:[UINib nibWithNibName:@"discussionCell" bundle:nil] forCellReuseIdentifier:@"discussionCell"];
     
 	//---------------------------------------------------------------------------------------------------------------------------------------------
@@ -74,6 +75,13 @@
     down = [[NSMutableArray alloc] init];
     join = [[NSMutableArray alloc] init];
     vote = [[NSMutableArray alloc] init];
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor purpleColor];
+    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self
+                            action:@selector(reloadData)
+                  forControlEvents:UIControlEventValueChanged];
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -84,6 +92,7 @@
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	if ([PFUser currentUser] != nil)
 	{
+        NSLog(@"start to load group");
         //[[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
 		[self loadGroups];
 	}
@@ -91,6 +100,26 @@
 }
 
 #pragma mark - Backend actions
+- (void)reloadData
+{
+    // Reload table data
+    [self loadGroups];
+    [self.tableView reloadData];
+    
+    // End the refreshing
+    if (self.refreshControl) {
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MMM d, h:mm a"];
+        NSString *title = [NSString stringWithFormat:@"Last update: %@", [formatter stringFromDate:[NSDate date]]];
+        NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+                                                                    forKey:NSForegroundColorAttributeName];
+        NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attrsDictionary];
+        self.refreshControl.attributedTitle = attributedTitle;
+        
+        [self.refreshControl endRefreshing];
+    }
+}
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)loadGroups
@@ -131,6 +160,17 @@
 {
     discussionView *dv = [[discussionView alloc] initWithNibName:nil bundle:nil];
     dv.hidesBottomBarWhenPushed = YES;
+    
+    PFObject *object  = [PFObject objectWithClassName:PF_GROUPS_CLASS_NAME];
+    object[PF_GROUPS_NAME] = @"Topic";
+    object[PF_GROUPS_DESCRIPTION] = @"Let's join the discussion!";
+    [object setObject:[NSNumber numberWithInteger:0] forKey:PF_GROUPS_DOWN];
+    [object setObject:[NSNumber numberWithInteger:0] forKey:PF_GROUPS_UP];
+    [object setObject:[NSNumber numberWithInteger:0] forKey:PF_GROUPS_NUM_CHAT];
+    object[PF_GROUPS_DOWN_NAME] = @"No";
+    object[PF_GROUPS_UP_NAME] = @"Yes";
+    dv.group = object;
+    
     [self.navigationController pushViewController:dv animated:YES];
     /*
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please enter a name for your group" message:nil delegate:self
@@ -171,14 +211,22 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-	return 1;
+	return 2;
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-	return [groups count];
+    /*
+    if (section == 0) {
+       return [groups count];
+    }
+    else {
+        return 1;
+    }*/
+    
+    return (section==0) ? [groups count] : 1;
 }
 
 
@@ -186,6 +234,22 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
+    NSLog(@"indexPath section is %ld", (long)indexPath.section);
+    if (indexPath.section == 1) {
+        feedbackCell *cell = (feedbackCell *)[tableView dequeueReusableCellWithIdentifier:@"feedbackCell"];
+        if (cell == nil) cell = (feedbackCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"feedbackCell"];
+        //discussionCell *cell = (discussionCell *)[tableView dequeueReusableCellWithIdentifier:@"discussionCell"];
+        //if (cell == nil) cell = (discussionCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discussionCell"];
+        //PFObject *group = groups[0];
+        //cell.group = group;
+        //cell.topic.text = group[PF_GROUPS_NAME];
+        //cell.topicDescription.text = group[PF_GROUPS_DESCRIPTION];
+        [cell.join addTarget:self action:@selector(actionFeedback:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.share addTarget:self action:@selector(actionShareFeedback:) forControlEvents:UIControlEventTouchUpInside];
+        
+        return  cell;
+    }
+    else {
 	discussionCell *cell = (discussionCell *)[tableView dequeueReusableCellWithIdentifier:@"discussionCell"];
 	if (cell == nil) cell = (discussionCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discussionCell"];
 
@@ -197,42 +261,33 @@
     [cell.join setTag:[indexPath row]];
     [cell.up setTag:[indexPath row]];
     [cell.down setTag:[indexPath row]];
+    [cell.share setTag:[indexPath row]];
     
     [cell.join addTarget:self action:@selector(actionChat:) forControlEvents:UIControlEventTouchUpInside];
     [cell.up addTarget:self action:@selector(actionUp:) forControlEvents:UIControlEventTouchUpInside];
     [cell.down addTarget:self action:@selector(actionDown:) forControlEvents:UIControlEventTouchUpInside];
-    
-    if([vote[indexPath.row] integerValue]==0) {
-        cell.up.userInteractionEnabled = YES;
-        cell.down.userInteractionEnabled = YES;
-    } else if ([vote[indexPath.row] integerValue]==1) {
-        cell.up.userInteractionEnabled = NO;
-        cell.down.userInteractionEnabled = YES;
-    } else if  ([vote[indexPath.row] integerValue]==2) {
-        cell.up.userInteractionEnabled = YES;
-        cell.down.userInteractionEnabled = NO;
-    }
+    [cell.share addTarget:self action:@selector(actionShare:) forControlEvents:UIControlEventTouchUpInside];
     
     if (up[indexPath.row]==nil) {
-        [cell.up setTitle:@"YES 0" forState:UIControlStateNormal];
+        [cell.up setTitle:@"Yes 0" forState:UIControlStateNormal];
         up[indexPath.row] = @"0";
     } else {
-        [cell.up setTitle:[NSString stringWithFormat:@"YES %@", up[indexPath.row]] forState:UIControlStateNormal];
+        [cell.up setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_UP_NAME], up[indexPath.row]] forState:UIControlStateNormal];
     }
     
     if (down[indexPath.row]==nil) {
-        [cell.down setTitle:@"NO 0" forState:UIControlStateNormal];
+        [cell.down setTitle:@"No 0" forState:UIControlStateNormal];
         down[indexPath.row] = @"0";
     } else {
-        [cell.down setTitle:[NSString stringWithFormat:@"NO %@", down[indexPath.row]] forState:UIControlStateNormal];
+        [cell.down setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_DOWN_NAME], down[indexPath.row]] forState:UIControlStateNormal];
     }
     
     if (join[indexPath.row]==nil) {
-        [cell.join setTitle:@"JOIN" forState:UIControlStateNormal];
+        [cell.join setTitle:@"Join" forState:UIControlStateNormal];
         join[indexPath.row] = @"0";
     } else {
         //[cell.join setTitle:[NSString stringWithFormat:@"JOIN %@", join[indexPath.row]] forState:UIControlStateNormal];
-        [cell.join setTitle:@"JOIN" forState:UIControlStateNormal];
+        [cell.join setTitle:@"Join" forState:UIControlStateNormal];
     }
     
     if (group[PF_GROUPS_PICTURE]==nil) {
@@ -245,27 +300,23 @@
         //cell.image.contentMode = UIViewContentModeScaleAspectFit;
     }
     
-    /*
-	if (cell.detailTextLabel.text == nil) cell.detailTextLabel.text = @" ";
-	cell.detailTextLabel.textColor = [UIColor lightGrayColor];
-
-	PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-	[query whereKey:PF_CHAT_GROUPID equalTo:group.objectId];
-	[query orderByDescending:PF_CHAT_CREATEDAT];
-	[query setLimit:1000];
-	[query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-	{
-		if ([objects count] != 0)
-		{
-			PFObject *chat = [objects firstObject];
-			NSTimeInterval seconds = [[NSDate date] timeIntervalSinceDate:chat.createdAt];
-			cell.detailTextLabel.text = [NSString stringWithFormat:@"%d messages (%@)", (int) [objects count], TimeElapsed(seconds)];
-		}
-		else cell.detailTextLabel.text = @"No message";
-	}];
-     */
+    if([vote[indexPath.row] integerValue]==0) {
+        cell.up.userInteractionEnabled = YES;
+        cell.down.userInteractionEnabled = YES;
+    } else if ([vote[indexPath.row] integerValue]==1) {
+        cell.up.userInteractionEnabled = NO;
+        cell.down.userInteractionEnabled = YES;
+        cell.up.highlighted = YES;
+        cell.down.highlighted = NO;
+    } else if  ([vote[indexPath.row] integerValue]==2) {
+        cell.up.userInteractionEnabled = YES;
+        cell.down.userInteractionEnabled = NO;
+        cell.down.highlighted = YES;
+        cell.up.highlighted = NO;
+    }
 
 	return cell;
+    }
 }
 
 #pragma mark - Table view delegate
@@ -274,43 +325,107 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-    /*
-	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	//[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
+    if (indexPath.section == 0) {
 	PFObject *group = groups[indexPath.row];
-	NSString *groupId = group.objectId;
+    
+    discussionView *dv = [[discussionView alloc] initWithNibName:nil bundle:nil];
+    dv.hidesBottomBarWhenPushed = YES;
+    dv.group = group;
+    NSLog(@"push to edit mode");
+    [self.navigationController pushViewController:dv animated:YES];
+    }
+    /*
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	CreateMessageItem([PFUser currentUser], groupId, group[PF_GROUPS_NAME]);
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	ChatView *chatView = [[ChatView alloc] initWith:groupId];
 	chatView.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:chatView animated:YES];
-     */
+    */
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    if(indexPath.section == 0) {
     discussionCell *cell = prototypeCell;
     PFObject *group = groups[indexPath.row];
-    NSString *cellText = group[PF_GROUPS_NAME];
+    NSString *cellText = group[PF_GROUPS_DESCRIPTION];
     UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:17.0];
     
-    NSAttributedString *attributedText =
+    NSAttributedString *attributedText = 
     [[NSAttributedString alloc]
      initWithString:cellText
      attributes:@
      {
      NSFontAttributeName: cellFont
      }];
-    CGRect rect = [attributedText boundingRectWithSize:CGSizeMake(cell.topicDescription.frame.size.width, CGFLOAT_MAX)
+    CGRect rect = [attributedText boundingRectWithSize:CGSizeMake(280.0, CGFLOAT_MAX)
                                                options:NSStringDrawingUsesLineFragmentOrigin
                                                context:nil];
-    return rect.size.height + 400;
+    NSLog(@"height for row %ld is %f, %f, %f", (long)indexPath.row, rect.size.height+200, rect.size.width, cell.topicDescription.frame.size.width);
+    return rect.size.height + 320;
     
+    }
+    else {
+        return 200;
+    }
     //CGSize size = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
     //NSLog(@"h=%f", size.height + 1);
     //return 1  + size.height;
+}
+
+
+
+//delete group post
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+{
+    if (indexPath.section == 0) {
+    PFObject *group = groups[indexPath.row];
+    PFQuery *query = [PFQuery queryWithClassName:PF_GROUPS_CLASS_NAME];
+    [query whereKey:@"objectId" equalTo:group.objectId];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+    {
+        if (!error) {
+            NSLog(@"find group to be deleted");
+            [group deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+             {
+                 if (error == nil)
+                 {
+                     [self loadGroups];
+                     [ProgressHUD showSuccess:@"Delete Group discussion!"];
+                 }
+                 else [ProgressHUD showError:@"Network error."];
+             }];
+        }
+    }];
+    }
+}
+
+
+-(void)actionFeedback:(UIButton *)sender
+{
+    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [query whereKey:PF_USER_USERNAME equalTo:@"kiddsu@gmail.com"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+     {
+         if ([objects count] != 0)
+         {
+             PFUser *user1 = [PFUser currentUser];
+             PFUser *user2 = [objects firstObject];
+             NSString *groupId = StartPrivateChat(user1, user2);
+             ChatView *chatView = [[ChatView alloc] initWith:groupId];
+             chatView.hidesBottomBarWhenPushed = YES;
+             [self.navigationController pushViewController:chatView animated:YES];
+         }
+         else {
+             [ProgressHUD showError:@"Admin error."];
+         }
+     }];
+
 }
 
 -(void)actionChat:(UIButton *)sender
@@ -332,7 +447,7 @@
     NSInteger row = [sender tag];
     PFObject *group = groups[row];
     NSInteger agree = [[group objectForKey:PF_GROUPS_UP] intValue];
-    [group setObject:[NSNumber numberWithInteger:(agree+1)] forKey:PF_GROUPS_UP];
+    [group incrementKey:PF_GROUPS_UP byAmount:[NSNumber numberWithInt:1]];
     [up setObject:[NSNumber numberWithInteger:(agree + 1)] atIndexedSubscript:row  ];
     NSLog(@"up is now %@", up[row]);
     [self.tableView reloadData];
@@ -362,7 +477,7 @@
     NSInteger row = [sender tag];
     PFObject *group = groups[row];
     NSInteger disagree = [[group objectForKey:PF_GROUPS_DOWN] intValue];
-    [group setObject:[NSNumber numberWithInteger:(disagree+1)] forKey:PF_GROUPS_DOWN];
+    [group incrementKey:PF_GROUPS_DOWN byAmount:[NSNumber numberWithInt:1]];
     [down setObject:[NSNumber numberWithInteger:(disagree+1)] atIndexedSubscript:row  ];
     NSLog(@"down now is %@", down[row]);
     [self.tableView reloadData];
@@ -386,6 +501,48 @@
      }];
 }
 
+-(void)actionShare:(UIButton *)sender
+{
+    NSInteger row = [sender tag];
+    PFObject *group = groups[row];
+    
+    NSString *text = group[PF_GROUPS_NAME];
+    NSString *details = group[PF_GROUPS_DESCRIPTION];
+    /* NSURL *url = [NSURL URLWithString:@"http://roadfiresoftware.com/2014/02/how-to-add-facebook-and-twitter-sharing-to-an-ios-app/"]; */
+    //UIImage *image = [UIImage imageNamed:@"roadfire-icon-square-200"];
+    UIImage *image;
+    if (group[PF_GROUPS_PICTURE]==nil) {
+        image = [UIImage imageNamed:@"tab_discovers_2"];
+    } else {
+        //[cell bindData:group];
+        image = group[PF_GROUPS_PICTURE];
+        //cell.image.contentMode = UIViewContentModeScaleAspectFit;
+    }
+    UIActivityViewController *controller =
+    [[UIActivityViewController alloc]
+     initWithActivityItems:@[text, image, details]
+     applicationActivities:nil];
+    
+    [self presentViewController:controller animated:YES completion:nil];
+}
 
+
+-(void)actionShareFeedback:(UIButton *)sender
+{
+    
+    NSString *text = @"I am using Blue Whale Chat to meet new people around my life and strat intresting discussion! Join us!";
+    //UIImage *image = [UIImage imageNamed:@"roadfire-icon-square-200"];
+
+    UIImage *image;
+
+    image = [UIImage imageNamed:@"logo-120x120.gif"];
+
+    UIActivityViewController *controller =
+    [[UIActivityViewController alloc]
+     initWithActivityItems:@[text, image]
+     applicationActivities:nil];
+    
+    [self presentViewController:controller animated:YES completion:nil];
+}
 
 @end

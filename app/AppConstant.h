@@ -54,6 +54,8 @@
 #define		PF_GROUPS_NAME						@"name"					//	String
 #define     PF_GROUPS_UP                        @"up"                   //  Number
 #define     PF_GROUPS_DOWN                      @"down"                 //  Number
+#define     PF_GROUPS_UP_NAME                   @"upName"               //  String
+#define     PF_GROUPS_DOWN_NAME                 @"downName"             //  String
 #define		PF_GROUPS_TOPIC                     @"topic"				//  String
 #define		PF_GROUPS_DESCRIPTION				@"description"			//	String
 #define     PF_GROUPS_PICTURE                   @"picture"              //  File

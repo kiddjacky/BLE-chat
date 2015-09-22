@@ -25,6 +25,8 @@
 @property (strong, nonatomic) IBOutlet UIButton *up;
 @property (strong, nonatomic) IBOutlet UIButton *join;
 
+@property (strong, nonatomic) UIButton *share;
+
 @property (nonatomic, assign)   BOOL didSetupConstraints;
 
 @end
