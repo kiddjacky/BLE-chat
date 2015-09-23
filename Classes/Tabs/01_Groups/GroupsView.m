@@ -59,10 +59,10 @@
 	[super viewDidLoad];
 	self.title = @"Discussions";
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self  action:@selector(actionNew)];
+	//self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self  action:@selector(actionNew)];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	self.tableView.tableFooterView = [[UIView alloc] init];
-    //self.tableView.allowsSelection = NO;
+    self.tableView.allowsSelection = NO;
     self.tableView.backgroundColor = [UIColor lightGrayColor];
     self.tableView.separatorColor = [UIColor clearColor];
     [self.tableView registerClass:[discussionCell class] forCellReuseIdentifier:@"discussionCell"];
@@ -377,7 +377,7 @@
 }
 
 
-
+/*
 //delete group post
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -404,7 +404,7 @@
     }];
     }
 }
-
+*/
 
 -(void)actionFeedback:(UIButton *)sender
 {
@@ -508,29 +508,37 @@
     
     NSString *text = group[PF_GROUPS_NAME];
     NSString *details = group[PF_GROUPS_DESCRIPTION];
-    /* NSURL *url = [NSURL URLWithString:@"http://roadfiresoftware.com/2014/02/how-to-add-facebook-and-twitter-sharing-to-an-ios-app/"]; */
-    //UIImage *image = [UIImage imageNamed:@"roadfire-icon-square-200"];
-    UIImage *image;
+    NSString *promote = @"Download the app BlueWhale at APP store now! #BlueWhale";
+
     if (group[PF_GROUPS_PICTURE]==nil) {
-        image = [UIImage imageNamed:@"tab_discovers_2"];
+        UIImage *image = [UIImage imageNamed:@"logo-120x120.gif"];
+        UIActivityViewController *controller =
+        [[UIActivityViewController alloc]
+         initWithActivityItems:@[text, image, details, promote]
+         applicationActivities:nil];
+        
+        [self presentViewController:controller animated:YES completion:nil];
     } else {
-        //[cell bindData:group];
-        image = group[PF_GROUPS_PICTURE];
-        //cell.image.contentMode = UIViewContentModeScaleAspectFit;
+        [group[PF_GROUPS_PICTURE] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+            if (!error) {
+               UIImage *image = [UIImage imageWithData:data];
+                // image can now be set on a UIImageView
+                UIActivityViewController *controller =
+                [[UIActivityViewController alloc]
+                 initWithActivityItems:@[text, image, details, promote]
+                 applicationActivities:nil];
+                
+                [self presentViewController:controller animated:YES completion:nil];
+            }
+        }];
     }
-    UIActivityViewController *controller =
-    [[UIActivityViewController alloc]
-     initWithActivityItems:@[text, image, details]
-     applicationActivities:nil];
-    
-    [self presentViewController:controller animated:YES completion:nil];
 }
 
 
 -(void)actionShareFeedback:(UIButton *)sender
 {
     
-    NSString *text = @"I am using Blue Whale Chat to meet new people around my life and strat intresting discussion! Join us!";
+    NSString *text = @"I am using Blue Whale Chat to meet new people around my life and strat intresting discussion! Join us! Download the app BlueWhale at APP store now! #BlueWhale";
     //UIImage *image = [UIImage imageNamed:@"roadfire-icon-square-200"];
 
     UIImage *image;
