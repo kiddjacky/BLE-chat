@@ -23,6 +23,8 @@
 #import "discussionCell.h"
 #import "discussionView.h"
 #import "feedbackCell.h"
+#import "WeiXinActivity.h"
+
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @interface GroupsView()
@@ -226,7 +228,7 @@
         return 1;
     }*/
     
-    return (section==0) ? [groups count] : 1;
+    return (section==0) ? [groups count] : 2;
 }
 
 
@@ -247,6 +249,12 @@
         [cell.join addTarget:self action:@selector(actionFeedback:) forControlEvents:UIControlEventTouchUpInside];
         [cell.share addTarget:self action:@selector(actionShareFeedback:) forControlEvents:UIControlEventTouchUpInside];
         
+        if (indexPath.row == 1) {
+            cell.topic.text = @"Report any abusive behaviors or users";
+            cell.topicDescription.text = @"Please report any offensive content or any abusive users from the service";
+            [cell.join setTitle:@"Report"   forState:UIControlStateNormal  ];
+        }
+        
         return  cell;
     }
     else {
@@ -254,8 +262,12 @@
 	if (cell == nil) cell = (discussionCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discussionCell"];
 
 	PFObject *group = groups[indexPath.row];
-	cell.topic.text = group[PF_GROUPS_NAME];
-    cell.topicDescription.text = group[PF_GROUPS_DESCRIPTION];
+    if (group[PF_GROUPS_NAME] != nil) {
+        cell.topic.text = group[PF_GROUPS_NAME];
+    }
+    if (group[PF_GROUPS_DESCRIPTION] != nil) {
+        cell.topicDescription.text = group[PF_GROUPS_DESCRIPTION];
+    }
     //cell.status.text = [NSString stringWithFormat:@"YES %@ VS NO %@", group[PF_GROUPS_UP], group[PF_GROUPS_DOWN]];
     cell.group = group;
     [cell.join setTag:[indexPath row]];
@@ -272,14 +284,18 @@
         [cell.up setTitle:@"Yes 0" forState:UIControlStateNormal];
         up[indexPath.row] = @"0";
     } else {
-        [cell.up setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_UP_NAME], up[indexPath.row]] forState:UIControlStateNormal];
+        if (group[PF_GROUPS_UP_NAME] != nil) {
+            [cell.up setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_UP_NAME], up[indexPath.row]] forState:UIControlStateNormal];
+        }
     }
     
     if (down[indexPath.row]==nil) {
         [cell.down setTitle:@"No 0" forState:UIControlStateNormal];
         down[indexPath.row] = @"0";
     } else {
+        if (group[PF_GROUPS_DOWN_NAME] != nil) {
         [cell.down setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_DOWN_NAME], down[indexPath.row]] forState:UIControlStateNormal];
+        }
     }
     
     if (join[indexPath.row]==nil) {
@@ -409,7 +425,7 @@
 -(void)actionFeedback:(UIButton *)sender
 {
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    [query whereKey:PF_USER_USERNAME equalTo:@"kiddsu@gmail.com"];
+    [query whereKey:PF_USER_USERNAME equalTo:@"admin@bluewhalechat.com"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
      {
          if ([objects count] != 0)
@@ -512,10 +528,20 @@
 
     if (group[PF_GROUPS_PICTURE]==nil) {
         UIImage *image = [UIImage imageNamed:@"logo-120x120.gif"];
+        WeiXinActivity *weiXinActivity = [[WeiXinActivity alloc] init];
+        weiXinActivity.message = promote;
+        NSArray *applicationActivities = @[weiXinActivity];
         UIActivityViewController *controller =
         [[UIActivityViewController alloc]
          initWithActivityItems:@[text, image, details, promote]
-         applicationActivities:nil];
+         applicationActivities:applicationActivities];
+        controller.excludedActivityTypes = @[
+                                            UIActivityTypeAddToReadingList,
+                                            UIActivityTypeAirDrop,
+                                            UIActivityTypePrint,
+                                            UIActivityTypeAssignToContact,
+                                            UIActivityTypeSaveToCameraRoll
+                                            ];
         
         [self presentViewController:controller animated:YES completion:nil];
     } else {
@@ -523,10 +549,20 @@
             if (!error) {
                UIImage *image = [UIImage imageWithData:data];
                 // image can now be set on a UIImageView
+                WeiXinActivity *weiXinActivity = [[WeiXinActivity alloc] init];
+                weiXinActivity.message = promote;
+                NSArray *applicationActivities = @[weiXinActivity];
                 UIActivityViewController *controller =
                 [[UIActivityViewController alloc]
                  initWithActivityItems:@[text, image, details, promote]
-                 applicationActivities:nil];
+                 applicationActivities:applicationActivities];
+                controller.excludedActivityTypes = @[
+                                                     UIActivityTypeAddToReadingList,
+                                                     UIActivityTypeAirDrop,
+                                                     UIActivityTypePrint,
+                                                     UIActivityTypeAssignToContact,
+                                                     UIActivityTypeSaveToCameraRoll
+                                                     ];
                 
                 [self presentViewController:controller animated:YES completion:nil];
             }
@@ -552,5 +588,7 @@
     
     [self presentViewController:controller animated:YES completion:nil];
 }
+
+
 
 @end

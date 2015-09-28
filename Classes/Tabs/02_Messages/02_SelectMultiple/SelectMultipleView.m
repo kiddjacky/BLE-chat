@@ -17,6 +17,7 @@
 #import "utilities.h"
 
 #import "SelectMultipleView.h"
+#import "DatabaseAvailability.h"
 #import "Contacts.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -69,6 +70,14 @@
 	selection = [[NSMutableArray alloc] init];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	//[self loadUsers];
+    [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      NSLog(@"single Get database notification");
+                                                      self.managedObjectContext = note.userInfo[DatabaseAvailabilityContext];
+                                                  }];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -117,7 +126,7 @@
     [query whereKey:PF_USER_USERNAME containedIn:selection];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
      {
-         NSLog(@"object count is %d", [objects count]);
+         //NSLog(@"object count is %d", [objects count]);
          if ([objects count] != 0)
          {
              NSMutableArray *chatlist = [[NSMutableArray alloc] initWithArray:objects];

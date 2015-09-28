@@ -15,5 +15,6 @@
 @interface WelcomeView : UIViewController
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) UIImageView *image;
 
 @end

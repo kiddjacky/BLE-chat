@@ -36,12 +36,56 @@
 {
 	[super viewDidLoad];
 	self.title = @"Welcome";
+    
+    /*
     UIGraphicsBeginImageContext(self.view.frame.size);
     [[UIImage imageNamed:@"iphone5-background.jpg"] drawInRect:self.view.bounds];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
     self.view.backgroundColor = [UIColor colorWithPatternImage:image];
+     */
+    self.image = [[UIImageView alloc] initWithFrame:CGRectZero];
+    self.image.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:self.image];
+    UIImage *def_image = [UIImage imageNamed:@"iphone5-background.jpg"];
+    [self.image setContentMode:UIViewContentModeScaleToFill];
+    [self.view sendSubviewToBack:self.image];
+    self.image.image = def_image;
+    
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.image
+                                                                 attribute:NSLayoutAttributeWidth
+                                                                 relatedBy:NSLayoutRelationEqual
+                                                                    toItem:self.view
+                                                                 attribute:NSLayoutAttributeWidth
+                                                                multiplier:1
+                                                                  constant:0]];
+    // Center horizontally
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.image
+                                                          attribute:NSLayoutAttributeCenterX
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeCenterX
+                                                         multiplier:1
+                                                           constant:0.0]];
+    // Center horizontally
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.image
+                                                                 attribute:NSLayoutAttributeCenterY
+                                                                 relatedBy:NSLayoutRelationEqual
+                                                                    toItem:self.view
+                                                                 attribute:NSLayoutAttributeCenterY
+                                                                multiplier:1
+                                                                  constant:0.0]];
+    // set heigh to 30
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.image
+                                                                 attribute:NSLayoutAttributeHeight
+                                                                 relatedBy:NSLayoutRelationEqual
+                                                                    toItem:self.view
+                                                                 attribute:NSLayoutAttributeHeight
+                                                                multiplier:1
+                                                                  constant:0]];
+    
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
 	[self.navigationItem setBackBarButtonItem:backButton];

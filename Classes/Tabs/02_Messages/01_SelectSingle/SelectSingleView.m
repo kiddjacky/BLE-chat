@@ -74,6 +74,14 @@
 	//---------------------------------------------------------------------------------------------------------------------------------------------
     //if (!self.managedObjectContext) [self useDocument];
 	//[self loadUsers];
+    [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      NSLog(@"single Get database notification");
+                                                      self.managedObjectContext = note.userInfo[DatabaseAvailabilityContext];
+                                                  }];
+    
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
