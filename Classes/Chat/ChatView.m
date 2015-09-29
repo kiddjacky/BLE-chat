@@ -20,6 +20,8 @@
 #import "pushnotification.h"
 
 #import "ChatView.h"
+#import "blockVC.h"
+#import "NavigationController.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @interface ChatView()
@@ -57,6 +59,9 @@
 {
 	[super viewDidLoad];
 	self.title = @"Chat";
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"messages_compose"]
+                                                                              style:UIBarButtonItemStylePlain target:self action:@selector(actionBlock)];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	users = [[NSMutableArray alloc] init];
 	messages = [[NSMutableArray alloc] init];
@@ -93,6 +98,15 @@
 {
 	[super viewWillDisappear:animated];
 	[timer invalidate];
+}
+
+-(void)actionBlock
+{
+    blockVC *bv = [[blockVC alloc] init];
+    NSArray *userlist = users;
+    bv.userlist = userlist;
+    NavigationController *navController = [[NavigationController alloc] initWithRootViewController:bv];
+    [self presentViewController:navController animated:YES completion:nil];
 }
 
 #pragma mark - Backend methods

@@ -124,16 +124,31 @@
 		29EB240B19E9292500D7AA97 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29EB240A19E9292500D7AA97 /* main.m */; };
 		29EB240E19E9292500D7AA97 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 29EB240D19E9292500D7AA97 /* AppDelegate.m */; };
 		29EB241619E9292500D7AA97 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 29EB241519E9292500D7AA97 /* Images.xcassets */; };
-		29EB241919E9292500D7AA97 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29EB241719E9292500D7AA97 /* LaunchScreen.xib */; };
-		685AE2511B1DA8F600C8D9E9 /* Whale_preview_180.png in Resources */ = {isa = PBXBuildFile; fileRef = 685AE2501B1DA8F600C8D9E9 /* Whale_preview_180.png */; };
-		685AE2531B1DAB5000C8D9E9 /* Whale_preview_120.png in Resources */ = {isa = PBXBuildFile; fileRef = 685AE2521B1DAB5000C8D9E9 /* Whale_preview_120.png */; };
 		689D00E91B1D9BFD003E21F3 /* contact-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 689D00E81B1D9BFD003E21F3 /* contact-icon.png */; };
 		DE1C96EA1AE73D1100610AF7 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE1C96E91AE73D1100610AF7 /* CoreBluetooth.framework */; };
 		DE31A2DD1AF7152800FD8DE2 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE31A2DC1AF7152800FD8DE2 /* CoreDataTableViewController.m */; };
 		DE31A2E31AF7321700FD8DE2 /* AppDelegate+MOC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE31A2E21AF7321700FD8DE2 /* AppDelegate+MOC.m */; };
 		DE31A2E61AF7357400FD8DE2 /* DiscoversView+MOC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE31A2E51AF7357400FD8DE2 /* DiscoversView+MOC.m */; };
 		DE6DA8251ABF54CE007A683B /* DiscoversView.m in Sources */ = {isa = PBXBuildFile; fileRef = DE6DA8241ABF54CE007A683B /* DiscoversView.m */; };
+		DEAD60E71B93D1BB002E7B29 /* discussionView.m in Sources */ = {isa = PBXBuildFile; fileRef = DEAD60E61B93D1BB002E7B29 /* discussionView.m */; };
+		DEAD60F21B9AC366002E7B29 /* logo-120x120.gif in Resources */ = {isa = PBXBuildFile; fileRef = DEAD60F11B9AC366002E7B29 /* logo-120x120.gif */; };
+		DEAD60F41B9AC377002E7B29 /* iphone5-buttons-login-1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DEAD60F31B9AC377002E7B29 /* iphone5-buttons-login-1.jpg */; };
+		DEAD60F71B9AC393002E7B29 /* iphone5-buttons-register-1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DEAD60F51B9AC393002E7B29 /* iphone5-buttons-register-1.jpg */; };
+		DEAD60F81B9AC393002E7B29 /* iphone5-buttons-facebook-1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DEAD60F61B9AC393002E7B29 /* iphone5-buttons-facebook-1.jpg */; };
+		DEAD60FE1B9AD795002E7B29 /* iphone5-background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DEAD60FD1B9AD795002E7B29 /* iphone5-background.jpg */; };
+		DEAD61001B9AD7D5002E7B29 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DEAD60FF1B9AD7D5002E7B29 /* Default-568h@2x.png */; };
+		DEAD61021B9B9DBD002E7B29 /* discussionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEAD61011B9B9DBD002E7B29 /* discussionCell.xib */; };
+		DEB213581B9017D500009E5D /* discussionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB213571B9017D500009E5D /* discussionCell.m */; };
 		DEB34C2D1AF0A7DF000A42B8 /* detailsView.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB34C2C1AF0A7DF000A42B8 /* detailsView.m */; };
+		DEB5B99B1BACB482000CDA1B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEB5B99A1BACB482000CDA1B /* LaunchScreen.xib */; };
+		DEB5B99E1BAF1C61000CDA1B /* feedbackCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB5B99D1BAF1C61000CDA1B /* feedbackCell.m */; };
+		DEB5B9A71BB4DF44000CDA1B /* WeiXinActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB5B9A61BB4DF44000CDA1B /* WeiXinActivity.m */; };
+		DEB5B9B81BB4EDAD000CDA1B /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DEB5B9B71BB4EDAD000CDA1B /* libc++.dylib */; };
+		DEB5B9BC1BB4EDD6000CDA1B /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DEB5B9B91BB4EDD6000CDA1B /* libWeChatSDK.a */; };
+		DEB5B9BE1BB4EE2D000CDA1B /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEB5B9BD1BB4EE2D000CDA1B /* CoreTelephony.framework */; };
+		DEB5B9C41BB66508000CDA1B /* weixin_icon1.png in Resources */ = {isa = PBXBuildFile; fileRef = DEB5B9C31BB66508000CDA1B /* weixin_icon1.png */; };
+		DEB5B9C61BB6677F000CDA1B /* weixin_icon_ios7_1.png in Resources */ = {isa = PBXBuildFile; fileRef = DEB5B9C51BB6677F000CDA1B /* weixin_icon_ios7_1.png */; };
+		DEB5B9C91BB91B73000CDA1B /* blockVC.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB5B9C81BB91B73000CDA1B /* blockVC.m */; };
 		DEB793941B68C6E400046815 /* contactsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB793921B68C6E400046815 /* contactsCell.m */; };
 		DEB793951B68C6E400046815 /* contactsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEB793931B68C6E400046815 /* contactsCell.xib */; };
 		DEB7939C1B6C45E100046815 /* Binoculars-50.png in Resources */ = {isa = PBXBuildFile; fileRef = DEB793961B6C45E100046815 /* Binoculars-50.png */; };
@@ -372,10 +387,7 @@
 		29EB240C19E9292500D7AA97 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		29EB240D19E9292500D7AA97 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		29EB241519E9292500D7AA97 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		29EB241819E9292500D7AA97 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		29EB254F19E92ACD00D7AA97 /* AppConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConstant.h; sourceTree = "<group>"; };
-		685AE2501B1DA8F600C8D9E9 /* Whale_preview_180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Whale_preview_180.png; path = Images.xcassets/AppIcon.appiconset/Whale_preview_180.png; sourceTree = "<group>"; };
-		685AE2521B1DAB5000C8D9E9 /* Whale_preview_120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Whale_preview_120.png; path = Images.xcassets/AppIcon.appiconset/Whale_preview_120.png; sourceTree = "<group>"; };
 		689D00E81B1D9BFD003E21F3 /* contact-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-icon.png"; sourceTree = "<group>"; };
 		DE1C96E61AE47D7400610AF7 /* app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = app.entitlements; sourceTree = "<group>"; };
 		DE1C96E91AE73D1100610AF7 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
@@ -390,8 +402,33 @@
 		DE4AA4831AC9B582008309D0 /* TransferService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransferService.h; sourceTree = "<group>"; };
 		DE6DA8231ABF54CE007A683B /* DiscoversView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoversView.h; sourceTree = "<group>"; };
 		DE6DA8241ABF54CE007A683B /* DiscoversView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoversView.m; sourceTree = "<group>"; };
+		DEAD60E51B93D1BB002E7B29 /* discussionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = discussionView.h; sourceTree = "<group>"; };
+		DEAD60E61B93D1BB002E7B29 /* discussionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = discussionView.m; sourceTree = "<group>"; };
+		DEAD60F11B9AC366002E7B29 /* logo-120x120.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "logo-120x120.gif"; sourceTree = "<group>"; };
+		DEAD60F31B9AC377002E7B29 /* iphone5-buttons-login-1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "iphone5-buttons-login-1.jpg"; sourceTree = "<group>"; };
+		DEAD60F51B9AC393002E7B29 /* iphone5-buttons-register-1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "iphone5-buttons-register-1.jpg"; sourceTree = "<group>"; };
+		DEAD60F61B9AC393002E7B29 /* iphone5-buttons-facebook-1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "iphone5-buttons-facebook-1.jpg"; sourceTree = "<group>"; };
+		DEAD60FD1B9AD795002E7B29 /* iphone5-background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "iphone5-background.jpg"; sourceTree = "<group>"; };
+		DEAD60FF1B9AD7D5002E7B29 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		DEAD61011B9B9DBD002E7B29 /* discussionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = discussionCell.xib; sourceTree = "<group>"; };
+		DEB213561B9017D500009E5D /* discussionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = discussionCell.h; sourceTree = "<group>"; };
+		DEB213571B9017D500009E5D /* discussionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = discussionCell.m; sourceTree = "<group>"; };
 		DEB34C2B1AF0A7DF000A42B8 /* detailsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = detailsView.h; sourceTree = "<group>"; };
 		DEB34C2C1AF0A7DF000A42B8 /* detailsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = detailsView.m; sourceTree = "<group>"; };
+		DEB5B99A1BACB482000CDA1B /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
+		DEB5B99C1BAF1C61000CDA1B /* feedbackCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = feedbackCell.h; sourceTree = "<group>"; };
+		DEB5B99D1BAF1C61000CDA1B /* feedbackCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = feedbackCell.m; sourceTree = "<group>"; };
+		DEB5B9A51BB4DF44000CDA1B /* WeiXinActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeiXinActivity.h; sourceTree = "<group>"; };
+		DEB5B9A61BB4DF44000CDA1B /* WeiXinActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeiXinActivity.m; sourceTree = "<group>"; };
+		DEB5B9B71BB4EDAD000CDA1B /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		DEB5B9B91BB4EDD6000CDA1B /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
+		DEB5B9BA1BB4EDD6000CDA1B /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
+		DEB5B9BB1BB4EDD6000CDA1B /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		DEB5B9BD1BB4EE2D000CDA1B /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		DEB5B9C31BB66508000CDA1B /* weixin_icon1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = weixin_icon1.png; sourceTree = "<group>"; };
+		DEB5B9C51BB6677F000CDA1B /* weixin_icon_ios7_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = weixin_icon_ios7_1.png; sourceTree = "<group>"; };
+		DEB5B9C71BB91B73000CDA1B /* blockVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blockVC.h; sourceTree = "<group>"; };
+		DEB5B9C81BB91B73000CDA1B /* blockVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = blockVC.m; sourceTree = "<group>"; };
 		DEB793911B68C6E400046815 /* contactsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = contactsCell.h; sourceTree = "<group>"; };
 		DEB793921B68C6E400046815 /* contactsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = contactsCell.m; sourceTree = "<group>"; };
 		DEB793931B68C6E400046815 /* contactsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = contactsCell.xib; sourceTree = "<group>"; };
@@ -428,6 +465,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DEB5B9BE1BB4EE2D000CDA1B /* CoreTelephony.framework in Frameworks */,
+				DEB5B9B81BB4EDAD000CDA1B /* libc++.dylib in Frameworks */,
 				29A299661A5575BF00117608 /* CoreGraphics.framework in Frameworks */,
 				DE1C96EA1AE73D1100610AF7 /* CoreBluetooth.framework in Frameworks */,
 				29A2996E1A55763100117608 /* Social.framework in Frameworks */,
@@ -439,6 +478,7 @@
 				29A2995E1A55759A00117608 /* Security.framework in Frameworks */,
 				29A2995C1A55759200117608 /* StoreKit.framework in Frameworks */,
 				29A2995A1A55758B00117608 /* SystemConfiguration.framework in Frameworks */,
+				DEB5B9BC1BB4EDD6000CDA1B /* libWeChatSDK.a in Frameworks */,
 				29A299581A55758300117608 /* libz.dylib in Frameworks */,
 				29A299561A55757800117608 /* libsqlite3.dylib in Frameworks */,
 				29A299521A5574FE00117608 /* ParseUI.framework in Frameworks */,
@@ -477,6 +517,8 @@
 			children = (
 				292338901AA350A400A47A39 /* ChatView.h */,
 				292338911AA350A400A47A39 /* ChatView.m */,
+				DEB5B9C71BB91B73000CDA1B /* blockVC.h */,
+				DEB5B9C81BB91B73000CDA1B /* blockVC.m */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -498,6 +540,7 @@
 			children = (
 				292338941AA350A400A47A39 /* GroupsView.h */,
 				292338951AA350A400A47A39 /* GroupsView.m */,
+				DEB2134C1B8FFD8100009E5D /* Discussion */,
 			);
 			path = 01_Groups;
 			sourceTree = "<group>";
@@ -581,6 +624,7 @@
 				292338B21AA350A400A47A39 /* WelcomeView.h */,
 				292338B31AA350A400A47A39 /* WelcomeView.m */,
 				292338B41AA350A400A47A39 /* WelcomeView.xib */,
+				DEB5B99A1BACB482000CDA1B /* LaunchScreen.xib */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -836,6 +880,7 @@
 		2927192F19F284AC009C308B /* Vendors */ = {
 			isa = PBXGroup;
 			children = (
+				DEB5B9A01BB3B113000CDA1B /* Wechat */,
 				292338FD1AA38DBD00A47A39 /* AFNetworking */,
 				292339351AA38E0F00A47A39 /* JSQMessagesViewController */,
 				292D2EF61A84497A00CEC270 /* JSQSystemSoundPlayer */,
@@ -874,6 +919,7 @@
 		29A531241AAEEF9500263CB1 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				DEAD60EE1B9AC321002E7B29 /* login */,
 				29A531251AAEEF9500263CB1 /* chat */,
 				29A531271AAEEF9500263CB1 /* messages */,
 				29A5312A1AAEEF9500263CB1 /* profileview */,
@@ -936,6 +982,7 @@
 		29EB23FC19E9292500D7AA97 = {
 			isa = PBXGroup;
 			children = (
+				DEAD60FF1B9AD7D5002E7B29 /* Default-568h@2x.png */,
 				2923388B1AA350A400A47A39 /* Classes */,
 				2927192F19F284AC009C308B /* Vendors */,
 				29B8FE7319E92E4500E7A503 /* Resources */,
@@ -959,14 +1006,11 @@
 				DE1C96E61AE47D7400610AF7 /* app.entitlements */,
 				29EB254F19E92ACD00D7AA97 /* AppConstant.h */,
 				29EB240C19E9292500D7AA97 /* AppDelegate.h */,
-				685AE2501B1DA8F600C8D9E9 /* Whale_preview_180.png */,
-				685AE2521B1DAB5000C8D9E9 /* Whale_preview_120.png */,
 				29EB240D19E9292500D7AA97 /* AppDelegate.m */,
 				DE31A2EA1AF8689100FD8DE2 /* DatabaseAvailability.h */,
 				DE31A2E11AF7321700FD8DE2 /* AppDelegate+MOC.h */,
 				DE31A2E21AF7321700FD8DE2 /* AppDelegate+MOC.m */,
 				29EB241519E9292500D7AA97 /* Images.xcassets */,
-				29EB241719E9292500D7AA97 /* LaunchScreen.xib */,
 				29EB240819E9292500D7AA97 /* Supporting Files */,
 			);
 			path = app;
@@ -984,6 +1028,8 @@
 		29EB243319E9297900D7AA97 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DEB5B9BD1BB4EE2D000CDA1B /* CoreTelephony.framework */,
+				DEB5B9B71BB4EDAD000CDA1B /* libc++.dylib */,
 				DE1C96E91AE73D1100610AF7 /* CoreBluetooth.framework */,
 				29A2996D1A55763100117608 /* Social.framework */,
 				29A299691A5575CC00117608 /* AudioToolbox.framework */,
@@ -1019,8 +1065,6 @@
 				DEE855511B12817C000AA5AC /* CurrentUser.m */,
 				DEE855441B08232E000AA5AC /* contactDetailsVC.h */,
 				DEE855451B08232E000AA5AC /* contactDetailsVC.m */,
-				DEF024A91B823E86008DBABF /* detailsImageView.h */,
-				DEF024AA1B823E86008DBABF /* detailsImageView.m */,
 				DEF024A41B80FBA7008DBABF /* contactDetailCell.xib */,
 				DEF024A61B80FBF9008DBABF /* contactDetailCell.h */,
 				DEF024A71B80FBF9008DBABF /* contactDetailCell.m */,
@@ -1044,11 +1088,53 @@
 				DEBF53CC1B4CF9C900891128 /* discoversCell.xib */,
 				DEB34C2B1AF0A7DF000A42B8 /* detailsView.h */,
 				DEB34C2C1AF0A7DF000A42B8 /* detailsView.m */,
+				DEF024A91B823E86008DBABF /* detailsImageView.h */,
+				DEF024AA1B823E86008DBABF /* detailsImageView.m */,
 				DE31A2DB1AF7152800FD8DE2 /* CoreDataTableViewController.h */,
 				DE31A2DC1AF7152800FD8DE2 /* CoreDataTableViewController.m */,
 				DE4AA4831AC9B582008309D0 /* TransferService.h */,
 			);
 			name = 04_Discovers;
+			sourceTree = "<group>";
+		};
+		DEAD60EE1B9AC321002E7B29 /* login */ = {
+			isa = PBXGroup;
+			children = (
+				DEB5B9C51BB6677F000CDA1B /* weixin_icon_ios7_1.png */,
+				DEB5B9C31BB66508000CDA1B /* weixin_icon1.png */,
+				DEAD60F11B9AC366002E7B29 /* logo-120x120.gif */,
+				DEAD60FD1B9AD795002E7B29 /* iphone5-background.jpg */,
+				DEAD60F51B9AC393002E7B29 /* iphone5-buttons-register-1.jpg */,
+				DEAD60F61B9AC393002E7B29 /* iphone5-buttons-facebook-1.jpg */,
+				DEAD60F31B9AC377002E7B29 /* iphone5-buttons-login-1.jpg */,
+			);
+			name = login;
+			sourceTree = "<group>";
+		};
+		DEB2134C1B8FFD8100009E5D /* Discussion */ = {
+			isa = PBXGroup;
+			children = (
+				DEB5B99C1BAF1C61000CDA1B /* feedbackCell.h */,
+				DEB5B99D1BAF1C61000CDA1B /* feedbackCell.m */,
+				DEAD60E51B93D1BB002E7B29 /* discussionView.h */,
+				DEAD60E61B93D1BB002E7B29 /* discussionView.m */,
+				DEB213561B9017D500009E5D /* discussionCell.h */,
+				DEB213571B9017D500009E5D /* discussionCell.m */,
+				DEAD61011B9B9DBD002E7B29 /* discussionCell.xib */,
+				DEB5B9A51BB4DF44000CDA1B /* WeiXinActivity.h */,
+				DEB5B9A61BB4DF44000CDA1B /* WeiXinActivity.m */,
+			);
+			name = Discussion;
+			sourceTree = "<group>";
+		};
+		DEB5B9A01BB3B113000CDA1B /* Wechat */ = {
+			isa = PBXGroup;
+			children = (
+				DEB5B9B91BB4EDD6000CDA1B /* libWeChatSDK.a */,
+				DEB5B9BA1BB4EDD6000CDA1B /* WXApi.h */,
+				DEB5B9BB1BB4EDD6000CDA1B /* WXApiObject.h */,
+			);
+			name = Wechat;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1136,26 +1222,31 @@
 				296DD5E81A1F557900AB9F8C /* ProgressHUD.bundle in Resources */,
 				292338D01AA350A400A47A39 /* LoginView.xib in Resources */,
 				29A531351AAEEF9500263CB1 /* tab_messages@2x.png in Resources */,
+				DEB5B9C61BB6677F000CDA1B /* weixin_icon_ios7_1.png in Resources */,
 				292338C81AA350A400A47A39 /* AddressBookView.xib in Resources */,
-				29EB241919E9292500D7AA97 /* LaunchScreen.xib in Resources */,
-				685AE2511B1DA8F600C8D9E9 /* Whale_preview_180.png in Resources */,
 				DEB793A01B6C45E100046815 /* Find_User-100@2x.png in Resources */,
 				292339C01AA38E0F00A47A39 /* JSQMessagesCollectionViewCellIncoming.xib in Resources */,
 				292338CC1AA350A400A47A39 /* MessagesView.xib in Resources */,
 				292339C71AA38E0F00A47A39 /* JSQMessagesLoadEarlierHeaderView.xib in Resources */,
-				685AE2531B1DAB5000C8D9E9 /* Whale_preview_120.png in Resources */,
 				29A531341AAEEF9500263CB1 /* tab_groups@2x.png in Resources */,
 				DEB7939C1B6C45E100046815 /* Binoculars-50.png in Resources */,
+				DEAD60F21B9AC366002E7B29 /* logo-120x120.gif in Resources */,
 				292338CA1AA350A400A47A39 /* MessagesCell.xib in Resources */,
+				DEAD61021B9B9DBD002E7B29 /* discussionCell.xib in Resources */,
 				292338F71AA374C300A47A39 /* SelectMultipleView.xib in Resources */,
+				DEAD60F71B9AC393002E7B29 /* iphone5-buttons-register-1.jpg in Resources */,
 				292338CE1AA350A400A47A39 /* ProfileView.xib in Resources */,
 				292339A31AA38E0F00A47A39 /* JSQMessages.strings in Resources */,
 				292339A21AA38E0F00A47A39 /* JSQMessagesAssets.bundle in Resources */,
 				292338C61AA350A400A47A39 /* SelectSingleView.xib in Resources */,
 				DEB7939D1B6C45E100046815 /* Binoculars-100.png in Resources */,
+				DEAD60FE1B9AD795002E7B29 /* iphone5-background.jpg in Resources */,
 				29A531361AAEEF9500263CB1 /* tab_profile@2x.png in Resources */,
+				DEB5B9C41BB66508000CDA1B /* weixin_icon1.png in Resources */,
 				689D00E91B1D9BFD003E21F3 /* contact-icon.png in Resources */,
+				DEB5B99B1BACB482000CDA1B /* LaunchScreen.xib in Resources */,
 				29A531331AAEEF9500263CB1 /* profile_blank@2x.png in Resources */,
+				DEAD61001B9AD7D5002E7B29 /* Default-568h@2x.png in Resources */,
 				DEBB7B351AE2FD21009CD940 /* tab_discovers.png in Resources */,
 				DEBF53CE1B4CF9C900891128 /* discoversCell.xib in Resources */,
 				29A531311AAEEF9500263CB1 /* messages_blank@2x.png in Resources */,
@@ -1163,6 +1254,7 @@
 				DEB7939F1B6C45E100046815 /* contact-icon@2x.png in Resources */,
 				29A531321AAEEF9500263CB1 /* messages_compose@2x.png in Resources */,
 				DEB793A11B6C45E100046815 /* tab_discovers_2.png in Resources */,
+				DEAD60F81B9AC393002E7B29 /* iphone5-buttons-facebook-1.jpg in Resources */,
 				292338FC1AA37C4100A47A39 /* FacebookFriendsView.xib in Resources */,
 				29EB241619E9292500D7AA97 /* Images.xcassets in Resources */,
 				292338D41AA350A400A47A39 /* WelcomeView.xib in Resources */,
@@ -1171,6 +1263,7 @@
 				292339C21AA38E0F00A47A39 /* JSQMessagesCollectionViewCellOutgoing.xib in Resources */,
 				DEB793951B68C6E400046815 /* contactsCell.xib in Resources */,
 				292339CA1AA38E0F00A47A39 /* JSQMessagesToolbarContentView.xib in Resources */,
+				DEAD60F41B9AC377002E7B29 /* iphone5-buttons-login-1.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1215,6 +1308,7 @@
 				292339C51AA38E0F00A47A39 /* JSQMessagesLabel.m in Sources */,
 				292339261AA38DBD00A47A39 /* AFHTTPSessionManager.m in Sources */,
 				DE6DA8251ABF54CE007A683B /* DiscoversView.m in Sources */,
+				DEB5B99E1BAF1C61000CDA1B /* feedbackCell.m in Sources */,
 				292339C41AA38E0F00A47A39 /* JSQMessagesInputToolbar.m in Sources */,
 				292338C31AA350A400A47A39 /* ChatView.m in Sources */,
 				292339B51AA38E0F00A47A39 /* JSQLocationMediaItem.m in Sources */,
@@ -1227,8 +1321,10 @@
 				292339B31AA38E0F00A47A39 /* JSQMessagesCollectionViewFlowLayoutInvalidationContext.m in Sources */,
 				DEB34C2D1AF0A7DF000A42B8 /* detailsView.m in Sources */,
 				292339C91AA38E0F00A47A39 /* JSQMessagesToolbarContentView.m in Sources */,
+				DEB5B9A71BB4DF44000CDA1B /* WeiXinActivity.m in Sources */,
 				DEE855401B081778000AA5AC /* ContactsView.m in Sources */,
 				292339B11AA38E0F00A47A39 /* JSQMessagesToolbarButtonFactory.m in Sources */,
+				DEB5B9C91BB91B73000CDA1B /* blockVC.m in Sources */,
 				2923392E1AA38DBD00A47A39 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				2923392B1AA38DBD00A47A39 /* AFURLResponseSerialization.m in Sources */,
 				292338C41AA350A400A47A39 /* GroupsView.m in Sources */,
@@ -1262,9 +1358,11 @@
 				292339CB1AA38E0F00A47A39 /* JSQMessagesTypingIndicatorFooterView.m in Sources */,
 				292339B71AA38E0F00A47A39 /* JSQMessage.m in Sources */,
 				292338D11AA350A400A47A39 /* RegisterView.m in Sources */,
+				DEAD60E71B93D1BB002E7B29 /* discussionView.m in Sources */,
 				292339AA1AA38E0F00A47A39 /* JSQMessagesKeyboardController.m in Sources */,
 				292338D91AA350A400A47A39 /* utilities.m in Sources */,
 				292339B61AA38E0F00A47A39 /* JSQMediaItem.m in Sources */,
+				DEB213581B9017D500009E5D /* discussionCell.m in Sources */,
 				292338C91AA350A400A47A39 /* MessagesCell.m in Sources */,
 				DEBB7B481AE3753C009CD940 /* Discover.xcdatamodeld in Sources */,
 				DEB793941B68C6E400046815 /* contactsCell.m in Sources */,
@@ -1296,14 +1394,6 @@
 				292339481AA38E0F00A47A39 /* zh-Hant */,
 			);
 			name = JSQMessages.strings;
-			sourceTree = "<group>";
-		};
-		29EB241719E9292500D7AA97 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				29EB241819E9292500D7AA97 /* Base */,
-			);
-			name = LaunchScreen.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1389,6 +1479,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-2";
 				CODE_SIGN_ENTITLEMENTS = app/app.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1399,6 +1490,11 @@
 				INFOPLIST_FILE = app/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendors",
+				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1410,6 +1506,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-2";
 				CODE_SIGN_ENTITLEMENTS = app/app.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1420,6 +1517,11 @@
 				INFOPLIST_FILE = app/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendors",
+				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
