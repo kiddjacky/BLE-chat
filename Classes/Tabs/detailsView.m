@@ -541,8 +541,21 @@
             [self.imageUser loadInBackground];
             }
             else {
+
+                UIImage *def_image_male = [UIImage imageNamed:@"male"];
+                UIImage *def_image_female = [UIImage imageNamed:@"female"];
                 UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
-                self.imageUser.image = def_image;
+                if ([self.target[PF_USER_SEX]  isEqual: @"Male"])
+                {
+                self.imageUser.image = def_image_male;
+                }
+                
+                else if ([self.target[PF_USER_SEX]  isEqual: @"Female"])
+                {
+                    self.imageUser.image = def_image_female;
+                }
+                
+                else { self.imageUser.image = def_image;}
             }
          }
      }];
