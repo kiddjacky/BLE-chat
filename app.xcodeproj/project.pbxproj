@@ -125,6 +125,8 @@
 		29EB240E19E9292500D7AA97 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 29EB240D19E9292500D7AA97 /* AppDelegate.m */; };
 		29EB241619E9292500D7AA97 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 29EB241519E9292500D7AA97 /* Images.xcassets */; };
 		689D00E91B1D9BFD003E21F3 /* contact-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 689D00E81B1D9BFD003E21F3 /* contact-icon.png */; };
+		68DB82551BBA2EE70071912D /* female.png in Resources */ = {isa = PBXBuildFile; fileRef = 68DB82541BBA2EE70071912D /* female.png */; };
+		68DB82571BBA2EF00071912D /* male.png in Resources */ = {isa = PBXBuildFile; fileRef = 68DB82561BBA2EF00071912D /* male.png */; };
 		DE1C96EA1AE73D1100610AF7 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE1C96E91AE73D1100610AF7 /* CoreBluetooth.framework */; };
 		DE31A2DD1AF7152800FD8DE2 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE31A2DC1AF7152800FD8DE2 /* CoreDataTableViewController.m */; };
 		DE31A2E31AF7321700FD8DE2 /* AppDelegate+MOC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE31A2E21AF7321700FD8DE2 /* AppDelegate+MOC.m */; };
@@ -389,6 +391,8 @@
 		29EB241519E9292500D7AA97 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		29EB254F19E92ACD00D7AA97 /* AppConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConstant.h; sourceTree = "<group>"; };
 		689D00E81B1D9BFD003E21F3 /* contact-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-icon.png"; sourceTree = "<group>"; };
+		68DB82541BBA2EE70071912D /* female.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = female.png; path = Resources/Images/female.png; sourceTree = SOURCE_ROOT; };
+		68DB82561BBA2EF00071912D /* male.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = male.png; path = Resources/Images/male.png; sourceTree = SOURCE_ROOT; };
 		DE1C96E61AE47D7400610AF7 /* app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = app.entitlements; sourceTree = "<group>"; };
 		DE1C96E91AE73D1100610AF7 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		DE31A2DB1AF7152800FD8DE2 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
@@ -960,6 +964,8 @@
 				DEB793961B6C45E100046815 /* Binoculars-50.png */,
 				DEB793971B6C45E100046815 /* Binoculars-100.png */,
 				DEB793981B6C45E100046815 /* Binoculars-200.png */,
+				68DB82541BBA2EE70071912D /* female.png */,
+				68DB82561BBA2EF00071912D /* male.png */,
 				DEB793991B6C45E100046815 /* contact-icon@2x.png */,
 				DEB7939A1B6C45E100046815 /* Find_User-100@2x.png */,
 				DEB7939B1B6C45E100046815 /* tab_discovers_2.png */,
@@ -1248,9 +1254,11 @@
 				29A531331AAEEF9500263CB1 /* profile_blank@2x.png in Resources */,
 				DEAD61001B9AD7D5002E7B29 /* Default-568h@2x.png in Resources */,
 				DEBB7B351AE2FD21009CD940 /* tab_discovers.png in Resources */,
+				68DB82551BBA2EE70071912D /* female.png in Resources */,
 				DEBF53CE1B4CF9C900891128 /* discoversCell.xib in Resources */,
 				29A531311AAEEF9500263CB1 /* messages_blank@2x.png in Resources */,
 				DEF024A51B80FBA7008DBABF /* contactDetailCell.xib in Resources */,
+				68DB82571BBA2EF00071912D /* male.png in Resources */,
 				DEB7939F1B6C45E100046815 /* contact-icon@2x.png in Resources */,
 				29A531321AAEEF9500263CB1 /* messages_compose@2x.png in Resources */,
 				DEB793A11B6C45E100046815 /* tab_discovers_2.png in Resources */,

@@ -203,7 +203,8 @@
     }
     cell.localDateTime.text = localDateString;
     
-    UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
+ //   UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
+    UIImage *def_image = [UIImage imageNamed:@"male"];
     //UIImage *def_image = [UIImage imageNamed:@"profile_blank@2x.png"];
     cell.pfImageView.image = def_image;
     //UIImage *def_image = [UIImage imageNamed:@"messages_blank.png"];
@@ -251,9 +252,27 @@
              }
              if (user[PF_USER_THUMBNAIL] == nil)
              {
+                 UIImage *def_image_male = [UIImage imageNamed:@"male"];
+                  UIImage *def_image_female = [UIImage imageNamed:@"female"];
+                 
                  UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
+                 if ([user[PF_USER_SEX]  isEqual: @"Male"])
+                 {
+                  cell.pfImageView.image = def_image_male;
+                 }
+                 
+                 else  if ([user[PF_USER_SEX]  isEqual: @"Female"])
+                 {
+                     cell.pfImageView.image = def_image_female;
+                     
+                 }
+                 
+                 else
+                 {
+                     cell.pfImageView.image = def_image;
+                 }
                  //UIImage *def_image = [UIImage imageNamed:@"profile_blank@2x.png"];
-                 cell.pfImageView.image = def_image;
+
 
              } else {
                  [cell bindData:user];
