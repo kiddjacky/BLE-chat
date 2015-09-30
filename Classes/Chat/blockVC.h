@@ -8,9 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol BlockUserDelegate <NSObject>
+
+-(void) blockUser:(NSMutableArray *)blockedUsers;
+
+@end
+
 @interface blockVC : UITableViewController
 
+@property(nonatomic,assign) id<BlockUserDelegate> delegate;
 @property (strong, nonatomic) NSMutableArray *userlist;
+@property (strong, nonatomic) NSMutableArray *namelist;
 @property (strong, nonatomic) NSMutableArray *selection;
 
 @end

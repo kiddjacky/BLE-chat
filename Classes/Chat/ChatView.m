@@ -34,6 +34,10 @@
 	NSMutableArray *users;
 	NSMutableArray *messages;
 	NSMutableDictionary *avatars;
+    NSMutableArray *users_objectId;
+    NSMutableArray *users_userName;
+    NSMutableArray *users_fullName;
+    NSMutableArray *blockUsers;
 
 	JSQMessagesBubbleImage *bubbleImageOutgoing;
 	JSQMessagesBubbleImage *bubbleImageIncoming;
@@ -60,16 +64,50 @@
 	[super viewDidLoad];
 	self.title = @"Chat";
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"messages_compose"]
-                                                                              style:UIBarButtonItemStylePlain target:self action:@selector(actionBlock)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Block"
+                                                style:UIBarButtonItemStylePlain target:self action:@selector(actionBlock)];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	users = [[NSMutableArray alloc] init];
 	messages = [[NSMutableArray alloc] init];
 	avatars = [[NSMutableDictionary alloc] init];
+    blockUsers = [[NSMutableArray alloc] init];
+    users_objectId = [[NSMutableArray alloc] init];
+    users_userName = [[NSMutableArray alloc] init];
+    users_fullName = [[NSMutableArray alloc] init];
+    
+    PFQuery *query = [PFQuery queryWithClassName:PF_MESSAGES_CLASS_NAME];
+    [query whereKey:PF_MESSAGES_GROUPID equalTo:groupId];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+     {
+         for (PFObject *message in objects) {
+             //NSLog(@"message is %@", message);
+             PFUser *s_user = message[PF_MESSAGES_USER];
+             NSLog(@"current user id is %@, s_user object id is %@", [PFUser currentUser].objectId, s_user.objectId);
+             if (![[PFUser currentUser].objectId isEqualToString:s_user.objectId]) {
+             [users_objectId addObject:s_user.objectId];
+             
+             PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+             [query whereKey:PF_USER_OBJECTID equalTo:s_user.objectId];
+             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+              {
+                  NSLog(@"user is %@", objects[0]);
+                  PFUser *user = objects[0];
+
+                      [users_userName addObject:user[PF_USER_USERNAME]];
+                      [users_fullName addObject:user[PF_USER_FULLNAME]];
+              }];
+             }
+         }
+     }];
+
+    
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	PFUser *user = [PFUser currentUser];
 	self.senderId = user.objectId;
 	self.senderDisplayName = user[PF_USER_FULLNAME];
+    if (user[PF_USER_BLOCKED_USERS]!=nil) {
+        blockUsers = user[PF_USER_BLOCKED_USERS];
+    }
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
 	bubbleImageOutgoing = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleLightGrayColor]];
@@ -102,11 +140,104 @@
 
 -(void)actionBlock
 {
+    
     blockVC *bv = [[blockVC alloc] init];
-    NSArray *userlist = users;
-    bv.userlist = userlist;
+    bv.delegate = self;
+    bv.userlist = users_userName;
+    bv.namelist = users_fullName;
+    NSMutableArray *selection = [[NSMutableArray alloc] init];
+    for (NSString *user_id in users_userName) {
+        if ([blockUsers containsObject:user_id]) {
+            [selection addObject:user_id];
+        }
+    }
+    bv.selection = selection;
+    
+    NSLog(@"selection is %@", selection);
     NavigationController *navController = [[NavigationController alloc] initWithRootViewController:bv];
     [self presentViewController:navController animated:YES completion:nil];
+
+    
+
+}
+
+-(void)blockUser:(NSMutableArray *)blockedUsers
+{
+    NSLog(@"blocked users is %@", blockedUsers);
+    for (NSString *userName in blockedUsers) {
+        if (![blockUsers containsObject:userName]) {
+            NSLog(@"add %@ to block list", userName);
+            [blockUsers addObject:userName];
+        }
+    }
+    for (NSString *user in users_userName) {
+        if ([blockUsers containsObject:user]) {
+            if (![blockedUsers containsObject:user]) {
+                [blockUsers removeObject:user];
+            }
+        }
+    }
+    
+    NSLog(@"block user now is %@",blockUsers);
+    PFUser *user = [PFUser currentUser];
+    if (blockUsers != nil) {
+    user[PF_USER_BLOCKED_USERS] = blockUsers;
+    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+     {
+         if (error == nil)
+         {
+             [ProgressHUD showSuccess:@"Save Block List!"];
+         }
+         else [ProgressHUD showError:@"Network error."];
+     }];
+    }
+    [self loadBlockedMessages];
+}
+
+-(void)cleanMessage
+{
+    users = [[NSMutableArray alloc] init];
+    messages = [[NSMutableArray alloc] init];
+    avatars = [[NSMutableDictionary alloc] init];
+    NSLog(@"clean message");
+}
+
+-(void)loadBlockedMessages
+{
+    if (isLoading == NO)
+    {
+        isLoading = YES;
+        JSQMessage *message_last = [messages lastObject];
+        NSLog(@"message last is %@", message_last);
+        PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+        [query whereKey:PF_CHAT_GROUPID equalTo:groupId];
+        if (message_last != nil) [query whereKey:PF_CHAT_CREATEDAT greaterThan:message_last.date];
+        [query includeKey:PF_CHAT_USER];
+        [query orderByDescending:PF_CHAT_CREATEDAT];
+        [query setLimit:50];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+         {
+             if (error == nil)
+             {
+                 self.automaticallyScrollsToMostRecentMessage = NO;
+                 for (PFObject *object in [objects reverseObjectEnumerator])
+                 {
+                     PFUser *user = object[PF_CHAT_USER];
+                     if(![blockUsers containsObject:user[PF_USER_FULLNAME]]) {
+                         [self addMessage:object];
+                     }
+                 }
+                 if ([objects count] != 0)
+                 {
+                     [self finishReceivingMessage];
+                     [self scrollToBottomAnimated:NO];
+                 }
+                 self.automaticallyScrollsToMostRecentMessage = YES;
+             }
+             else [ProgressHUD showError:@"Network error."];
+             isLoading = NO;
+         }];
+    }
 }
 
 #pragma mark - Backend methods
@@ -133,7 +264,10 @@
 				self.automaticallyScrollsToMostRecentMessage = NO;
 				for (PFObject *object in [objects reverseObjectEnumerator])
 				{
-					[self addMessage:object];
+                    PFUser *user = object[PF_CHAT_USER];
+                    if(![blockUsers containsObject:user[PF_USER_USERNAME]]) {
+                        [self addMessage:object];
+                    }
 				}
 				if ([objects count] != 0)
 				{
