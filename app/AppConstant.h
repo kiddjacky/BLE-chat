@@ -16,7 +16,7 @@
 #define		DEFAULT_TAB							1
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-#define		MESSAGE_INVITE						@"Check out NotificationChat. You can download here: https://github.com/relatedcode/NotificationChat"
+#define		MESSAGE_INVITE						@"Check out BlueWhale Chat. You can download at APP store or here: "
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 #define		PF_INSTALLATION_CLASS_NAME			@"_Installation"		//	Class name
@@ -57,10 +57,15 @@
 #define     PF_GROUPS_DOWN                      @"down"                 //  Number
 #define     PF_GROUPS_UP_NAME                   @"upName"               //  String
 #define     PF_GROUPS_DOWN_NAME                 @"downName"             //  String
-#define		PF_GROUPS_TOPIC                     @"topic"				//  String
+#define		PF_GROUPS_CREATER                   @"creater"				//  Pointer to User Class
+#define		PF_GROUPS_CREATE_TIME               @"createTime"			//  Date
+#define     PF_GROUPS_LATITUDE                  @"latitude"             //  String
+#define     PF_GROUPS_LONGITUDE                 @"longitude"            //  String
 #define		PF_GROUPS_DESCRIPTION				@"description"			//	String
 #define     PF_GROUPS_PICTURE                   @"picture"              //  File
 #define     PF_GROUPS_NUM_CHAT                  @"numChat"              //  Number
+#define     PF_GROUPS_IS_PUBLIC                 @"is_public"            //  BOOL
+#define     PF_GROUPS_FLAG_NUMBER               @"flag_number"          //  Number
 //-----------------------------------------------------------------------
 #define		PF_MESSAGES_CLASS_NAME				@"Messages"				//	Class name
 #define		PF_MESSAGES_USER					@"user"					//	Pointer to User Class

@@ -17,6 +17,7 @@
 #import "ProfileView.h"
 #import "DiscoversView.h"
 #import "ContactsView.h"
+#import "settingTVC.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
@@ -31,7 +32,8 @@
 
 @property (strong, nonatomic) GroupsView *groupsView;
 @property (strong, nonatomic) MessagesView *messagesView;
-@property (strong, nonatomic) ProfileView *profileView;
+//@property (strong, nonatomic) ProfileView *profileView;
+@property (strong, nonatomic) settingTVC *settingView;
 @property (strong, nonatomic) DiscoversView *discoversView;
 @property (strong, nonatomic) ContactsView *contactsView;
 

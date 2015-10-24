@@ -38,6 +38,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadView];
+    //set textfield delegate
+    //self.name.delegate = self;
+    //self.noName.delegate = self;
+    //self.noNumber.delegate = self;
+    //self.yesName.delegate = self;
+    //self.yesNumber.delegate = self;
+    
+    
     // Do any additional setup after loading the view.
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
     
@@ -278,50 +286,50 @@
     
     NSDictionary *viewsDictionary = @{@"nameView":self.name, @"detailView":self.detail, @"yesVote":self.yesNumber, @"noVote":self.noNumber, @"yesName":self.yesName, @"noName":self.noName, @"save":self.save, @"picture":self.picture};
     
-    NSArray *constraint_POS_V_picture = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[picture]"
+    NSArray *constraint_POS_V_picture = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10@999-[picture]"
                                                                               options:0
                                                                               metrics:nil
                                                                                 views:viewsDictionary];
     
-    NSArray *constraint_POS_V_name = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[picture]-10-[nameView]"
+    NSArray *constraint_POS_V_name = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[picture]-10@998-[nameView]"
                                                                              options:0
                                                                              metrics:nil
                                                                                views:viewsDictionary];
 
-    NSArray *constraint_POS_V_detail = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[nameView]-10-[detailView]"
+    NSArray *constraint_POS_V_detail = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[nameView]-10@997-[detailView]"
                                                                              options:0
                                                                              metrics:nil
                                                                                views:viewsDictionary];
-    NSArray *constraint_POS_V_yesVote = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[detailView]-10-[yesVote]"
+    NSArray *constraint_POS_V_yesVote = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[detailView]-10@996-[yesVote]"
                                                                                options:0
                                                                                metrics:nil
                                                                                  views:viewsDictionary];
-    NSArray *constraint_POS_V_noVote = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[detailView]-10-[noVote]"
+    NSArray *constraint_POS_V_noVote = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[detailView]-10@995-[noVote]"
                                                                                 options:0
                                                                                 metrics:nil
                                                                                   views:viewsDictionary];
     
-    NSArray *constraint_POS_V_yesName = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[yesVote]-10-[yesName]"
+    NSArray *constraint_POS_V_yesName = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[yesVote]-10@994-[yesName]"
                                                                                 options:0
                                                                                 metrics:nil
                                                                                   views:viewsDictionary];
     
-    NSArray *constraint_POS_V_noName = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[noVote]-10-[noName]"
+    NSArray *constraint_POS_V_noName = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[noVote]-10@993-[noName]"
                                                                                options:0
                                                                                metrics:nil
                                                                                  views:viewsDictionary];
     
-    NSArray *constraint_POS_H_Vote = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[yesVote]-20-[noVote]-20-|"
+    NSArray *constraint_POS_H_Vote = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20@992-[yesVote]-20@991-[noVote]-20@990-|"
                                                                              options:0
                                                                              metrics:nil
                                                                                views:viewsDictionary];
     
-    NSArray *constraint_POS_H_Name = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[yesName]-20-[noName]-20-|"
+    NSArray *constraint_POS_H_Name = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20@989-[yesName]-20@988-[noName]-20@987-|"
                                                                                options:0
                                                                                metrics:nil
                                                                                  views:viewsDictionary];
     
-    NSArray *constraint_POS_V_save = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[yesName]-10-[save]"
+    NSArray *constraint_POS_V_save = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[yesName]-10@986-[save]"
                                                                                options:0
                                                                                metrics:nil
                                                                                  views:viewsDictionary];
@@ -438,6 +446,31 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
     [self.view endEditing:YES];
+}
+
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [self animateTextField:textField up:YES];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    [self animateTextField:textField up:NO];
+}
+
+-(void)animateTextField:(UITextField*)textField up:(BOOL)up
+{
+    const int movementDistance = -130; // tweak as needed
+    const float movementDuration = 0.3f; // tweak as needed
+    
+    int movement = (up ? movementDistance : -movementDistance);
+    
+    [UIView beginAnimations: @"animateTextField" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
 }
 
 @end

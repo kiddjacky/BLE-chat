@@ -1,20 +1,21 @@
 //
-//  feedbackCell.m
+//  discussionCellWithoutPicture.m
 //  app
 //
-//  Created by kiddjacky on 9/20/15.
+//  Created by kiddjacky on 10/21/15.
 //  Copyright (c) 2015 KZ. All rights reserved.
 //
 
-#import "feedbackCell.h"
+#import "discussionCellWithoutPicture.h"
+#import "AppConstant.h"
 
-@implementation feedbackCell
+@implementation discussionCellWithoutPicture
 
 @synthesize cardView = _cardView;
 @synthesize topic = _topic;
 @synthesize topicDescription = _topicDescription;
-@synthesize image = _image;
-
+@synthesize down = _down;
+@synthesize up  = _up;
 @synthesize join = _join;
 @synthesize share = _share;
 
@@ -25,27 +26,11 @@
     if (self) {
         self.backgroundColor = [UIColor lightGrayColor];
         [self cardSetup];
-        //[self imageSetup];
         [self cellLayout];
         //[self drawButton];
     }
     return self;
 }
-/*
- -(void) layoutSubviews
- {
- [super layoutSubviews];
- 
- self.backgroundColor = [UIColor greenColor];
- //[self cardSetup];
- //[self imageSetup];
- //[self cellLayout];
- //CGFloat viewWidth = self.contentView.frame.size.width;
- [self.contentView setNeedsLayout];
- [self.contentView layoutIfNeeded];
- 
- }*/
-
 
 -(void)cardSetup
 {
@@ -64,7 +49,10 @@
     
     self.topic = [[UILabel alloc] initWithFrame:CGRectZero];
     self.topic.translatesAutoresizingMaskIntoConstraints = NO;
-    self.topic.text = @"Leave Us your feedback!";
+    self.topic.lineBreakMode = NSLineBreakByWordWrapping;
+    self.topic.numberOfLines = 0;
+    self.topic.textAlignment =  NSTextAlignmentCenter;
+    self.topic.font = [UIFont fontWithName:@"Helvetica" size:20.0];
     //self.topic.backgroundColor = [UIColor redColor];
     //self.topic.text = @"test";
     [self.contentView addSubview:self.topic];
@@ -73,30 +61,58 @@
     self.topicDescription.translatesAutoresizingMaskIntoConstraints = NO;
     self.topicDescription.lineBreakMode = NSLineBreakByWordWrapping;
     self.topicDescription.numberOfLines = 0;
-    self.topicDescription.text = @"Please leave us your thought about the discussion topic, your feeling about the app, or any app problem!";
+    self.topicDescription.font = [UIFont fontWithName:@"Helvetica" size:15.0];
     //self.topicDescription.backgroundColor = [UIColor redColor];
     [self.contentView addSubview:self.topicDescription];
     
-    _image = [[PFImageView alloc] initWithFrame:CGRectZero];
-    self.image.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.contentView addSubview:self.image];
+    _up = [[UIButton alloc] initWithFrame:CGRectZero];
+    self.up.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.up setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    //[self.up setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
+    [self.up setTitle:@"Yes" forState:UIControlStateNormal];
+    self.up.backgroundColor = [UIColor greenColor];
+    self.up.layer.cornerRadius = 15;
+    [self.contentView addSubview:self.up];
+    
+    
+    _down = [[UIButton alloc] initWithFrame:CGRectZero];
+    self.down.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.down setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.down setTitle:@"No" forState:UIControlStateNormal];
+    self.down.backgroundColor = [UIColor redColor];
+    self.down.layer.cornerRadius = 15;
+    [self.contentView addSubview:self.down];
     
     _join = [[UIButton alloc] initWithFrame:CGRectZero];
     self.join.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.join setTitle:@"Feedback" forState:UIControlStateNormal];
-    [self.join setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    //self.join.backgroundColor = [UIColor grayColor];
+    [self.join setTitle:@"Join" forState:UIControlStateNormal];
+    [self.join setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.join.backgroundColor = [UIColor blueColor];
+    self.join.layer.cornerRadius = 15;
     [self.contentView addSubview:self.join];
     
     _share = [[UIButton alloc] initWithFrame:CGRectZero];
     self.share.translatesAutoresizingMaskIntoConstraints = NO;
     [self.share setTitle:@"Share" forState:UIControlStateNormal];
-    [self.share setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [self.share setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.share.backgroundColor = [UIColor blueColor];
+    self.share.layer.cornerRadius = 15;
     [self.contentView addSubview:self.share];
     
     
 }
 
+-(void)drawButton
+{
+    // Draw a custom gradient
+    CAGradientLayer *btnGradient = [CAGradientLayer layer];
+    btnGradient.frame = self.up.bounds;
+    btnGradient.colors = [NSArray arrayWithObjects:
+                          (id)[[UIColor colorWithRed:102.0f / 255.0f green:102.0f / 255.0f blue:102.0f / 255.0f alpha:1.0f] CGColor],
+                          (id)[[UIColor colorWithRed:51.0f / 255.0f green:51.0f / 255.0f blue:51.0f / 255.0f alpha:1.0f] CGColor],
+                          nil];
+    [self.up.layer insertSublayer:btnGradient atIndex:0];
+}
 
 -(void)cellLayout
 {
@@ -116,35 +132,10 @@
                                                                  attribute:NSLayoutAttributeCenterX
                                                                 multiplier:1
                                                                   constant:0.0]];
-    // set heigh to 30
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.topic
-                                                                 attribute:NSLayoutAttributeHeight
-                                                                 relatedBy:NSLayoutRelationEqual
-                                                                    toItem:self.contentView
-                                                                 attribute:NSLayoutAttributeHeight
-                                                                multiplier:0
-                                                                  constant:30]];
     
-    
-    //position
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.topicDescription
-                                                                 attribute:NSLayoutAttributeWidth
-                                                                 relatedBy:NSLayoutRelationEqual
-                                                                    toItem:self.contentView
-                                                                 attribute:NSLayoutAttributeWidth
-                                                                multiplier:0.8
-                                                                  constant:0]];
-    // Center horizontally
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.topicDescription
-                                                                 attribute:NSLayoutAttributeCenterX
-                                                                 relatedBy:NSLayoutRelationEqual
-                                                                    toItem:self.contentView
-                                                                 attribute:NSLayoutAttributeCenterX
-                                                                multiplier:1
-                                                                  constant:0.0]];
     /*
      // set heigh to 30
-     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.topicDescription
+     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.topic
      attribute:NSLayoutAttributeHeight
      relatedBy:NSLayoutRelationEqual
      toItem:self.contentView
@@ -152,32 +143,41 @@
      multiplier:0
      constant:30]];
      */
+    
     //position
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.image
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.topicDescription
                                                                  attribute:NSLayoutAttributeWidth
                                                                  relatedBy:NSLayoutRelationEqual
                                                                     toItem:self.contentView
                                                                  attribute:NSLayoutAttributeWidth
                                                                 multiplier:0
-                                                                  constant:160]];
+                                                                  constant:280]];
     // Center horizontally
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.image
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.topicDescription
                                                                  attribute:NSLayoutAttributeCenterX
                                                                  relatedBy:NSLayoutRelationEqual
                                                                     toItem:self.contentView
                                                                  attribute:NSLayoutAttributeCenterX
                                                                 multiplier:1
                                                                   constant:0.0]];
+    
     // set heigh to 30
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.image
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.up
                                                                  attribute:NSLayoutAttributeHeight
                                                                  relatedBy:NSLayoutRelationEqual
                                                                     toItem:self.contentView
                                                                  attribute:NSLayoutAttributeHeight
                                                                 multiplier:0
-                                                                  constant:160]];
-    
-       // set heigh to 30
+                                                                  constant:30]];
+    // set heigh to 30
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.down
+                                                                 attribute:NSLayoutAttributeHeight
+                                                                 relatedBy: NSLayoutRelationEqual
+                                                                    toItem:self.contentView
+                                                                 attribute:NSLayoutAttributeHeight
+                                                                multiplier:0
+                                                                  constant:30]];
+    // set heigh to 30
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.join
                                                                  attribute:NSLayoutAttributeHeight
                                                                  relatedBy:NSLayoutRelationEqual
@@ -194,9 +194,25 @@
                                                                  attribute:NSLayoutAttributeHeight
                                                                 multiplier:0
                                                                   constant:30]];
+    // Width constraint, full of parent view width
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.up
+                                                                 attribute:NSLayoutAttributeWidth
+                                                                 relatedBy:NSLayoutRelationEqual
+                                                                    toItem:self.down
+                                                                 attribute:NSLayoutAttributeWidth
+                                                                multiplier:1
+                                                                  constant:0]];
+    // Width constraint, full of parent view width
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.up
+                                                                 attribute:NSLayoutAttributeWidth
+                                                                 relatedBy:NSLayoutRelationEqual
+                                                                    toItem:self.join
+                                                                 attribute:NSLayoutAttributeWidth
+                                                                multiplier:1
+                                                                  constant:0]];
     
     // Width constraint, full of parent view width
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.join
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.up
                                                                  attribute:NSLayoutAttributeWidth
                                                                  relatedBy:NSLayoutRelationEqual
                                                                     toItem:self.share
@@ -205,65 +221,68 @@
                                                                   constant:0]];
     
     //relative position constriants
-    NSDictionary *viewsDictionary = @{@"nameView":self.topic, @"detailView":self.topicDescription,  @"join":self.join, @"picture":self.image, @"card":self.cardView, @"share":self.share };
+    NSDictionary *viewsDictionary = @{@"nameView":self.topic, @"detailView":self.topicDescription, @"yesVote":self.up, @"noVote":self.down,  @"join":self.join, @"card":self.cardView, @"share":self.share };
     
     
-    NSArray *constraint_POS_V_name = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[nameView]"
+    NSArray *constraint_POS_V_name = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15@999-[nameView]"
                                                                              options:0
                                                                              metrics:nil
                                                                                views:viewsDictionary];
     
-    /*
-    NSArray *constraint_POS_V_picture = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[nameView]-5-[picture]"
+    
+    NSArray *constraint_POS_V_detail = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[nameView]-5@997-[detailView]"
+                                                                               options:0
+                                                                               metrics:nil
+                                                                                 views:viewsDictionary];
+    
+    
+    NSArray *constraint_POS_V_yesVote = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[detailView]-10@996-[yesVote]"
                                                                                 options:0
                                                                                 metrics:nil
                                                                                   views:viewsDictionary];
     
-    
-    NSArray *constraint_POS_V_detail = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[picture]-5-[detailView]"
-                                                                               options:0
-                                                                               metrics:nil
-                                                                                 views:viewsDictionary];
-     */
-    
-    NSArray *constraint_POS_V_detail = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[nameView]-10-[detailView]"
+    NSArray *constraint_POS_V_noVote = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[detailView]-10@995-[noVote]"
                                                                                options:0
                                                                                metrics:nil
                                                                                  views:viewsDictionary];
     
-    
-    NSArray *constraint_POS_V_join = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[detailView]-10-[join]"
+    NSArray *constraint_POS_V_join = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[yesVote]-10@994-[join]"
                                                                              options:0
                                                                              metrics:nil
                                                                                views:viewsDictionary];
     
-    NSArray *constraint_POS_V_share = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[detailView]-10-[share]"
+    NSArray *constraint_POS_V_share = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[noVote]-10@993-[share]"
                                                                               options:0
                                                                               metrics:nil
                                                                                 views:viewsDictionary];
     
-    NSArray *constraint_POS_H_button = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[join]-10-[share]-10-|"
+    NSArray *constraint_POS_H_button = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20@992-[yesVote]-20@991-[noVote]-20@990-|"
                                                                                options:0
                                                                                metrics:nil
                                                                                  views:viewsDictionary];
     
-    NSArray *constraint_POS_V_card = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[card]-5-|"
+    NSArray *constraint_POS_H_button2 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20@989-[join]-20@988-[share]-20@987-|"
+                                                                                options:0
+                                                                                metrics:nil
+                                                                                  views:viewsDictionary];
+    
+    NSArray *constraint_POS_V_card = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5@986-[card]-5@985-|"
                                                                              options:0
                                                                              metrics:nil
                                                                                views:viewsDictionary];
     
-    NSArray *constraint_POS_H_card = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[card]-10-|"
+    NSArray *constraint_POS_H_card = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10@984-[card]-10@983-|"
                                                                              options:0
                                                                              metrics:nil
                                                                                views:viewsDictionary];
-
-    
     
     [self.contentView addConstraints:constraint_POS_V_name];
-    //[self.contentView addConstraints:constraint_POS_V_picture];
     [self.contentView addConstraints:constraint_POS_V_detail];
+    [self.contentView addConstraints:constraint_POS_V_yesVote];
+    [self.contentView addConstraints:constraint_POS_V_noVote];
     [self.contentView addConstraints:constraint_POS_V_join];
     [self.contentView addConstraints:constraint_POS_H_button];
+    [self.contentView addConstraints:constraint_POS_H_button2];
     [self.contentView addConstraints:constraint_POS_H_card];
     [self.contentView addConstraints:constraint_POS_V_card];
     [self.contentView addConstraints:constraint_POS_V_share];
@@ -272,14 +291,5 @@
 
 
 
-- (void)awakeFromNib {
-    // Initialization code
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
 
 @end

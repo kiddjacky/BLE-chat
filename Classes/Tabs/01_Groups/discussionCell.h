@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 #import <ParseUI/ParseUI.h>
+#import <Parse/Parse.h>
+#import <ParseUI/ParseUI.h>
 
 @interface discussionCell : UITableViewCell
 
@@ -28,5 +30,7 @@
 @property (strong, nonatomic) UIButton *share;
 
 @property (nonatomic, assign)   BOOL didSetupConstraints;
+
+-(void)bindData:(PFObject *)group;
 
 @end

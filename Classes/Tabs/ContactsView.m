@@ -17,6 +17,12 @@
 #import "Contacts.h"
 #import "contactDetailsVC.h"
 
+@interface ContactsView()
+{
+    UIView *nomatchesView;
+}
+@end
+
 @implementation ContactsView
 
 /*
@@ -89,16 +95,39 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"contactsCell" bundle:nil] forCellReuseIdentifier:@"contactsCell"];
 
     //if (!self.managedObjectContext) [self useDocument];
-    //[self setupFetchedResultsController];
+    //[self setupFetchedResultsController]
+
+    
+    //add subview when no match
+    nomatchesView = [[UIView alloc] initWithFrame:self.view.frame];
+    nomatchesView.backgroundColor = [UIColor clearColor];
+    
+    UILabel *matchesLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,320,320)];
+    matchesLabel.font = [UIFont boldSystemFontOfSize:18];
+    //matchesLabel.minimumFontSize = 12.0f;
+    matchesLabel.numberOfLines = 1;
+    //matchesLabel.lineBreakMode = UILineBreakModeWordWrap;
+    //matchesLabel.shadowColor = [UIColor lightTextColor];
+    matchesLabel.textColor = [UIColor lightGrayColor];
+    matchesLabel.shadowOffset = CGSizeMake(0, 1);
+    matchesLabel.backgroundColor = [UIColor clearColor];
+    matchesLabel.textAlignment =  NSTextAlignmentCenter;
+    
+    //Here is the text for when there are no results
+    matchesLabel.text = @"You don't have any contact yet";
+    
+    
+    nomatchesView.hidden = YES;
+    [nomatchesView addSubview:matchesLabel];
+    [self.tableView insertSubview:nomatchesView belowSubview:self.tableView];
     
     // Initialize the refresh control.
     self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.backgroundColor = [UIColor purpleColor];
-    self.refreshControl.tintColor = [UIColor whiteColor];
+    self.refreshControl.backgroundColor = [UIColor whiteColor];
+    self.refreshControl.tintColor = [UIColor grayColor];
     [self.refreshControl addTarget:self
                             action:@selector(reloadData)
                   forControlEvents:UIControlEventValueChanged];
-
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -132,7 +161,7 @@
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"MMM d, h:mm a"];
         NSString *title = [NSString stringWithFormat:@"Last update: %@", [formatter stringFromDate:[NSDate date]]];
-        NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+        NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor blackColor]
                                                                     forKey:NSForegroundColorAttributeName];
         NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attrsDictionary];
         self.refreshControl.attributedTitle = attributedTitle;
@@ -149,7 +178,6 @@
 {
     return 70.0f;
 }
-
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

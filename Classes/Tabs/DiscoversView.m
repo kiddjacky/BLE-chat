@@ -28,6 +28,7 @@
 {
     CLGeocoder *geocoder;
     CLPlacemark *placemark;
+    UIView *nomatchesView;
 }
 @end
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -113,13 +114,34 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"discoversCell" bundle:nil] forCellReuseIdentifier:@"discoversCell"];
     // Initialize the refresh control.
     self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.backgroundColor = [UIColor purpleColor];
-    self.refreshControl.tintColor = [UIColor whiteColor];
+    self.refreshControl.backgroundColor = [UIColor whiteColor];
+    self.refreshControl.tintColor = [UIColor blackColor];
     [self.refreshControl addTarget:self
                             action:@selector(reloadData)
                   forControlEvents:UIControlEventValueChanged];
     
+    //add subview when no match
+    nomatchesView = [[UIView alloc] initWithFrame:self.view.frame];
+    nomatchesView.backgroundColor = [UIColor clearColor];
     
+    UILabel *matchesLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,320,320)];
+    matchesLabel.font = [UIFont boldSystemFontOfSize:18];
+    //matchesLabel.minimumFontSize = 12.0f;
+    matchesLabel.numberOfLines = 1;
+    //matchesLabel.lineBreakMode = UILineBreakModeWordWrap;
+    //matchesLabel.shadowColor = [UIColor lightTextColor];
+    matchesLabel.textColor = [UIColor lightGrayColor];
+    matchesLabel.shadowOffset = CGSizeMake(0, 1);
+    matchesLabel.backgroundColor = [UIColor clearColor];
+    matchesLabel.textAlignment =  NSTextAlignmentCenter;
+    
+    //Here is the text for when there are no results
+    matchesLabel.text = @"No Whaler around 200m of you";
+    
+    
+    nomatchesView.hidden = YES;
+    [nomatchesView addSubview:matchesLabel];
+    [self.tableView insertSubview:nomatchesView belowSubview:self.tableView];
     
     //[self.tableView reloadData];
     //setup observer before ask the appdelegate to post
@@ -140,7 +162,7 @@
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"MMM d, h:mm a"];
         NSString *title = [NSString stringWithFormat:@"Last update: %@", [formatter stringFromDate:[NSDate date]]];
-        NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+        NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor blackColor]
                                                                     forKey:NSForegroundColorAttributeName];
         NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attrsDictionary];
         self.refreshControl.attributedTitle = attributedTitle;
@@ -173,6 +195,25 @@
     return 70.0f;
 }
 
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSInteger rows = 0;
+    if ([[self.fetchedResultsController sections] count] > 0) {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
+        rows = [sectionInfo numberOfObjects];
+        if ([sectionInfo numberOfObjects] ==0 ) {
+            nomatchesView.hidden = NO;
+        }
+        else {
+            nomatchesView.hidden = YES;
+        }
+    }
+    else {
+        nomatchesView.hidden = NO;
+    }
+    return rows;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 //-------------------------------------------------------------------------------------------------------------------------------------------------

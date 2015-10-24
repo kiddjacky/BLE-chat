@@ -48,7 +48,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
     self.pfImageView.frame = CGRectMake(10, 10, 50, 50);
-    //self.pfImageView.layer.cornerRadius = self.pfImageView.frame.size.width/2;
+    self.pfImageView.layer.cornerRadius = self.pfImageView.frame.size.width/2;
     self.pfImageView.layer.masksToBounds = YES;
     [self.pfImageView setContentMode:UIViewContentModeScaleAspectFit];
     //discovered_users = discovered_users_;

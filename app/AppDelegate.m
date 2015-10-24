@@ -81,7 +81,8 @@
 
 	self.groupsView = [[GroupsView alloc] init];
 	self.messagesView = [[MessagesView alloc] init];
-	self.profileView = [[ProfileView alloc] init];
+	//self.profileView = [[ProfileView alloc] init];
+    self.settingView = [[settingTVC alloc] init];
     self.discoversView = [[DiscoversView alloc] init];
     //self.discoversView.managedObjectContext = self.DiscoverDatabaseContext;
     self.contactsView = [[ContactsView alloc] init];
@@ -91,8 +92,8 @@
 	NavigationController *navController2 = [[NavigationController alloc] initWithRootViewController:self.messagesView];
 	NavigationController *navController3 = [[NavigationController alloc] initWithRootViewController:self.contactsView];
     NavigationController *navController4 = [[NavigationController alloc] initWithRootViewController:self.discoversView];
-    NavigationController *navController5 = [[NavigationController alloc] initWithRootViewController:self.profileView];
-    
+    //NavigationController *navController5 = [[NavigationController alloc] initWithRootViewController:self.profileView];
+    NavigationController *navController5 = [[NavigationController alloc] initWithRootViewController:self.settingView];
 
 	self.tabBarController = [[UITabBarController alloc] init];
 	self.tabBarController.viewControllers = [NSArray arrayWithObjects:navController1, navController2, navController3, navController4, navController5, nil];

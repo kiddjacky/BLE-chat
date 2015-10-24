@@ -75,10 +75,10 @@
 {
     
      //discovered_user = discovered_user;
-     
-     //self.imageUser.layer.cornerRadius = imageUser.frame.size.width/2;
-    
     self.imageUser.frame = CGRectMake(10, 10, 50, 50);
+    self.imageUser.layer.cornerRadius = self.imageUser.frame.size.width/2;
+    
+
     self.imageUser.layer.masksToBounds = YES;
      //---------------------------------------------------------------------------------------------------------------------------------------------
     [self.imageUser setContentMode:UIViewContentModeScaleAspectFit];
