@@ -23,7 +23,9 @@
 
 
 @interface settingTVC ()
-
+{
+    bool select;
+}
 @end
 
 @implementation settingTVC
@@ -46,6 +48,7 @@
     
     self.title = @"Setting";
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+    select = NO;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"contactsCell" bundle:nil] forCellReuseIdentifier:@"contactsCell"];
     
@@ -75,7 +78,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-    return 3;
+    return 4;
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -111,6 +114,14 @@
             cell.textLabel.text = @"Report";
         }
         return cell;
+    }
+    else if (indexPath.section== 2) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+        if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+        cell.textLabel.text = @"Disable Discover";
+        cell.accessoryType = select ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+        return cell;
+        
     }
     else {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
@@ -159,7 +170,16 @@
          }];
         }
     }
-    else if (indexPath.section==2) {
+    else if (indexPath.section == 2) {
+        select = !select;
+        if (select) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_DISABLE object:nil];
+        } else {
+            [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_ENABLE object:nil];
+        }
+        [self.tableView reloadData];
+    }
+    else if (indexPath.section==3) {
         UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil
                                                    otherButtonTitles:@"Log out", nil];
         [action showFromTabBar:[[self tabBarController] tabBar]];

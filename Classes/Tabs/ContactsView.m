@@ -72,11 +72,11 @@
     
     
     //NSLog(@"Discover set managed object context %@", managedObjectContext);
-    NSLog(@"about to fetch contacts!" );
-    NSError *error;
-    NSArray *matches = [self.managedObjectContext executeFetchRequest:request error:&error];
+    //NSLog(@"about to fetch contacts!" );
+    //NSError *error;
+    //NSArray *matches = [self.managedObjectContext executeFetchRequest:request error:&error];
     
-    NSLog(@"contact now is %d", [matches count]);
+    //NSLog(@"contact now is %lu", (unsigned long)[matches count]);
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
                                                                         managedObjectContext:managedObjectContext

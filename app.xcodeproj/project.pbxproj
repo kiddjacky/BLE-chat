@@ -151,6 +151,14 @@
 		DEB5B9C41BB66508000CDA1B /* weixin_icon1.png in Resources */ = {isa = PBXBuildFile; fileRef = DEB5B9C31BB66508000CDA1B /* weixin_icon1.png */; };
 		DEB5B9C61BB6677F000CDA1B /* weixin_icon_ios7_1.png in Resources */ = {isa = PBXBuildFile; fileRef = DEB5B9C51BB6677F000CDA1B /* weixin_icon_ios7_1.png */; };
 		DEB5B9C91BB91B73000CDA1B /* blockVC.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB5B9C81BB91B73000CDA1B /* blockVC.m */; };
+		DEB5B9CC1BC4FB24000CDA1B /* discussionTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB5B9CB1BC4FB24000CDA1B /* discussionTVC.m */; };
+		DEB5B9D01BC5F7DE000CDA1B /* discussionTVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEB5B9CF1BC5F7DE000CDA1B /* discussionTVCell.xib */; };
+		DEB5B9D31BD235D6000CDA1B /* settingTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB5B9D21BD235D6000CDA1B /* settingTVC.m */; };
+		DEB5B9D51BD444B4000CDA1B /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = DEB5B9D41BD444B4000CDA1B /* plus.png */; };
+		DEB5B9D81BD8B592000CDA1B /* discussionCellWithoutPicture.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB5B9D71BD8B592000CDA1B /* discussionCellWithoutPicture.m */; };
+		DEB5B9DE1BDB4457000CDA1B /* privacy.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB5B9DD1BDB4457000CDA1B /* privacy.m */; };
+		DEB5B9E01BDB4D16000CDA1B /* privacy.html in Resources */ = {isa = PBXBuildFile; fileRef = DEB5B9DF1BDB4D16000CDA1B /* privacy.html */; };
+		DEB5B9E41BDB6123000CDA1B /* privacy.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEB5B9E31BDB6123000CDA1B /* privacy.xib */; };
 		DEB793941B68C6E400046815 /* contactsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB793921B68C6E400046815 /* contactsCell.m */; };
 		DEB793951B68C6E400046815 /* contactsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEB793931B68C6E400046815 /* contactsCell.xib */; };
 		DEB7939C1B6C45E100046815 /* Binoculars-50.png in Resources */ = {isa = PBXBuildFile; fileRef = DEB793961B6C45E100046815 /* Binoculars-50.png */; };
@@ -433,6 +441,18 @@
 		DEB5B9C51BB6677F000CDA1B /* weixin_icon_ios7_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = weixin_icon_ios7_1.png; sourceTree = "<group>"; };
 		DEB5B9C71BB91B73000CDA1B /* blockVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blockVC.h; sourceTree = "<group>"; };
 		DEB5B9C81BB91B73000CDA1B /* blockVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = blockVC.m; sourceTree = "<group>"; };
+		DEB5B9CA1BC4FB24000CDA1B /* discussionTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = discussionTVC.h; sourceTree = "<group>"; };
+		DEB5B9CB1BC4FB24000CDA1B /* discussionTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = discussionTVC.m; sourceTree = "<group>"; };
+		DEB5B9CF1BC5F7DE000CDA1B /* discussionTVCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = discussionTVCell.xib; sourceTree = "<group>"; };
+		DEB5B9D11BD235D6000CDA1B /* settingTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = settingTVC.h; sourceTree = "<group>"; };
+		DEB5B9D21BD235D6000CDA1B /* settingTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = settingTVC.m; sourceTree = "<group>"; };
+		DEB5B9D41BD444B4000CDA1B /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
+		DEB5B9D61BD8B592000CDA1B /* discussionCellWithoutPicture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = discussionCellWithoutPicture.h; sourceTree = "<group>"; };
+		DEB5B9D71BD8B592000CDA1B /* discussionCellWithoutPicture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = discussionCellWithoutPicture.m; sourceTree = "<group>"; };
+		DEB5B9DC1BDB4457000CDA1B /* privacy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = privacy.h; sourceTree = "<group>"; };
+		DEB5B9DD1BDB4457000CDA1B /* privacy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = privacy.m; sourceTree = "<group>"; };
+		DEB5B9DF1BDB4D16000CDA1B /* privacy.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = privacy.html; sourceTree = "<group>"; };
+		DEB5B9E31BDB6123000CDA1B /* privacy.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = privacy.xib; sourceTree = "<group>"; };
 		DEB793911B68C6E400046815 /* contactsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = contactsCell.h; sourceTree = "<group>"; };
 		DEB793921B68C6E400046815 /* contactsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = contactsCell.m; sourceTree = "<group>"; };
 		DEB793931B68C6E400046815 /* contactsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = contactsCell.xib; sourceTree = "<group>"; };
@@ -611,6 +631,11 @@
 			children = (
 				292338A81AA350A400A47A39 /* ProfileView.h */,
 				292338A91AA350A400A47A39 /* ProfileView.m */,
+				DEB5B9DC1BDB4457000CDA1B /* privacy.h */,
+				DEB5B9DD1BDB4457000CDA1B /* privacy.m */,
+				DEB5B9E31BDB6123000CDA1B /* privacy.xib */,
+				DEB5B9D11BD235D6000CDA1B /* settingTVC.h */,
+				DEB5B9D21BD235D6000CDA1B /* settingTVC.m */,
 				292338AA1AA350A400A47A39 /* ProfileView.xib */,
 			);
 			path = 03_Profile;
@@ -980,6 +1005,7 @@
 		29B8FE7319E92E4500E7A503 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DEB5B9DF1BDB4D16000CDA1B /* privacy.html */,
 				29A531241AAEEF9500263CB1 /* Images */,
 			);
 			path = Resources;
@@ -1108,6 +1134,7 @@
 			children = (
 				DEB5B9C51BB6677F000CDA1B /* weixin_icon_ios7_1.png */,
 				DEB5B9C31BB66508000CDA1B /* weixin_icon1.png */,
+				DEB5B9D41BD444B4000CDA1B /* plus.png */,
 				DEAD60F11B9AC366002E7B29 /* logo-120x120.gif */,
 				DEAD60FD1B9AD795002E7B29 /* iphone5-background.jpg */,
 				DEAD60F51B9AC393002E7B29 /* iphone5-buttons-register-1.jpg */,
@@ -1124,8 +1151,13 @@
 				DEB5B99D1BAF1C61000CDA1B /* feedbackCell.m */,
 				DEAD60E51B93D1BB002E7B29 /* discussionView.h */,
 				DEAD60E61B93D1BB002E7B29 /* discussionView.m */,
+				DEB5B9CA1BC4FB24000CDA1B /* discussionTVC.h */,
+				DEB5B9CB1BC4FB24000CDA1B /* discussionTVC.m */,
+				DEB5B9CF1BC5F7DE000CDA1B /* discussionTVCell.xib */,
 				DEB213561B9017D500009E5D /* discussionCell.h */,
 				DEB213571B9017D500009E5D /* discussionCell.m */,
+				DEB5B9D61BD8B592000CDA1B /* discussionCellWithoutPicture.h */,
+				DEB5B9D71BD8B592000CDA1B /* discussionCellWithoutPicture.m */,
 				DEAD61011B9B9DBD002E7B29 /* discussionCell.xib */,
 				DEB5B9A51BB4DF44000CDA1B /* WeiXinActivity.h */,
 				DEB5B9A61BB4DF44000CDA1B /* WeiXinActivity.m */,
@@ -1241,8 +1273,10 @@
 				DEAD61021B9B9DBD002E7B29 /* discussionCell.xib in Resources */,
 				292338F71AA374C300A47A39 /* SelectMultipleView.xib in Resources */,
 				DEAD60F71B9AC393002E7B29 /* iphone5-buttons-register-1.jpg in Resources */,
+				DEB5B9D51BD444B4000CDA1B /* plus.png in Resources */,
 				292338CE1AA350A400A47A39 /* ProfileView.xib in Resources */,
 				292339A31AA38E0F00A47A39 /* JSQMessages.strings in Resources */,
+				DEB5B9E41BDB6123000CDA1B /* privacy.xib in Resources */,
 				292339A21AA38E0F00A47A39 /* JSQMessagesAssets.bundle in Resources */,
 				292338C61AA350A400A47A39 /* SelectSingleView.xib in Resources */,
 				DEB7939D1B6C45E100046815 /* Binoculars-100.png in Resources */,
@@ -1265,11 +1299,13 @@
 				DEAD60F81B9AC393002E7B29 /* iphone5-buttons-facebook-1.jpg in Resources */,
 				292338FC1AA37C4100A47A39 /* FacebookFriendsView.xib in Resources */,
 				29EB241619E9292500D7AA97 /* Images.xcassets in Resources */,
+				DEB5B9D01BC5F7DE000CDA1B /* discussionTVCell.xib in Resources */,
 				292338D41AA350A400A47A39 /* WelcomeView.xib in Resources */,
 				DEB7939E1B6C45E100046815 /* Binoculars-200.png in Resources */,
 				29A531301AAEEF9500263CB1 /* chat_blank@2x.png in Resources */,
 				292339C21AA38E0F00A47A39 /* JSQMessagesCollectionViewCellOutgoing.xib in Resources */,
 				DEB793951B68C6E400046815 /* contactsCell.xib in Resources */,
+				DEB5B9E01BDB4D16000CDA1B /* privacy.html in Resources */,
 				292339CA1AA38E0F00A47A39 /* JSQMessagesToolbarContentView.xib in Resources */,
 				DEAD60F41B9AC377002E7B29 /* iphone5-buttons-login-1.jpg in Resources */,
 			);
@@ -1300,6 +1336,7 @@
 				2923392C1AA38DBD00A47A39 /* AFURLSessionManager.m in Sources */,
 				292339AD1AA38E0F00A47A39 /* JSQMessagesAvatarImageFactory.m in Sources */,
 				292339301AA38DBD00A47A39 /* UIButton+AFNetworking.m in Sources */,
+				DEB5B9D31BD235D6000CDA1B /* settingTVC.m in Sources */,
 				292339A81AA38E0F00A47A39 /* UIImage+JSQMessages.m in Sources */,
 				292338CB1AA350A400A47A39 /* MessagesView.m in Sources */,
 				292339BB1AA38E0F00A47A39 /* JSQVideoMediaItem.m in Sources */,
@@ -1332,6 +1369,7 @@
 				DEB5B9A71BB4DF44000CDA1B /* WeiXinActivity.m in Sources */,
 				DEE855401B081778000AA5AC /* ContactsView.m in Sources */,
 				292339B11AA38E0F00A47A39 /* JSQMessagesToolbarButtonFactory.m in Sources */,
+				DEB5B9D81BD8B592000CDA1B /* discussionCellWithoutPicture.m in Sources */,
 				DEB5B9C91BB91B73000CDA1B /* blockVC.m in Sources */,
 				2923392E1AA38DBD00A47A39 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				2923392B1AA38DBD00A47A39 /* AFURLResponseSerialization.m in Sources */,
@@ -1358,9 +1396,11 @@
 				296DD5E91A1F557900AB9F8C /* ProgressHUD.m in Sources */,
 				292339C31AA38E0F00A47A39 /* JSQMessagesComposerTextView.m in Sources */,
 				292338C51AA350A400A47A39 /* SelectSingleView.m in Sources */,
+				DEB5B9DE1BDB4457000CDA1B /* privacy.m in Sources */,
 				DEF024AB1B823E86008DBABF /* detailsImageView.m in Sources */,
 				292339AE1AA38E0F00A47A39 /* JSQMessagesBubbleImageFactory.m in Sources */,
 				292339B81AA38E0F00A47A39 /* JSQMessagesAvatarImage.m in Sources */,
+				DEB5B9CC1BC4FB24000CDA1B /* discussionTVC.m in Sources */,
 				2923392A1AA38DBD00A47A39 /* AFURLRequestSerialization.m in Sources */,
 				292339A51AA38E0F00A47A39 /* NSString+JSQMessages.m in Sources */,
 				292339CB1AA38E0F00A47A39 /* JSQMessagesTypingIndicatorFooterView.m in Sources */,
@@ -1502,7 +1542,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendors",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1529,7 +1569,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendors",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

@@ -124,7 +124,8 @@
     //[self post_context];
     //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(post_context) name:DiscoverViewReady object:nil];
     
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stop_scan) name:PFUSER_DISABLE object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(start_scan) name:PFUSER_ENABLE object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stop_scan) name:PFUSER_LOGOUT object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(start_scan) name:PFUSER_READY object:nil];
 
@@ -238,6 +239,7 @@
 {
 	PFInstallation *currentInstallation = [PFInstallation currentInstallation];
 	[currentInstallation setDeviceTokenFromData:deviceToken];
+    currentInstallation.channels = @[ @"global" ];
 	[currentInstallation saveInBackground];
 }
 
@@ -859,8 +861,9 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     
     
     // ... so build our service.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stop_ad) name:PFUSER_DISABLE object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(btle_seq) name:PFUSER_ENABLE object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(btle_seq) name:PFUSER_READY object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stop_ad) name:PFUSER_LOGOUT object:nil];
     
     if ([PFUser currentUser] != nil) {

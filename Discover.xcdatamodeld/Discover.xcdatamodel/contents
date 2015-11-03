@@ -34,7 +34,7 @@
     </entity>
     <elements>
         <element name="Contacts" positionX="207" positionY="99" width="128" height="180"/>
-        <element name="CurrentUser" positionX="-54" positionY="18" width="128" height="30"/>
+        <element name="CurrentUser" positionX="-54" positionY="18" width="128" height="195"/>
         <element name="DiscoverUser" positionX="-18" positionY="228" width="128" height="150"/>
     </elements>
 </model>

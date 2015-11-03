@@ -16,4 +16,6 @@
 #define PFUSER_LOGOUT @"PFUSER_LOGOUT"
 #define ContactAvailabilityNotification @"ContactAvailabilityNotification"
 #define ContactAvailabilityContext @"ContactContext"
+#define PFUSER_DISABLE @"PFUSER_DISABLE"
+#define PFUSER_ENABLE @"PFUSER_ENABLE"
 #endif

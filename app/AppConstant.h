@@ -57,6 +57,8 @@
 #define     PF_GROUPS_DOWN                      @"down"                 //  Number
 #define     PF_GROUPS_UP_NAME                   @"upName"               //  String
 #define     PF_GROUPS_DOWN_NAME                 @"downName"             //  String
+#define     PF_GROUPS_UP_LIST                   @"upList"               //  Array of user vote up
+#define     PF_GROUPS_DOWN_LIST                 @"downList"             //  Array of user vote down
 #define		PF_GROUPS_CREATER                   @"creater"				//  Pointer to User Class
 #define		PF_GROUPS_CREATE_TIME               @"createTime"			//  Date
 #define     PF_GROUPS_LATITUDE                  @"latitude"             //  String

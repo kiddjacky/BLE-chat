@@ -35,6 +35,8 @@
     discussionCell *prototypeCell;
     NSMutableArray *up;
     NSMutableArray *down;
+    NSMutableArray *upList;
+    NSMutableArray *downList;
     NSMutableArray *join;
     NSMutableArray *vote; //0 means didn't vote, 1 means yes, 2 means no
 }
@@ -142,17 +144,40 @@
 			[groups addObjectsFromArray:reversedArray];
             [up removeAllObjects];
             [down removeAllObjects];
+            [upList removeAllObjects];
+            [downList removeAllObjects];
             [join removeAllObjects];
             [vote removeAllObjects];
             [up addObjectsFromArray:[reversedArray valueForKey:PF_GROUPS_UP]];
             [down addObjectsFromArray:[reversedArray valueForKey:PF_GROUPS_DOWN]];
             [join addObjectsFromArray:[reversedArray valueForKey:PF_GROUPS_NUM_CHAT]];
+            NSLog(@"up list is %@", upList);
+            NSLog(@"down list is %@", downList);
+            PFUser *user = [PFUser currentUser];
+            NSString *userName = user[PF_USER_USERNAME];
             NSInteger size = [objects count];
             for (int i=0; i<size; i++) {
                 [vote addObject:[NSNumber numberWithInt:0]];
             }
+            
+            for (int i=0; i<size; i++) {
+                if (groups[i][PF_GROUPS_UP_LIST]) {
+                    if ([groups[i][PF_GROUPS_UP_LIST] containsObject:userName]) {
+                        vote[i] = [NSNumber numberWithInt:1];
+                    }
+                }
+                else if (groups[i][PF_GROUPS_DOWN_LIST]) {
+                    if ([groups[i][PF_GROUPS_DOWN_LIST] containsObject:userName]) {
+                        vote[i] = [NSNumber numberWithInt:2];
+                    }
+                }
+                else {
+                    NSLog(@"user has not vote in this group yet");
+                }
+            }
+            
 			[self.tableView reloadData];
-            NSLog(@"groups is %@, up is %@, down is %@, join is %@, vote is %@", groups, up, down, join, vote);
+            //NSLog(@"groups is %@, up is %@, down is %@, join is %@, vote is %@", groups, up, down, join, vote);
 		}
 		else [ProgressHUD showError:@"Network error."];
 	}];
@@ -391,10 +416,7 @@
                 [cell.join setTitle:@"Join" forState:UIControlStateNormal];
             }
             
-            if([vote[indexPath.row] integerValue]==0) {
-                cell.up.userInteractionEnabled = YES;
-                cell.down.userInteractionEnabled = YES;
-            } else if ([vote[indexPath.row] integerValue]==1) {
+            if ([vote[indexPath.row] integerValue]==1) {
                 cell.up.userInteractionEnabled = NO;
                 cell.down.userInteractionEnabled = YES;
                 cell.up.highlighted = YES;
@@ -404,6 +426,9 @@
                 cell.down.userInteractionEnabled = NO;
                 cell.down.highlighted = YES;
                 cell.up.highlighted = NO;
+            } else {
+                cell.up.userInteractionEnabled = YES;
+                cell.down.userInteractionEnabled = YES;
             }
             
             return cell;
@@ -441,7 +466,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(indexPath.section == 0) {
-    discussionCell *cell = prototypeCell;
+    //discussionCell *cell = prototypeCell;
     PFObject *group = groups[indexPath.row];
         CGFloat height = 0;
     NSString *cellTextT = group[PF_GROUPS_NAME];
@@ -454,33 +479,33 @@
          {
          NSFontAttributeName: cellFontT
          }];
-        CGRect rect0 = [attributedTextT boundingRectWithSize:CGSizeMake(self.view.frame.size.width-20, CGFLOAT_MAX)
+        CGRect rect0 = [attributedTextT boundingRectWithSize:CGSizeMake(280, CGFLOAT_MAX)
                                                      options:NSStringDrawingUsesLineFragmentOrigin
                                                      context:nil];
         height = rect0.size.height;
+                NSLog(@"height with topic is %f", height);
         
-        if(group[PF_GROUPS_DESCRIPTION] != nil) {
+    if(group[PF_GROUPS_DESCRIPTION] != nil) {
         NSString *cellText = group[PF_GROUPS_DESCRIPTION];
         UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:15.0];
-    NSAttributedString *attributedTextD =
-    [[NSAttributedString alloc]
-     initWithString:cellText
-     attributes:@
-     {
-     NSFontAttributeName: cellFont
-     }];
-    CGRect rect1 = [attributedTextD boundingRectWithSize:CGSizeMake(280.0, CGFLOAT_MAX)
+        NSAttributedString *attributedTextD =
+            [[NSAttributedString alloc] initWithString:cellText
+                                            attributes:@{
+                                                         NSFontAttributeName: cellFont
+                                                         }];
+        CGRect rect1 = [attributedTextD boundingRectWithSize:CGSizeMake(280.0, CGFLOAT_MAX)
                                                options:NSStringDrawingUsesLineFragmentOrigin
                                                context:nil];
             height = height + rect1.size.height;
-        }
+        NSLog(@"height with details is %f", height);
+    }
 
-        if (group[PF_GROUPS_PICTURE]==nil) {
-            height = height + 120;
-        }
-        else {
-            height = height + 450;
-        }
+    if (group[PF_GROUPS_PICTURE]==nil) {
+        height = height + 120;
+    }
+    else {
+        height = height + 450;
+    }
         return height;
     }
     else {
@@ -492,7 +517,7 @@
 }
 
 
-/*
+
 //delete group post
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -519,7 +544,7 @@
     }];
     }
 }
-*/
+
 
 //flag group post
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -591,15 +616,24 @@
         NSInteger disagree = [[group objectForKey:PF_GROUPS_DOWN] intValue];
         [group setObject:[NSNumber numberWithInteger:(disagree-1)] forKey:PF_GROUPS_DOWN];
         [down setObject:[NSNumber numberWithInteger:(disagree-1)] atIndexedSubscript:row  ];
+        [group[PF_GROUPS_DOWN_LIST] removeObject:[PFUser currentUser][PF_USER_USERNAME]];
         NSLog(@"down now is %@", down[row]);
     }
     vote[row] = [NSNumber numberWithInt:1];
+    if (group[PF_GROUPS_UP_LIST]) {
+        [group[PF_GROUPS_UP_LIST] addObject:[PFUser currentUser][PF_USER_USERNAME]];
+    }
+    else {
+        group[PF_GROUPS_UP_LIST] = [[NSMutableArray alloc] init];
+        [group[PF_GROUPS_UP_LIST] addObject:[PFUser currentUser][PF_USER_USERNAME]];
+    }
     NSLog(@"vote is now %@", vote[row]);
     [group saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
      {
          if (error == nil)
          {
              //[self loadGroups];
+            NSLog(@"group now is %@",group);
          }
          else [ProgressHUD showError:@"Network error."];
      }];
@@ -621,10 +655,19 @@
         NSInteger agree = [[group objectForKey:PF_GROUPS_UP] intValue];
         [group setObject:[NSNumber numberWithInteger:(agree-1)] forKey:PF_GROUPS_UP];
         [up setObject:[NSNumber numberWithInteger:(agree - 1)] atIndexedSubscript:row  ];
+        [group[PF_GROUPS_UP_LIST] removeObject:[PFUser currentUser][PF_USER_USERNAME]];
         NSLog(@"up is now %@", up[row]);
     }
     vote[row] = [NSNumber numberWithInt:2];
-        NSLog(@"vote is now %@", vote[row]);
+    NSLog(@"vote is now %@", vote[row]);
+    if (group[PF_GROUPS_DOWN_LIST]) {
+        [group[PF_GROUPS_DOWN_LIST] addObject:[PFUser currentUser][PF_USER_USERNAME]];
+    }
+    else {
+        group[PF_GROUPS_DOWN_LIST] = [[NSMutableArray alloc] init];
+        [group[PF_GROUPS_DOWN_LIST] addObject:[PFUser currentUser][PF_USER_USERNAME]];
+    }
+
     [group saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
      {
          if (error == nil)

@@ -399,7 +399,7 @@
              NSArray *matches = [self.context executeFetchRequest:request error:&error];
              Contacts *contact = nil;
              //CurrentUser *currentUser = nil;
-            NSLog(@"match is %d", [matches count]);
+             NSLog(@"match is %lu", (unsigned long)[matches count]);
              
              if (error) {
                  NSLog(@"request error!");

@@ -287,6 +287,8 @@
         self.group[PF_GROUPS_UP_NAME] = self.yesName.text;
         self.group[PF_GROUPS_CREATER] = [PFUser currentUser];
         self.group[PF_GROUPS_CREATE_TIME] = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
+        self.group[PF_GROUPS_UP_LIST] = @"";
+        self.group[PF_GROUPS_DOWN_LIST] = @"";
         [self.group setObject:[NSNumber numberWithInteger:0] forKey:PF_GROUPS_NUM_CHAT];
         if (self.picFile) {
             [self.group setObject:self.picFile forKey:PF_GROUPS_PICTURE];
