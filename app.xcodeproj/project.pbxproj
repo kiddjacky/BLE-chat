@@ -105,7 +105,6 @@
 		29A299561A55757800117608 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A299551A55757800117608 /* libsqlite3.dylib */; };
 		29A299581A55758300117608 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A299571A55758300117608 /* libz.dylib */; };
 		29A2995A1A55758B00117608 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A299591A55758B00117608 /* SystemConfiguration.framework */; };
-		29A2995C1A55759200117608 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A2995B1A55759200117608 /* StoreKit.framework */; };
 		29A2995E1A55759A00117608 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A2995D1A55759A00117608 /* Security.framework */; };
 		29A299601A5575A100117608 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A2995F1A5575A100117608 /* QuartzCore.framework */; };
 		29A299621A5575A900117608 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A299611A5575A900117608 /* MobileCoreServices.framework */; };
@@ -132,6 +131,7 @@
 		DE31A2E31AF7321700FD8DE2 /* AppDelegate+MOC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE31A2E21AF7321700FD8DE2 /* AppDelegate+MOC.m */; };
 		DE31A2E61AF7357400FD8DE2 /* DiscoversView+MOC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE31A2E51AF7357400FD8DE2 /* DiscoversView+MOC.m */; };
 		DE6DA8251ABF54CE007A683B /* DiscoversView.m in Sources */ = {isa = PBXBuildFile; fileRef = DE6DA8241ABF54CE007A683B /* DiscoversView.m */; };
+		DE7414501BEFBB8100E6BF78 /* report.m in Sources */ = {isa = PBXBuildFile; fileRef = DE74144F1BEFBB8100E6BF78 /* report.m */; };
 		DEAD60E71B93D1BB002E7B29 /* discussionView.m in Sources */ = {isa = PBXBuildFile; fileRef = DEAD60E61B93D1BB002E7B29 /* discussionView.m */; };
 		DEAD60F21B9AC366002E7B29 /* logo-120x120.gif in Resources */ = {isa = PBXBuildFile; fileRef = DEAD60F11B9AC366002E7B29 /* logo-120x120.gif */; };
 		DEAD60F41B9AC377002E7B29 /* iphone5-buttons-login-1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DEAD60F31B9AC377002E7B29 /* iphone5-buttons-login-1.jpg */; };
@@ -375,7 +375,6 @@
 		29A299551A55757800117608 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		29A299571A55758300117608 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		29A299591A55758B00117608 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		29A2995B1A55759200117608 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		29A2995D1A55759A00117608 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		29A2995F1A5575A100117608 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		29A299611A5575A900117608 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -414,6 +413,8 @@
 		DE4AA4831AC9B582008309D0 /* TransferService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransferService.h; sourceTree = "<group>"; };
 		DE6DA8231ABF54CE007A683B /* DiscoversView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoversView.h; sourceTree = "<group>"; };
 		DE6DA8241ABF54CE007A683B /* DiscoversView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoversView.m; sourceTree = "<group>"; };
+		DE74144E1BEFBB8100E6BF78 /* report.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = report.h; sourceTree = "<group>"; };
+		DE74144F1BEFBB8100E6BF78 /* report.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = report.m; sourceTree = "<group>"; };
 		DEAD60E51B93D1BB002E7B29 /* discussionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = discussionView.h; sourceTree = "<group>"; };
 		DEAD60E61B93D1BB002E7B29 /* discussionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = discussionView.m; sourceTree = "<group>"; };
 		DEAD60F11B9AC366002E7B29 /* logo-120x120.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "logo-120x120.gif"; sourceTree = "<group>"; };
@@ -500,7 +501,6 @@
 				29A299621A5575A900117608 /* MobileCoreServices.framework in Frameworks */,
 				29A299601A5575A100117608 /* QuartzCore.framework in Frameworks */,
 				29A2995E1A55759A00117608 /* Security.framework in Frameworks */,
-				29A2995C1A55759200117608 /* StoreKit.framework in Frameworks */,
 				29A2995A1A55758B00117608 /* SystemConfiguration.framework in Frameworks */,
 				DEB5B9BC1BB4EDD6000CDA1B /* libWeChatSDK.a in Frameworks */,
 				29A299581A55758300117608 /* libz.dylib in Frameworks */,
@@ -564,6 +564,7 @@
 			children = (
 				292338941AA350A400A47A39 /* GroupsView.h */,
 				292338951AA350A400A47A39 /* GroupsView.m */,
+				DE74144A1BEE7FD200E6BF78 /* Report */,
 				DEB2134C1B8FFD8100009E5D /* Discussion */,
 			);
 			path = 01_Groups;
@@ -1071,7 +1072,6 @@
 				29A299611A5575A900117608 /* MobileCoreServices.framework */,
 				29A2995F1A5575A100117608 /* QuartzCore.framework */,
 				29A2995D1A55759A00117608 /* Security.framework */,
-				29A2995B1A55759200117608 /* StoreKit.framework */,
 				29A299591A55758B00117608 /* SystemConfiguration.framework */,
 				29A299571A55758300117608 /* libz.dylib */,
 				29A299551A55757800117608 /* libsqlite3.dylib */,
@@ -1127,6 +1127,15 @@
 				DE4AA4831AC9B582008309D0 /* TransferService.h */,
 			);
 			name = 04_Discovers;
+			sourceTree = "<group>";
+		};
+		DE74144A1BEE7FD200E6BF78 /* Report */ = {
+			isa = PBXGroup;
+			children = (
+				DE74144E1BEFBB8100E6BF78 /* report.h */,
+				DE74144F1BEFBB8100E6BF78 /* report.m */,
+			);
+			name = Report;
 			sourceTree = "<group>";
 		};
 		DEAD60EE1B9AC321002E7B29 /* login */ = {
@@ -1210,6 +1219,9 @@
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
+							};
+							com.apple.InAppPurchase = {
+								enabled = 0;
 							};
 							com.apple.Keychain = {
 								enabled = 1;
@@ -1368,6 +1380,7 @@
 				292339C91AA38E0F00A47A39 /* JSQMessagesToolbarContentView.m in Sources */,
 				DEB5B9A71BB4DF44000CDA1B /* WeiXinActivity.m in Sources */,
 				DEE855401B081778000AA5AC /* ContactsView.m in Sources */,
+				DE7414501BEFBB8100E6BF78 /* report.m in Sources */,
 				292339B11AA38E0F00A47A39 /* JSQMessagesToolbarButtonFactory.m in Sources */,
 				DEB5B9D81BD8B592000CDA1B /* discussionCellWithoutPicture.m in Sources */,
 				DEB5B9C91BB91B73000CDA1B /* blockVC.m in Sources */,

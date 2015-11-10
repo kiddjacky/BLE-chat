@@ -18,6 +18,7 @@
 @synthesize up  = _up;
 @synthesize join = _join;
 @synthesize share = _share;
+@synthesize report = _report;
 
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -99,7 +100,13 @@
     self.share.layer.cornerRadius = 15;
     [self.contentView addSubview:self.share];
     
-    
+    _report = [[UIButton alloc] initWithFrame:CGRectZero];
+    self.report.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.report setTitle:@"Report" forState:UIControlStateNormal];
+    [self.report setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.report.backgroundColor = [UIColor blueColor];
+    self.report.layer.cornerRadius = 15;
+    [self.contentView addSubview:self.report];
 }
 
 -(void)drawButton
@@ -185,7 +192,14 @@
                                                                  attribute:NSLayoutAttributeHeight
                                                                 multiplier:0
                                                                   constant:30]];
-    
+    // set heigh to 30
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.report
+                                                                 attribute:NSLayoutAttributeHeight
+                                                                 relatedBy:NSLayoutRelationEqual
+                                                                    toItem:self.contentView
+                                                                 attribute:NSLayoutAttributeHeight
+                                                                multiplier:0
+                                                                  constant:30]];
     // set heigh to 30
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.share
                                                                  attribute:NSLayoutAttributeHeight
@@ -203,16 +217,25 @@
                                                                 multiplier:1
                                                                   constant:0]];
     // Width constraint, full of parent view width
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.up
+    /*
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.report
                                                                  attribute:NSLayoutAttributeWidth
                                                                  relatedBy:NSLayoutRelationEqual
                                                                     toItem:self.join
                                                                  attribute:NSLayoutAttributeWidth
                                                                 multiplier:1
                                                                   constant:0]];
-    
+     */
+    // set heigh to 30
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.report
+                                                                 attribute:NSLayoutAttributeWidth
+                                                                 relatedBy:NSLayoutRelationEqual
+                                                                    toItem:self.contentView
+                                                                 attribute:NSLayoutAttributeWidth
+                                                                multiplier:0
+                                                                  constant:90]];
     // Width constraint, full of parent view width
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.up
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.report
                                                                  attribute:NSLayoutAttributeWidth
                                                                  relatedBy:NSLayoutRelationEqual
                                                                     toItem:self.share
@@ -221,7 +244,7 @@
                                                                   constant:0]];
     
     //relative position constriants
-    NSDictionary *viewsDictionary = @{@"nameView":self.topic, @"detailView":self.topicDescription, @"yesVote":self.up, @"noVote":self.down,  @"join":self.join, @"card":self.cardView, @"share":self.share };
+    NSDictionary *viewsDictionary = @{@"nameView":self.topic, @"detailView":self.topicDescription, @"yesVote":self.up, @"noVote":self.down,  @"join":self.join, @"card":self.cardView, @"share":self.share, @"report":self.report };
     
     
     NSArray *constraint_POS_V_name = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15@999-[nameView]"
@@ -256,12 +279,17 @@
                                                                               metrics:nil
                                                                                 views:viewsDictionary];
     
+    NSArray *constraint_POS_V_report = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[noVote]-10@993-[report]"
+                                                                               options:0
+                                                                               metrics:nil
+                                                                                 views:viewsDictionary];
+    
     NSArray *constraint_POS_H_button = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20@992-[yesVote]-20@991-[noVote]-20@990-|"
                                                                                options:0
                                                                                metrics:nil
                                                                                  views:viewsDictionary];
     
-    NSArray *constraint_POS_H_button2 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20@989-[join]-20@988-[share]-20@987-|"
+    NSArray *constraint_POS_H_button2 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-15@800-[share]-5@801-[join]-5@802-[report]-15@803-|"
                                                                                 options:0
                                                                                 metrics:nil
                                                                                   views:viewsDictionary];
@@ -286,6 +314,7 @@
     [self.contentView addConstraints:constraint_POS_H_card];
     [self.contentView addConstraints:constraint_POS_V_card];
     [self.contentView addConstraints:constraint_POS_V_share];
+    [self.contentView addConstraints:constraint_POS_V_report];
 }
 
 

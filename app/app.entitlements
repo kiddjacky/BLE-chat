@@ -4,7 +4,7 @@
 <dict>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)com.kdstudio.bluechat</string>
+		<string>$(AppIdentifierPrefix)com.kdstudio.bluewhalechat</string>
 	</array>
 </dict>
 </plist>

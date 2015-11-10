@@ -25,5 +25,5 @@
 @property (strong, nonatomic)  UIButton *join;
 
 @property (strong, nonatomic) UIButton *share;
-
+@property (strong, nonatomic) UIButton *report;
 @end

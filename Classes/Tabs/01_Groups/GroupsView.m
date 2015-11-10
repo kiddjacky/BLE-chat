@@ -26,6 +26,7 @@
 #import "WeiXinActivity.h"
 #import "discussionTVC.h"
 #import "discussionCellWithoutPicture.h"
+#import "report.h"
 
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -106,6 +107,12 @@
 	else LoginUser(self);
 }
 
+//reload group after new cell is created.
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.tableView reloadData];
+}
+
 #pragma mark - Backend actions
 - (void)reloadData
 {
@@ -132,8 +139,16 @@
 - (void)loadGroups
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
+    PFUser *user = [PFUser currentUser];
+    NSMutableArray *blockList = user[PF_USER_BLOCKED_TOPICS];
+    if (!blockList) {
+        blockList = [[NSMutableArray alloc] init];
+    }
+    NSLog(@"blocked list in discussion view is %@", user[PF_USER_BLOCKED_TOPICS]);
 	PFQuery *query = [PFQuery queryWithClassName:PF_GROUPS_CLASS_NAME];
     [query whereKey:PF_GROUPS_IS_PUBLIC notEqualTo:[NSNumber numberWithInt:0]];
+    [query whereKey:@"objectId" notContainedIn:blockList];
+    [query orderByAscending:@"createdAt"];
     [query setLimit:100];
 	[query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
 	{
@@ -144,15 +159,14 @@
 			[groups addObjectsFromArray:reversedArray];
             [up removeAllObjects];
             [down removeAllObjects];
-            [upList removeAllObjects];
-            [downList removeAllObjects];
             [join removeAllObjects];
             [vote removeAllObjects];
             [up addObjectsFromArray:[reversedArray valueForKey:PF_GROUPS_UP]];
             [down addObjectsFromArray:[reversedArray valueForKey:PF_GROUPS_DOWN]];
             [join addObjectsFromArray:[reversedArray valueForKey:PF_GROUPS_NUM_CHAT]];
-            NSLog(@"up list is %@", upList);
-            NSLog(@"down list is %@", downList);
+            
+            NSLog(@"groups is %@, pf user is %@", groups, [PFUser currentUser]);
+            
             PFUser *user = [PFUser currentUser];
             NSString *userName = user[PF_USER_USERNAME];
             NSInteger size = [objects count];
@@ -164,20 +178,25 @@
                 if (groups[i][PF_GROUPS_UP_LIST]) {
                     if ([groups[i][PF_GROUPS_UP_LIST] containsObject:userName]) {
                         vote[i] = [NSNumber numberWithInt:1];
+                        NSLog(@"the user vote yes on this group %d",i);
+                    }
+                    else {
+                        NSLog(@"user has not vote yes in this group yet %d", i);
                     }
                 }
-                else if (groups[i][PF_GROUPS_DOWN_LIST]) {
+                if (groups[i][PF_GROUPS_DOWN_LIST]) {
                     if ([groups[i][PF_GROUPS_DOWN_LIST] containsObject:userName]) {
                         vote[i] = [NSNumber numberWithInt:2];
+                        NSLog(@"the user vote no on this group %d",i);
                     }
-                }
-                else {
-                    NSLog(@"user has not vote in this group yet");
+                    else {
+                        NSLog(@"user has not vote no in this group yet %d", i);
+                    }
                 }
             }
             
 			[self.tableView reloadData];
-            //NSLog(@"groups is %@, up is %@, down is %@, join is %@, vote is %@", groups, up, down, join, vote);
+
 		}
 		else [ProgressHUD showError:@"Network error."];
 	}];
@@ -290,82 +309,77 @@
     else {
         PFObject *group = groups[indexPath.row];
         if (group[PF_GROUPS_PICTURE]) {
-	discussionCell *cell = (discussionCell *)[tableView dequeueReusableCellWithIdentifier:@"discussionCell"];
-	if (cell == nil) cell = (discussionCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discussionCell"];
+            discussionCell *cell = (discussionCell *)[tableView dequeueReusableCellWithIdentifier:@"discussionCell"];
+            if (cell == nil) cell = (discussionCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discussionCell"];
 
 
-    if (group[PF_GROUPS_NAME] != nil) {
-        cell.topic.text = group[PF_GROUPS_NAME];
-    }
-    if (group[PF_GROUPS_DESCRIPTION] != nil) {
-        cell.topicDescription.text = group[PF_GROUPS_DESCRIPTION];
-        cell.topicDescription.textColor = [UIColor lightGrayColor];
-    }
-    //cell.status.text = [NSString stringWithFormat:@"YES %@ VS NO %@", group[PF_GROUPS_UP], group[PF_GROUPS_DOWN]];
-    cell.group = group;
-    [cell.join setTag:[indexPath row]];
-    [cell.up setTag:[indexPath row]];
-    [cell.down setTag:[indexPath row]];
-    [cell.share setTag:[indexPath row]];
+            if (group[PF_GROUPS_NAME] != nil) {
+                cell.topic.text = group[PF_GROUPS_NAME];
+            }
+            if (group[PF_GROUPS_DESCRIPTION] != nil) {
+                cell.topicDescription.text = group[PF_GROUPS_DESCRIPTION];
+                cell.topicDescription.textColor = [UIColor lightGrayColor];
+            }
+            //cell.status.text = [NSString stringWithFormat:@"YES %@ VS NO %@", group[PF_GROUPS_UP], group[PF_GROUPS_DOWN]];
+            cell.group = group;
+            [cell.join setTag:[indexPath row]];
+            [cell.up setTag:[indexPath row]];
+            [cell.down setTag:[indexPath row]];
+            [cell.share setTag:[indexPath row]];
+            [cell.report setTag:[indexPath row]];
     
-    [cell.join addTarget:self action:@selector(actionChat:) forControlEvents:UIControlEventTouchUpInside];
-    [cell.up addTarget:self action:@selector(actionUp:) forControlEvents:UIControlEventTouchUpInside];
-    [cell.down addTarget:self action:@selector(actionDown:) forControlEvents:UIControlEventTouchUpInside];
-    [cell.share addTarget:self action:@selector(actionShare:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.join addTarget:self action:@selector(actionChat:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.up addTarget:self action:@selector(actionUp:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.down addTarget:self action:@selector(actionDown:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.share addTarget:self action:@selector(actionShare:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.report addTarget:self action:@selector(actionReport:) forControlEvents:UIControlEventTouchUpInside];
     
-    if (up[indexPath.row]==nil) {
-        [cell.up setTitle:@"Yes 0" forState:UIControlStateNormal];
-        up[indexPath.row] = @"0";
-    } else {
-        if (group[PF_GROUPS_UP_NAME] != nil) {
-            [cell.up setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_UP_NAME], up[indexPath.row]] forState:UIControlStateNormal];
-        }
-    }
+            if (up[indexPath.row]==nil) {
+                [cell.up setTitle:@"Yes 0" forState:UIControlStateNormal];
+                up[indexPath.row] = @"0";
+            } else {
+                if (group[PF_GROUPS_UP_NAME] != nil) {
+                    NSLog(@"Yes name should be %@", group[PF_GROUPS_UP_NAME]);
+                    [cell.up setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_UP_NAME], up[indexPath.row]] forState:UIControlStateNormal];
+                }
+            }
     
-    if (down[indexPath.row]==nil) {
-        [cell.down setTitle:@"No 0" forState:UIControlStateNormal];
-        down[indexPath.row] = @"0";
-    } else {
-        if (group[PF_GROUPS_DOWN_NAME] != nil) {
-        [cell.down setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_DOWN_NAME], down[indexPath.row]] forState:UIControlStateNormal];
-        }
-    }
+            if (down[indexPath.row]==nil) {
+                [cell.down setTitle:@"No 0" forState:UIControlStateNormal];
+                down[indexPath.row] = @"0";
+            } else {
+                if (group[PF_GROUPS_DOWN_NAME] != nil) {
+                    [cell.down setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_DOWN_NAME], down[indexPath.row]] forState:UIControlStateNormal];
+                }
+            }
     
-    if (join[indexPath.row]==nil) {
-        [cell.join setTitle:@"Join" forState:UIControlStateNormal];
-        join[indexPath.row] = @"0";
-    } else {
-        //[cell.join setTitle:[NSString stringWithFormat:@"JOIN %@", join[indexPath.row]] forState:UIControlStateNormal];
-        [cell.join setTitle:@"Join" forState:UIControlStateNormal];
-    }
+            if (join[indexPath.row]==nil) {
+                [cell.join setTitle:@"Join" forState:UIControlStateNormal];
+                join[indexPath.row] = @"0";
+            } else {
+                //[cell.join setTitle:[NSString stringWithFormat:@"JOIN %@", join[indexPath.row]] forState:UIControlStateNormal];
+                [cell.join setTitle:@"Join" forState:UIControlStateNormal];
+            }
     
-    if (group[PF_GROUPS_PICTURE]==nil) {
-        //UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
-        //cell.image.image = def_image;
-        //cell.image = nil;
-    } else {
-        [cell bindData:group];
-        //cell.image.file = group[PF_GROUPS_PICTURE];
-        //[cell.image loadInBackground];
-        //cell.image.contentMode = UIViewContentModeScaleAspectFit;
-    }
-    
-    if([vote[indexPath.row] integerValue]==0) {
-        cell.up.userInteractionEnabled = YES;
-        cell.down.userInteractionEnabled = YES;
-    } else if ([vote[indexPath.row] integerValue]==1) {
-        cell.up.userInteractionEnabled = NO;
-        cell.down.userInteractionEnabled = YES;
-        cell.up.highlighted = YES;
-        cell.down.highlighted = NO;
-    } else if  ([vote[indexPath.row] integerValue]==2) {
-        cell.up.userInteractionEnabled = YES;
-        cell.down.userInteractionEnabled = NO;
-        cell.down.highlighted = YES;
-        cell.up.highlighted = NO;
-    }
+            [cell bindData:group];
 
-	return cell;
+    
+            if([vote[indexPath.row] integerValue]==0) {
+                cell.up.userInteractionEnabled = YES;
+                cell.down.userInteractionEnabled = YES;
+            } else if ([vote[indexPath.row] integerValue]==1) {
+                cell.up.userInteractionEnabled = NO;
+                cell.down.userInteractionEnabled = YES;
+                cell.up.highlighted = YES;
+                cell.down.highlighted = NO;
+            } else if  ([vote[indexPath.row] integerValue]==2) {
+                cell.up.userInteractionEnabled = YES;
+                cell.down.userInteractionEnabled = NO;
+                cell.down.highlighted = YES;
+                cell.up.highlighted = NO;
+            }
+
+            return cell;
         }
         else {
             discussionCellWithoutPicture *cell = (discussionCellWithoutPicture *)[tableView dequeueReusableCellWithIdentifier:@"discussionCellWithoutPicture"];
@@ -389,6 +403,8 @@
             [cell.up addTarget:self action:@selector(actionUp:) forControlEvents:UIControlEventTouchUpInside];
             [cell.down addTarget:self action:@selector(actionDown:) forControlEvents:UIControlEventTouchUpInside];
             [cell.share addTarget:self action:@selector(actionShare:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.report addTarget:self action:@selector(actionReport:) forControlEvents:UIControlEventTouchUpInside];
+            
             
             if (up[indexPath.row]==nil) {
                 [cell.up setTitle:@"Yes 0" forState:UIControlStateNormal];
@@ -483,7 +499,7 @@
                                                      options:NSStringDrawingUsesLineFragmentOrigin
                                                      context:nil];
         height = rect0.size.height;
-                NSLog(@"height with topic is %f", height);
+          //      NSLog(@"height with topic is %f", height);
         
     if(group[PF_GROUPS_DESCRIPTION] != nil) {
         NSString *cellText = group[PF_GROUPS_DESCRIPTION];
@@ -497,7 +513,7 @@
                                                options:NSStringDrawingUsesLineFragmentOrigin
                                                context:nil];
             height = height + rect1.size.height;
-        NSLog(@"height with details is %f", height);
+        //NSLog(@"height with details is %f", height);
     }
 
     if (group[PF_GROUPS_PICTURE]==nil) {
@@ -546,24 +562,21 @@
 }
 
 
-//flag group post
+
+
+
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-- (void)actionFlag:(UIButton *)sender
+- (void)actionReport:(UIButton *)sender
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
     NSInteger row = [sender tag];
     PFObject *group = groups[row];
     NSLog(@"flag group to report");
     [group incrementKey:PF_GROUPS_FLAG_NUMBER byAmount:[NSNumber numberWithInt:1]];
-    [group saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
-    {
-        if (error == nil)
-        {
-            [ProgressHUD showError:@"Reported this post"];
-                          //[self loadGroups];
-        }
-        else [ProgressHUD showError:@"Network error."];
-    }];
+    report *reportView = [[report alloc] init];
+    reportView.group = group;
+    reportView.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:reportView animated:YES];
 }
 
 -(void)actionFeedback:(UIButton *)sender
@@ -593,12 +606,15 @@
     NSInteger row = [sender tag];
     PFObject *group = groups[row];
     NSString *groupId = group.objectId;
+    NSLog(@"in action Chat");
     //---------------------------------------------------------------------------------------------------------------------------------------------
     CreateMessageItem([PFUser currentUser], groupId, group[PF_GROUPS_NAME]);
     //---------------------------------------------------------------------------------------------------------------------------------------------
     ChatView *chatView = [[ChatView alloc] initWith:groupId];
     chatView.hidesBottomBarWhenPushed = YES;
+        NSLog(@"in action Chat, before push");
     [self.navigationController pushViewController:chatView animated:YES];
+        NSLog(@"in action Chat, after push");
 }
 
 -(void)actionUp:(UIButton *)sender
@@ -621,11 +637,15 @@
     }
     vote[row] = [NSNumber numberWithInt:1];
     if (group[PF_GROUPS_UP_LIST]) {
+        if (![group[PF_GROUPS_UP_LIST] containsObject:[PFUser currentUser][PF_USER_USERNAME]]){
         [group[PF_GROUPS_UP_LIST] addObject:[PFUser currentUser][PF_USER_USERNAME]];
+        }
     }
     else {
         group[PF_GROUPS_UP_LIST] = [[NSMutableArray alloc] init];
+        if (![group[PF_GROUPS_UP_LIST] containsObject:[PFUser currentUser][PF_USER_USERNAME]]){
         [group[PF_GROUPS_UP_LIST] addObject:[PFUser currentUser][PF_USER_USERNAME]];
+        }
     }
     NSLog(@"vote is now %@", vote[row]);
     [group saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
@@ -661,11 +681,15 @@
     vote[row] = [NSNumber numberWithInt:2];
     NSLog(@"vote is now %@", vote[row]);
     if (group[PF_GROUPS_DOWN_LIST]) {
+        if (![group[PF_GROUPS_DOWN_LIST] containsObject:[PFUser currentUser][PF_USER_USERNAME]]){
         [group[PF_GROUPS_DOWN_LIST] addObject:[PFUser currentUser][PF_USER_USERNAME]];
+        }
     }
     else {
         group[PF_GROUPS_DOWN_LIST] = [[NSMutableArray alloc] init];
+        if (![group[PF_GROUPS_DOWN_LIST] containsObject:[PFUser currentUser][PF_USER_USERNAME]]){
         [group[PF_GROUPS_DOWN_LIST] addObject:[PFUser currentUser][PF_USER_USERNAME]];
+        }
     }
 
     [group saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)

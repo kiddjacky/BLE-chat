@@ -108,7 +108,7 @@
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
         if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
         if (indexPath.row==0) {
-            cell.textLabel.text = @"Privacy";
+            cell.textLabel.text = @"Privacy Policy";
         }
         if (indexPath.row==1) {
             cell.textLabel.text = @"Report";
@@ -146,7 +146,7 @@
     }
     else if (indexPath.section==1) {
         if (indexPath.row==0) {
-            privacy *pv = [[privacy alloc] initWithNibName:@"privacy" bundle:nil];
+            privacy *pv = [[privacy alloc] initWithNibName:@"Privacy Policy" bundle:nil];
             pv.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:pv animated:YES];
         }

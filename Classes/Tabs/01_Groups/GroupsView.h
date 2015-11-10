@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "WXApi.h"
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-@interface GroupsView : UITableViewController <UIAlertViewDelegate>
+@interface GroupsView : UITableViewController <UIAlertViewDelegate, UIActionSheetDelegate>
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 @end

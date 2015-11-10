@@ -10,7 +10,7 @@
 #import <Parse/Parse.h>
 #import <ParseUI/ParseUI.h>
 
-@interface discussionTVC : UITableViewController  <UIActionSheetDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate>
+@interface discussionTVC : UITableViewController  <UIActionSheetDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate, UIAlertViewDelegate >
 
 @property (strong, nonatomic) PFObject *group;
 

@@ -68,6 +68,32 @@
     detail.layer.borderColor = borderColor.CGColor;
     detail.layer.borderWidth = 1.0;
     detail.layer.cornerRadius = 5.0;
+    
+    NSString *rule = @"You should NOT post content on BlueWhale that harms the feed or the BuleWhale community, including pornogarphy, bully topic. Do Not post other people's private information.";
+    UIAlertView *alter = [[UIAlertView alloc] initWithTitle:@"Rule" message:rule delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    [alter addButtonWithTitle:@"Agree"];
+    [alter show];
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"Button Index =%ld",buttonIndex);
+    if (buttonIndex == 0)
+    {
+        NSLog(@"You have clicked Cancel");
+        [self handleBack];
+    }
+    else if(buttonIndex == 1)
+    {
+        NSLog(@"You have clicked Agree");
+    }
+}
+
+- (void) handleBack
+{
+    // pop to root view controller
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -275,6 +301,8 @@
     NSLog(@"save discussion");
     if (self.name.hasText)
     {
+        if ((![self.noName.text isEqualToString:@""]) && (![self.yesName.text isEqualToString:@""])) {
+            
         self.group[PF_GROUPS_NAME] = self.name.text;
         self.group[PF_GROUPS_DESCRIPTION] = self.detail.text;
         //NSNumber *upNumber = [NSNumber numberWithInt:[self.yesNumber.text intValue]];
@@ -287,8 +315,10 @@
         self.group[PF_GROUPS_UP_NAME] = self.yesName.text;
         self.group[PF_GROUPS_CREATER] = [PFUser currentUser];
         self.group[PF_GROUPS_CREATE_TIME] = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
-        self.group[PF_GROUPS_UP_LIST] = @"";
-        self.group[PF_GROUPS_DOWN_LIST] = @"";
+        NSArray *empty_array = [[NSArray alloc] init];
+        self.group[PF_GROUPS_UP_LIST] = empty_array;
+        self.group[PF_GROUPS_DOWN_LIST] = empty_array;
+        self.group[PF_USER_BLOCKED_TOPICS] = empty_array;
         [self.group setObject:[NSNumber numberWithInteger:0] forKey:PF_GROUPS_NUM_CHAT];
         if (self.picFile) {
             [self.group setObject:self.picFile forKey:PF_GROUPS_PICTURE];
@@ -299,10 +329,13 @@
              if (error == nil)
              {
                  [ProgressHUD showSuccess:@"Discussion Saved."];
+                 [self handleBack];
              }
              else [ProgressHUD showError:@"Network error."];
              
          }];
+        }
+        else [ProgressHUD showError:@"Choice left and right field must be set."];
     }
     else [ProgressHUD showError:@"Name field must be set."];
 }
