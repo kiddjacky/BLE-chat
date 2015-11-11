@@ -14,6 +14,7 @@
 #import "AppConstant.h"
 #import "ProfileView.h"
 #import "contactsCell.h"
+#import "contactDetailCell.h"
 #import "utilities.h"
 #import "pushnotification.h"
 #import "DatabaseAvailability.h"
@@ -25,6 +26,7 @@
 @interface settingTVC ()
 {
     bool select;
+    NSString *score;
 }
 @end
 
@@ -51,6 +53,19 @@
     select = NO;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"contactsCell" bundle:nil] forCellReuseIdentifier:@"contactsCell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"contactDetailCell" bundle:nil] forCellReuseIdentifier:@"contactDetailCell"];
+    
+    [PFCloud callFunctionInBackground:@"userBWCoins" withParameters:@{} block:^(id results, NSError *error) {
+        if (!error) {
+            NSLog(@"results is %@", results);
+            score = [results stringValue];
+            [self.tableView reloadData];
+        }
+        else {
+            NSLog(@"pf cloud in error!");
+        }
+    }];
+    
     
 }
 
@@ -65,6 +80,21 @@
         [self.tableView reloadData];
     }
     else LoginUser(self);
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [PFCloud callFunctionInBackground:@"userBWCoins" withParameters:@{} block:^(id results, NSError *error) {
+        if (!error) {
+            NSLog(@"results is %@", results);
+            score = [results stringValue];
+            [self.tableView reloadData];
+        }
+        else {
+            NSLog(@"pf cloud in error!");
+        }
+    }];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -85,12 +115,13 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-    return (section==0) ? 1 : ((section==1) ? 2 : 1);
+    return (section==0) ? 2 : ((section==1) ? 2 : 1);
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
         contactsCell *cell = (contactsCell *)[tableView dequeueReusableCellWithIdentifier:@"contactsCell" forIndexPath:indexPath];
         
         if (cell == nil) {
@@ -103,6 +134,18 @@
         cell.localDateTime.text = user[PF_USER_SELF_DESCRIPTION];
         [cell bindData:[PFUser currentUser]];
         return cell;
+        }
+        else {
+            contactDetailCell *cell = (contactDetailCell *)[tableView dequeueReusableCellWithIdentifier:@"contactDetailCell" forIndexPath:indexPath];
+            if (cell == nil) {
+                
+                //cell = [[discoversCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discoversCell"];
+                cell = [tableView dequeueReusableCellWithIdentifier:@"contactDetailCell" forIndexPath:indexPath];
+            }
+            cell.title.text = @"BW coins";
+            cell.content.text = score;
+            return cell;
+        }
     }
     else if (indexPath.section == 1) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
@@ -191,7 +234,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return (indexPath.section==0) ? 70.0f : 40.0f ;
+    return ((indexPath.section==0) && (indexPath.row==0)) ? 70.0f : 40.0f ;
 }
 
 #pragma logout
