@@ -69,6 +69,19 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
     PFUser *user = [PFUser currentUser];
+    NSString *reason = @"";
+    if (indexPath.row==0) {
+        reason = @"The content contains violence or pornography.";
+    }
+    else if (indexPath.row == 1) {
+        reason = @"The content violates copy rights.";
+    }
+    else if (indexPath.row == 2) {
+        reason = @"It is a spam.";
+    }
+    else {
+        reason = @"It makes me uncomfortable.";
+    }
     if (self.group.objectId != nil) {
         if (user[PF_USER_BLOCKED_TOPICS]) {
             NSLog(@"block list is nil");
@@ -84,6 +97,12 @@
              if (error == nil)
              {
                  [ProgressHUD showSuccess:@"Thank you! We will investage, and have blocked this topic from your feed."];
+                 NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+                 params[@"id"] = self.group.objectId;
+                 params[@"user"] = [PFUser currentUser].objectId;
+                 params[@"reason"] = reason;
+                 params[@"userName"] = [PFUser currentUser].username;
+                 [PFCloud callFunctionInBackground:@"userReport" withParameters:params];
                  [self.navigationController popToRootViewControllerAnimated:YES];
              }
              else [ProgressHUD showError:@"Network error."];

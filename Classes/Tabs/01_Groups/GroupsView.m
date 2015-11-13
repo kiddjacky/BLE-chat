@@ -398,6 +398,7 @@
             [cell.up setTag:[indexPath row]];
             [cell.down setTag:[indexPath row]];
             [cell.share setTag:[indexPath row]];
+            [cell.report setTag:[indexPath row]];
             
             [cell.join addTarget:self action:@selector(actionChat:) forControlEvents:UIControlEventTouchUpInside];
             [cell.up addTarget:self action:@selector(actionUp:) forControlEvents:UIControlEventTouchUpInside];
