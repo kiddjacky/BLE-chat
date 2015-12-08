@@ -21,6 +21,7 @@
 #import "ChatView.h"
 #import "messages.h"
 #import "privacy.h"
+#import "Feedback.h"
 
 
 @interface settingTVC ()
@@ -74,10 +75,15 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
     [super viewDidAppear:animated];
+    //[[PFUser currentUser] fetch];
     //---------------------------------------------------------------------------------------------------------------------------------------------
     if ([PFUser currentUser] != nil)
     {
+        if ([[PFUser currentUser][PF_USER_IS_BLACK_LIST] isEqualToNumber:[NSNumber numberWithInt:1]]) {
+            LoginUser(self);
+        } else {
         [self.tableView reloadData];
+        }
     }
     else LoginUser(self);
 }
@@ -115,7 +121,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-    return (section==0) ? 2 : ((section==1) ? 2 : 1);
+    return (section==0) ? 2 : ((section==1) ? 3 : 1);
 }
 
 
@@ -156,6 +162,9 @@
         if (indexPath.row==1) {
             cell.textLabel.text = @"Report";
         }
+        if (indexPath.row==2) {
+            cell.textLabel.text = @"Leave Feedback";
+        }
         return cell;
     }
     else if (indexPath.section== 2) {
@@ -193,7 +202,8 @@
             pv.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:pv animated:YES];
         }
-        if (indexPath.row==1) {
+        /*
+        if (indexPath.row==1){
         PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
         [query whereKey:PF_USER_USERNAME equalTo:@"admin@bluewhalechat.com"];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
@@ -211,6 +221,18 @@
                  [ProgressHUD showError:@"Admin error."];
              }
          }];
+        }*/
+        if (indexPath.row==1) {
+            Feedback *fv = [[Feedback alloc] init];
+            fv.feedbackType = [NSNumber numberWithInt:1];
+            fv.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:fv animated:YES];
+        }
+        if (indexPath.row==2) {
+            Feedback *fv = [[Feedback alloc] init];
+            fv.feedbackType = [NSNumber numberWithInt:0];
+            fv.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:fv animated:YES];
         }
     }
     else if (indexPath.section == 2) {

@@ -14,6 +14,7 @@
 #import "images.h"
 #import "pushnotification.h"
 #import "utilities.h"
+#import "AppDelegate.h"
 
 @interface discussionTVC ()
 
@@ -30,6 +31,8 @@
 //@property (strong, nonatomic) UIButton *save;
 @property (strong, nonatomic) PFImageView *picture;
 @property (strong, nonatomic) UIView *customeView;
+
+
 
 @property (strong, nonatomic) PFFile *picFile;
 @end
@@ -69,15 +72,41 @@
     detail.layer.borderWidth = 1.0;
     detail.layer.cornerRadius = 5.0;
     
-    NSString *rule = @"You should NOT post content on BlueWhale that harms the feed or the BuleWhale community, including pornogarphy, bully topic. Do Not post other people's private information.";
-    UIAlertView *alter = [[UIAlertView alloc] initWithTitle:@"Rule" message:rule delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-    [alter addButtonWithTitle:@"Agree"];
-    [alter show];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLocation) name:@"locationUpdate" object:nil];
+    
+    [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if ([[PFUser currentUser][PF_USER_IS_BLACK_LIST] isEqualToNumber:[NSNumber numberWithInt:1]]) {
+            [ProgressHUD showError:@"This user ID has been suspended."];
+            LoginUser(self);
+        } else {
+            NSString *rule = @"You should NOT post content on BlueWhale that harms the feed or the BuleWhale community, including pornogarphy, bully topic. Do Not post other people's private information.";
+            UIAlertView *alter = [[UIAlertView alloc] initWithTitle:@"Rule" message:rule delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+            [alter addButtonWithTitle:@"Agree"];
+            [alter show];
+        }
+    }];
+    
+
+}
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+- (void)viewDidAppear:(BOOL)animated
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+{
+    [super viewDidAppear:animated];
+
+}
+
+-(void)updateLocation
+{
+    AppDelegate *app = [[UIApplication sharedApplication] delegate];
+    CLLocation *myLocation = app.currentLocation;
+    self.currentLocation = myLocation;
+    NSLog(@"post location now is %@", self.currentLocation);
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    NSLog(@"Button Index =%ld",buttonIndex);
     if (buttonIndex == 0)
     {
         NSLog(@"You have clicked Cancel");
@@ -319,6 +348,14 @@
         self.group[PF_GROUPS_UP_LIST] = empty_array;
         self.group[PF_GROUPS_DOWN_LIST] = empty_array;
         self.group[PF_USER_BLOCKED_TOPICS] = empty_array;
+        self.group[PF_GROUPS_FEATURE] = [NSNumber numberWithInteger:1];
+        
+        PFGeoPoint *postLocation = [PFGeoPoint geoPointWithLatitude:self.currentLocation.coordinate.latitude
+                                                             longitude:self.currentLocation.coordinate.longitude];
+            
+            self.group[PF_GROUPS_LOCATION] = postLocation;
+            
+            
         [self.group setObject:[NSNumber numberWithInteger:0] forKey:PF_GROUPS_NUM_CHAT];
         if (self.picFile) {
             [self.group setObject:self.picFile forKey:PF_GROUPS_PICTURE];
@@ -339,5 +376,6 @@
     }
     else [ProgressHUD showError:@"Name field must be set."];
 }
+
 
 @end

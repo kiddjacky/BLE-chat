@@ -179,8 +179,12 @@
     //---------------------------------------------------------------------------------------------------------------------------------------------
     if ([PFUser currentUser] != nil)
     {
+        if ([[PFUser currentUser][PF_USER_IS_BLACK_LIST] isEqualToNumber:[NSNumber numberWithInt:1]]) {
+            LoginUser(self);
+        } else {
         //[[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
         [self loadDiscovers];
+        }
     }
     else LoginUser(self);
 }
@@ -297,7 +301,7 @@
                  UIImage *def_image_male = [UIImage imageNamed:@"male"];
                   UIImage *def_image_female = [UIImage imageNamed:@"female"];
                  
-                 UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
+                 //UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
                  if ([user[PF_USER_SEX]  isEqual: @"Male"])
                  {
                   cell.pfImageView.image = def_image_male;
@@ -311,7 +315,7 @@
                  
                  else
                  {
-                     cell.pfImageView.image = def_image;
+                     cell.pfImageView.image = def_image_male;
                  }
                  //UIImage *def_image = [UIImage imageNamed:@"profile_blank@2x.png"];
 

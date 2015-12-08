@@ -18,4 +18,5 @@
 #define ContactAvailabilityContext @"ContactContext"
 #define PFUSER_DISABLE @"PFUSER_DISABLE"
 #define PFUSER_ENABLE @"PFUSER_ENABLE"
+#define Location_Update @"locationUpdate"
 #endif

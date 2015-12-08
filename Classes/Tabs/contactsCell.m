@@ -75,7 +75,7 @@
 {
     
      //discovered_user = discovered_user;
-    self.imageUser.frame = CGRectMake(10, 10, 50, 50);
+    //self.imageUser.frame = CGRectMake(10, 10, 50, 50);
     self.imageUser.layer.cornerRadius = self.imageUser.frame.size.width/2;
     
 

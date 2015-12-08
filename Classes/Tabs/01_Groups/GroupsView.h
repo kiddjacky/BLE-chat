@@ -12,7 +12,10 @@
 #import <UIKit/UIKit.h>
 #import "WXApi.h"
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-@interface GroupsView : UITableViewController <UIAlertViewDelegate, UIActionSheetDelegate>
+@interface GroupsView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, UIActionSheetDelegate>
 //-------------------------------------------------------------------------------------------------------------------------------------------------
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UISegmentedControl *sg;
+@property UIRefreshControl *refreshControl;
 
 @end

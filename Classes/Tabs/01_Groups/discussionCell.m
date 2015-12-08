@@ -28,7 +28,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.backgroundColor = [UIColor lightGrayColor];
+        self.backgroundColor = [UIColor groupTableViewBackgroundColor];
         [self cardSetup];
         [self imageSetup];
         [self cellLayout];

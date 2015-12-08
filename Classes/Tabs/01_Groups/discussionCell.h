@@ -15,16 +15,16 @@
 
 @property (strong, nonatomic) PFObject *group;
 
-@property (strong, nonatomic) IBOutlet UILabel *topic;
+@property (strong, nonatomic) UILabel *topic;
 //@property (strong, nonatomic) IBOutlet UILabel *status;
-@property (strong, nonatomic) IBOutlet UILabel *topicDescription;
+@property (strong, nonatomic) UILabel *topicDescription;
 
-@property (strong, nonatomic) IBOutlet PFImageView *image;
-@property (strong, nonatomic) IBOutlet UIView *cardView;
+@property (strong, nonatomic) PFImageView *image;
+@property (strong, nonatomic) UIView *cardView;
 
-@property (strong, nonatomic) IBOutlet UIButton *down;
-@property (strong, nonatomic) IBOutlet UIButton *up;
-@property (strong, nonatomic) IBOutlet UIButton *join;
+@property (strong, nonatomic) UIButton *down;
+@property (strong, nonatomic) UIButton *up;
+@property (strong, nonatomic) UIButton *join;
 
 @property (strong, nonatomic) UIButton *share;
 @property (strong, nonatomic) UIButton *report;

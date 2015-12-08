@@ -16,6 +16,7 @@
 #import "AppConstant.h"
 #import "messages.h"
 #import "utilities.h"
+#import "AppDelegate.h"
 
 #import "GroupsView.h"
 #import "ChatView.h"
@@ -40,11 +41,16 @@
     NSMutableArray *downList;
     NSMutableArray *join;
     NSMutableArray *vote; //0 means didn't vote, 1 means yes, 2 means no
+    NSInteger selection;
 }
+
+//@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) CLLocation *currentLocation;
 @end
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 @implementation GroupsView
+
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -68,11 +74,12 @@
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self  action:@selector(actionNew)];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	self.tableView.tableFooterView = [[UIView alloc] init];
+	//self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.allowsSelection = NO;
-    self.tableView.backgroundColor = [UIColor lightGrayColor];
+    //self.tableView.backgroundColor = [UIColor lightGrayColor];
     self.tableView.separatorColor = [UIColor clearColor];
     [self.tableView registerClass:[discussionCell class] forCellReuseIdentifier:@"discussionCell"];
+    //[self.tableView registerNib:[UINib nibWithNibName:@"discussionCell"  bundle:nil] forCellReuseIdentifier:@"discussionCellWithoutPicture"];
     [self.tableView registerClass:[discussionCellWithoutPicture class] forCellReuseIdentifier:@"discussionCellWithoutPicture"];
     [self.tableView registerClass:[feedbackCell class] forCellReuseIdentifier:@"feedbackCell"];
     //[self.tableView registerNib:[UINib nibWithNibName:@"discussionCell" bundle:nil] forCellReuseIdentifier:@"discussionCell"];
@@ -84,13 +91,52 @@
     join = [[NSMutableArray alloc] init];
     vote = [[NSMutableArray alloc] init];
     
+    selection = 0;
+    
     self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.backgroundColor = [UIColor lightGrayColor];
+    self.refreshControl.backgroundColor = [UIColor clearColor];
     self.refreshControl.tintColor = [UIColor whiteColor];
     [self.refreshControl addTarget:self
                             action:@selector(reloadData)
                   forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:self.refreshControl];
+    
+    self.view.backgroundColor = [UIColor colorWithRed:0.10 green:0.77 blue:1.00 alpha:1.0];
+    
+    [self.tableView setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLocation) name:@"locationUpdate" object:nil];
 }
+
+-(void)updateLocation
+{
+    AppDelegate *app = [[UIApplication sharedApplication] delegate];
+    CLLocation *myLocation = app.currentLocation;
+    self.currentLocation = myLocation;
+    NSLog(@"location now is %@", self.currentLocation);
+}
+
+- (IBAction)selectView:(id)sender {
+    if ([sender isEqual:self.sg]){
+        
+        //get index position for the selected control
+        NSInteger selectedIndex = [sender selectedSegmentIndex];
+        if (selectedIndex == 0) {
+            selection = 0;
+            [self loadGroups];
+        }
+        else if (selectedIndex == 1) {
+            selection = 1;
+            [self loadGroups];
+        }
+        else {
+            selection = 2;
+            [self loadGroups];
+        }
+    }
+
+}
+
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)viewDidAppear:(BOOL)animated
@@ -101,8 +147,12 @@
 	if ([PFUser currentUser] != nil)
 	{
         NSLog(@"start to load group");
+        if ([[PFUser currentUser][PF_USER_IS_BLACK_LIST] isEqualToNumber:[NSNumber numberWithInt:1]]) {
+            LoginUser(self);
+        } else {
         //[[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
 		[self loadGroups];
+        }
 	}
 	else LoginUser(self);
 }
@@ -144,9 +194,24 @@
     if (!blockList) {
         blockList = [[NSMutableArray alloc] init];
     }
-    NSLog(@"blocked list in discussion view is %@", user[PF_USER_BLOCKED_TOPICS]);
+    NSLog(@"blocked list in discussion view is %@, selection is %ld", user[PF_USER_BLOCKED_TOPICS], (long)selection);
 	PFQuery *query = [PFQuery queryWithClassName:PF_GROUPS_CLASS_NAME];
-    [query whereKey:PF_GROUPS_IS_PUBLIC notEqualTo:[NSNumber numberWithInt:0]];
+    
+    if (selection == 0) {
+        [query whereKey:PF_GROUPS_FEATURE equalTo:[NSNumber numberWithInt:1]];
+    }
+    else if (selection == 1) {
+        PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:self.currentLocation.coordinate.latitude
+                                                   longitude:self.currentLocation.coordinate.longitude];
+        NSLog(@"location is %@", point);
+        // get the query of local post
+        [query whereKey:PF_GROUPS_LOCATION
+           nearGeoPoint:point
+       withinKilometers:10];
+    } else {
+        [query whereKey:PF_GROUPS_CREATER equalTo:[PFUser currentUser]];
+    }
+    //[query whereKey:PF_GROUPS_IS_PUBLIC notEqualTo:[NSNumber numberWithInt:0]];
     [query whereKey:@"objectId" notContainedIn:blockList];
     [query orderByAscending:@"createdAt"];
     [query setLimit:100];
@@ -204,6 +269,8 @@
     
 }
 
+
+
 #pragma mark - User actions
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -222,6 +289,7 @@
     object[PF_GROUPS_DOWN_NAME] = @"No";
     object[PF_GROUPS_UP_NAME] = @"Yes";
     dv.group = object;
+    dv.currentLocation = self.currentLocation;
     
     [self.navigationController pushViewController:dv animated:YES];
     /*
@@ -263,7 +331,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-	return 2;
+	return 1;
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -310,8 +378,14 @@
         PFObject *group = groups[indexPath.row];
         if (group[PF_GROUPS_PICTURE]) {
             discussionCell *cell = (discussionCell *)[tableView dequeueReusableCellWithIdentifier:@"discussionCell"];
-            if (cell == nil) cell = (discussionCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discussionCell"];
-
+            if (cell == nil) {
+                cell = (discussionCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discussionCell"];
+                [cell.down setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_DOWN_NAME], down[indexPath.row]] forState:UIControlStateNormal];
+                [cell.down setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_DOWN_NAME], down[indexPath.row]] forState:UIControlStateDisabled];
+                [cell.up setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_UP_NAME], up[indexPath.row]] forState:UIControlStateNormal];
+                [cell.up setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_UP_NAME], up[indexPath.row]] forState:UIControlStateDisabled];
+                
+            }
 
             if (group[PF_GROUPS_NAME] != nil) {
                 cell.topic.text = group[PF_GROUPS_NAME];
@@ -341,6 +415,7 @@
                 if (group[PF_GROUPS_UP_NAME] != nil) {
                     NSLog(@"Yes name should be %@", group[PF_GROUPS_UP_NAME]);
                     [cell.up setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_UP_NAME], up[indexPath.row]] forState:UIControlStateNormal];
+                    [cell.up setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_UP_NAME], up[indexPath.row]] forState:UIControlStateDisabled];
                 }
             }
     
@@ -350,6 +425,7 @@
             } else {
                 if (group[PF_GROUPS_DOWN_NAME] != nil) {
                     [cell.down setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_DOWN_NAME], down[indexPath.row]] forState:UIControlStateNormal];
+                    [cell.down setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_DOWN_NAME], down[indexPath.row]] forState:UIControlStateDisabled];
                 }
             }
     
@@ -383,7 +459,13 @@
         }
         else {
             discussionCellWithoutPicture *cell = (discussionCellWithoutPicture *)[tableView dequeueReusableCellWithIdentifier:@"discussionCellWithoutPicture"];
-            if (cell == nil) cell = (discussionCellWithoutPicture *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discussionCellWithoutPicture"];
+            if (cell == nil)
+            {cell = (discussionCellWithoutPicture *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"discussionCellWithoutPicture"];
+                [cell.down setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_DOWN_NAME], down[indexPath.row]] forState:UIControlStateNormal];
+                [cell.down setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_DOWN_NAME], down[indexPath.row]] forState:UIControlStateDisabled];
+                [cell.up setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_UP_NAME], up[indexPath.row]] forState:UIControlStateNormal];
+                [cell.up setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_UP_NAME], up[indexPath.row]] forState:UIControlStateDisabled];
+            }
             
             if (group[PF_GROUPS_NAME] != nil) {
                 cell.topic.text = group[PF_GROUPS_NAME];
@@ -413,6 +495,8 @@
             } else {
                 if (group[PF_GROUPS_UP_NAME] != nil) {
                     [cell.up setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_UP_NAME], up[indexPath.row]] forState:UIControlStateNormal];
+                    [cell.up setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_UP_NAME], up[indexPath.row]] forState:UIControlStateDisabled];
+                     NSLog(@"YES NAME IS %@", group[PF_GROUPS_UP_NAME]);
                 }
             }
             
@@ -422,6 +506,8 @@
             } else {
                 if (group[PF_GROUPS_DOWN_NAME] != nil) {
                     [cell.down setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_DOWN_NAME], down[indexPath.row]] forState:UIControlStateNormal];
+                    [cell.down setTitle:[NSString stringWithFormat:@"%@ %@", group[PF_GROUPS_DOWN_NAME], down[indexPath.row]] forState:UIControlStateDisabled];
+                    NSLog(@"NO NAME IS %@", group[PF_GROUPS_DOWN_NAME]);
                 }
             }
             
@@ -453,6 +539,7 @@
     }
 }
 
+
 #pragma mark - Table view delegate
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -479,6 +566,7 @@
 	[self.navigationController pushViewController:chatView animated:YES];
     */
 }
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -535,6 +623,7 @@
 
 
 /*
+
 //delete group post
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -561,8 +650,8 @@
     }];
     }
 }
-*/
 
+*/
 
 
 

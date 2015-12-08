@@ -134,13 +134,17 @@
 	{
 		if (user != nil)
 		{
-			if (user[PF_USER_FACEBOOKID] == nil)
+            if ([user[PF_USER_IS_BLACK_LIST] isEqualToNumber:[NSNumber numberWithInt:1]]) {
+                [ProgressHUD showError:@"This user ID has been suspended."];
+            } else {
+			if ((user[PF_USER_FACEBOOKID] == nil) || (user[PF_USER_USERNAME] == nil))
 			{
 				[self requestFacebook:user];
 			}
             else {
                 NSLog(@"no fb request");
                 [self userLoggedIn:user];
+            }
             }
 		}
 		else [ProgressHUD showError:error.userInfo[@"error"]];
@@ -198,6 +202,9 @@
 		}];
 		//-----------------------------------------------------------------------------------------------------------------------------------------
 		user[PF_USER_EMAILCOPY] = userData[@"email"];
+        if (userData[@"email"]!=nil) {
+            user[PF_USER_USERNAME] = userData[@"email"];
+        }
 		user[PF_USER_FULLNAME] = userData[@"name"];
 		user[PF_USER_FULLNAME_LOWER] = [userData[@"name"] lowercaseString];
 		user[PF_USER_FACEBOOKID] = userData[@"id"];

@@ -13,7 +13,14 @@
 #define HEXCOLOR(c) [UIColor colorWithRed:((c>>24)&0xFF)/255.0 green:((c>>16)&0xFF)/255.0 blue:((c>>8)&0xFF)/255.0 alpha:((c)&0xFF)/255.0]
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-#define		DEFAULT_TAB							1
+#define		DEFAULT_TAB							0
+
+//---------------------------------------------------------
+#define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
+#define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 #define		MESSAGE_INVITE						@"Check out BlueWhale Chat. You can download at APP store or here: "
@@ -43,6 +50,7 @@
 #define     PF_USER_BLOCKED_USERS               @"blockedUsers"         //  Array of blocked users
 #define     PF_USER_BLOCKED_TOPICS              @"blockedTopics"        //  Array of blocked users
 #define     PF_USER_VOTE                        @"votes"                //  Array of votes
+#define     PF_USER_IS_BLACK_LIST               @"is_blackList"         //  BOOL
 //-----------------------------------------------------------------------
 #define		PF_CHAT_CLASS_NAME					@"Chat"					//	Class name
 #define		PF_CHAT_USER						@"user"					//	Pointer to User Class
@@ -62,13 +70,13 @@
 #define     PF_GROUPS_DOWN_LIST                 @"downList"             //  Array of user vote down
 #define		PF_GROUPS_CREATER                   @"creater"				//  Pointer to User Class
 #define		PF_GROUPS_CREATE_TIME               @"createTime"			//  Date
-#define     PF_GROUPS_LATITUDE                  @"latitude"             //  String
-#define     PF_GROUPS_LONGITUDE                 @"longitude"            //  String
+#define     PF_GROUPS_LOCATION                  @"location"             //  GeoPoint
 #define		PF_GROUPS_DESCRIPTION				@"description"			//	String
 #define     PF_GROUPS_PICTURE                   @"picture"              //  File
 #define     PF_GROUPS_NUM_CHAT                  @"numChat"              //  Number
 #define     PF_GROUPS_IS_PUBLIC                 @"is_public"            //  BOOL
 #define     PF_GROUPS_FLAG_NUMBER               @"flag_number"          //  Number
+#define     PF_GROUPS_FEATURE                   @"feature"              //  BOOL
 //-----------------------------------------------------------------------
 #define		PF_MESSAGES_CLASS_NAME				@"Messages"				//	Class name
 #define		PF_MESSAGES_USER					@"user"					//	Pointer to User Class

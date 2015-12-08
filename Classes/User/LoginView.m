@@ -100,6 +100,11 @@
 	{
 		if (user != nil)
 		{
+            NSLog(@"user is %@, black list is %@", user,user[PF_USER_IS_BLACK_LIST]);
+            if ([user[PF_USER_IS_BLACK_LIST] isEqualToNumber:[NSNumber numberWithInt:1]]) {
+                [ProgressHUD showError:@"This user ID has been suspended."];
+            }
+            else {
 			ParsePushUserAssign();
 			[ProgressHUD showSuccess:[NSString stringWithFormat:@"Welcome back %@!", user[PF_USER_FULLNAME]]];
             //NSManagedObjectContext *context=((AppDelegate *) [UIApplication sharedApplication].delegate).DiscoverDatabaseContext;
@@ -112,6 +117,7 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
             NSLog(@"dismiss login");
 			[self dismissViewControllerAnimated:YES completion:nil];
+            }
 		}
 		else [ProgressHUD showError:error.userInfo[@"error"]];
 	}];

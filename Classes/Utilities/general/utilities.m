@@ -36,6 +36,11 @@ void LoginUser(id target)
 	[target presentViewController:navigationController animated:YES completion:nil];
 }
 
+void checkUser(PFUser *user)
+{
+    
+}
+
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 void PostNotification(NSString *notification)

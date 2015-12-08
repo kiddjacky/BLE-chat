@@ -22,6 +22,7 @@
 #import "ChatView.h"
 #import "blockVC.h"
 #import "NavigationController.h"
+#import "utilities.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @interface ChatView()
@@ -126,8 +127,14 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	[super viewDidAppear:animated];
-	self.collectionView.collectionViewLayout.springinessEnabled = YES;
+	self.collectionView.collectionViewLayout.springinessEnabled = NO;
 	timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(loadMessages) userInfo:nil repeats:YES];
+    [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if ([[PFUser currentUser][PF_USER_IS_BLACK_LIST] isEqualToNumber:[NSNumber numberWithInt:1]]) {
+            [ProgressHUD showError:@"This user ID has been suspended."];
+            LoginUser(self);
+        }
+    }];
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -388,9 +395,27 @@
 - (void)didPressAccessoryButton:(UIButton *)sender
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
+    //UIAlertController *action = [[UIAlertController alloc] init];
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"pick from following"
+                                                                   message:nil
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* takePhotoAction = [UIAlertAction actionWithTitle:@"Take photo" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {ShouldStartCamera(self, YES);}];
+    UIAlertAction* choosePhotoAction = [UIAlertAction actionWithTitle:@"Choose existing photo" style:UIAlertActionStyleDefault
+                                                            handler:^(UIAlertAction * action) {ShouldStartPhotoLibrary(self, YES);}];
+    
+    [alert addAction:takePhotoAction];
+    [alert addAction:choosePhotoAction];
+    [self presentViewController:alert animated:YES completion:nil];
+    }
+    else {
 	UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil
 											   otherButtonTitles:@"Take photo", @"Choose existing photo", nil];
 	[action showInView:self.view];
+     
+    }
 }
 
 #pragma mark - JSQMessages CollectionView DataSource

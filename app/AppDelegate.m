@@ -46,8 +46,7 @@
 @property (strong, nonatomic) IBOutlet UITextView       *textView;
 @property (strong, nonatomic) IBOutlet UISwitch         *advertisingSwitch;
 //CLLocation
-@property (strong, nonatomic) CLLocationManager *locationManager;
-@property (strong, nonatomic) CLLocation *currentLocation;
+
 @property (strong, nonatomic) NSTimer *scanTimer;
 @end
 
@@ -74,6 +73,9 @@
 		[application registerUserNotificationSettings:settings];
 		[application registerForRemoteNotifications];
 	}
+    
+    [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	[PFImageView class];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
@@ -198,7 +200,9 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-	
+    NSLog(@"enter background mode!");
+    [self.locationManager startMonitoringSignificantLocationChanges];
+
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -213,6 +217,9 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	[FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
+        NSLog(@"back from background mode!");
+    [self.locationManager stopMonitoringSignificantLocationChanges];
+    [self.locationManager startUpdatingLocation];
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -295,6 +302,7 @@
 }
 
 
+
 /** Scan for peripherals - specifically for our service's 128bit CBUUID
  */
 - (void)scan
@@ -336,7 +344,7 @@
     //[locationManager stopUpdatingLocation];
     //eventDate = currentLocation.timestamp;
     NSLog(@"Update Location is called\n");
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"locationUpdate" object:nil userInfo:nil];
     /*
      NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
      if (abs(howRecent) < 15.0) {
@@ -613,7 +621,15 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
                  NSLog(@"find pf user full name and thumbnail");
                  PFUser *user = [objects firstObject];
                  discoverUser.userFullName = user[PF_USER_FULLNAME];
-                 NSLog(@"found user %@, thumbnail is %@", discoverUser.userFullName, user[PF_USER_THUMBNAIL]);
+                 NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+                 params[@"fullName"] = user[PF_USER_FULLNAME];
+                 params[@"name"] = user[PF_USER_USERNAME];
+                 params[@"installationId"] = [PFInstallation currentInstallation].installationId;
+                 PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:self.currentLocation.coordinate.latitude
+                                                            longitude:self.currentLocation.coordinate.longitude];
+                 params[@"point"] = point;
+                 [PFCloud callFunctionInBackground:@"meetNewUser" withParameters:params];
+                 //NSLog(@"found user %@, thumbnail is %@", discoverUser.userFullName, user[PF_USER_THUMBNAIL]);
                  /*
                  PFFile *discoverThumbnail = user[PF_USER_THUMBNAIL];
                  [discoverThumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {

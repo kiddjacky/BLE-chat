@@ -11,27 +11,18 @@
 
 @implementation discussionCellWithoutPicture
 
-@synthesize cardView = _cardView;
-@synthesize topic = _topic;
-@synthesize topicDescription = _topicDescription;
-@synthesize down = _down;
-@synthesize up  = _up;
-@synthesize join = _join;
-@synthesize share = _share;
-@synthesize report = _report;
-
-
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.backgroundColor = [UIColor lightGrayColor];
+        self.backgroundColor = [UIColor groupTableViewBackgroundColor];
         [self cardSetup];
         [self cellLayout];
         //[self drawButton];
     }
     return self;
 }
+
 
 -(void)cardSetup
 {
@@ -109,6 +100,7 @@
     [self.contentView addSubview:self.report];
 }
 
+
 -(void)drawButton
 {
     // Draw a custom gradient
@@ -120,6 +112,7 @@
                           nil];
     [self.up.layer insertSublayer:btnGradient atIndex:0];
 }
+
 
 -(void)cellLayout
 {
@@ -140,16 +133,9 @@
                                                                 multiplier:1
                                                                   constant:0.0]];
     
-    /*
-     // set heigh to 30
-     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.topic
-     attribute:NSLayoutAttributeHeight
-     relatedBy:NSLayoutRelationEqual
-     toItem:self.contentView
-     attribute:NSLayoutAttributeHeight
-     multiplier:0
-     constant:30]];
-     */
+ 
+
+ 
     
     //position
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.topicDescription
@@ -216,16 +202,7 @@
                                                                  attribute:NSLayoutAttributeWidth
                                                                 multiplier:1
                                                                   constant:0]];
-    // Width constraint, full of parent view width
-    /*
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.report
-                                                                 attribute:NSLayoutAttributeWidth
-                                                                 relatedBy:NSLayoutRelationEqual
-                                                                    toItem:self.join
-                                                                 attribute:NSLayoutAttributeWidth
-                                                                multiplier:1
-                                                                  constant:0]];
-     */
+
     // set heigh to 30
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.report
                                                                  attribute:NSLayoutAttributeWidth

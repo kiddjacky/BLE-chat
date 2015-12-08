@@ -132,6 +132,7 @@
 		DE31A2E61AF7357400FD8DE2 /* DiscoversView+MOC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE31A2E51AF7357400FD8DE2 /* DiscoversView+MOC.m */; };
 		DE6DA8251ABF54CE007A683B /* DiscoversView.m in Sources */ = {isa = PBXBuildFile; fileRef = DE6DA8241ABF54CE007A683B /* DiscoversView.m */; };
 		DE7414501BEFBB8100E6BF78 /* report.m in Sources */ = {isa = PBXBuildFile; fileRef = DE74144F1BEFBB8100E6BF78 /* report.m */; };
+		DE9B83A41C0672FF00AF052E /* GroupsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DE9B83A31C0672FF00AF052E /* GroupsView.xib */; };
 		DEAD60E71B93D1BB002E7B29 /* discussionView.m in Sources */ = {isa = PBXBuildFile; fileRef = DEAD60E61B93D1BB002E7B29 /* discussionView.m */; };
 		DEAD60F21B9AC366002E7B29 /* logo-120x120.gif in Resources */ = {isa = PBXBuildFile; fileRef = DEAD60F11B9AC366002E7B29 /* logo-120x120.gif */; };
 		DEAD60F41B9AC377002E7B29 /* iphone5-buttons-login-1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DEAD60F31B9AC377002E7B29 /* iphone5-buttons-login-1.jpg */; };
@@ -139,7 +140,6 @@
 		DEAD60F81B9AC393002E7B29 /* iphone5-buttons-facebook-1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DEAD60F61B9AC393002E7B29 /* iphone5-buttons-facebook-1.jpg */; };
 		DEAD60FE1B9AD795002E7B29 /* iphone5-background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DEAD60FD1B9AD795002E7B29 /* iphone5-background.jpg */; };
 		DEAD61001B9AD7D5002E7B29 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DEAD60FF1B9AD7D5002E7B29 /* Default-568h@2x.png */; };
-		DEAD61021B9B9DBD002E7B29 /* discussionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEAD61011B9B9DBD002E7B29 /* discussionCell.xib */; };
 		DEB213581B9017D500009E5D /* discussionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB213571B9017D500009E5D /* discussionCell.m */; };
 		DEB34C2D1AF0A7DF000A42B8 /* detailsView.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB34C2C1AF0A7DF000A42B8 /* detailsView.m */; };
 		DEB5B99B1BACB482000CDA1B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEB5B99A1BACB482000CDA1B /* LaunchScreen.xib */; };
@@ -159,6 +159,7 @@
 		DEB5B9DE1BDB4457000CDA1B /* privacy.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB5B9DD1BDB4457000CDA1B /* privacy.m */; };
 		DEB5B9E01BDB4D16000CDA1B /* privacy.html in Resources */ = {isa = PBXBuildFile; fileRef = DEB5B9DF1BDB4D16000CDA1B /* privacy.html */; };
 		DEB5B9E41BDB6123000CDA1B /* privacy.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEB5B9E31BDB6123000CDA1B /* privacy.xib */; };
+		DEB6D2AA1C0C363C004B385B /* discussionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEB6D2A91C0C363C004B385B /* discussionCell.xib */; };
 		DEB793941B68C6E400046815 /* contactsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB793921B68C6E400046815 /* contactsCell.m */; };
 		DEB793951B68C6E400046815 /* contactsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEB793931B68C6E400046815 /* contactsCell.xib */; };
 		DEB7939C1B6C45E100046815 /* Binoculars-50.png in Resources */ = {isa = PBXBuildFile; fileRef = DEB793961B6C45E100046815 /* Binoculars-50.png */; };
@@ -179,6 +180,7 @@
 		DEF024A51B80FBA7008DBABF /* contactDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEF024A41B80FBA7008DBABF /* contactDetailCell.xib */; };
 		DEF024A81B80FBF9008DBABF /* contactDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DEF024A71B80FBF9008DBABF /* contactDetailCell.m */; };
 		DEF024AB1B823E86008DBABF /* detailsImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = DEF024AA1B823E86008DBABF /* detailsImageView.m */; };
+		DEFD45581C12E9C300865AD2 /* Feedback.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFD45571C12E9C300865AD2 /* Feedback.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -415,6 +417,7 @@
 		DE6DA8241ABF54CE007A683B /* DiscoversView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoversView.m; sourceTree = "<group>"; };
 		DE74144E1BEFBB8100E6BF78 /* report.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = report.h; sourceTree = "<group>"; };
 		DE74144F1BEFBB8100E6BF78 /* report.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = report.m; sourceTree = "<group>"; };
+		DE9B83A31C0672FF00AF052E /* GroupsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GroupsView.xib; sourceTree = "<group>"; };
 		DEAD60E51B93D1BB002E7B29 /* discussionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = discussionView.h; sourceTree = "<group>"; };
 		DEAD60E61B93D1BB002E7B29 /* discussionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = discussionView.m; sourceTree = "<group>"; };
 		DEAD60F11B9AC366002E7B29 /* logo-120x120.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "logo-120x120.gif"; sourceTree = "<group>"; };
@@ -423,7 +426,6 @@
 		DEAD60F61B9AC393002E7B29 /* iphone5-buttons-facebook-1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "iphone5-buttons-facebook-1.jpg"; sourceTree = "<group>"; };
 		DEAD60FD1B9AD795002E7B29 /* iphone5-background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "iphone5-background.jpg"; sourceTree = "<group>"; };
 		DEAD60FF1B9AD7D5002E7B29 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		DEAD61011B9B9DBD002E7B29 /* discussionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = discussionCell.xib; sourceTree = "<group>"; };
 		DEB213561B9017D500009E5D /* discussionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = discussionCell.h; sourceTree = "<group>"; };
 		DEB213571B9017D500009E5D /* discussionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = discussionCell.m; sourceTree = "<group>"; };
 		DEB34C2B1AF0A7DF000A42B8 /* detailsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = detailsView.h; sourceTree = "<group>"; };
@@ -454,6 +456,7 @@
 		DEB5B9DD1BDB4457000CDA1B /* privacy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = privacy.m; sourceTree = "<group>"; };
 		DEB5B9DF1BDB4D16000CDA1B /* privacy.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = privacy.html; sourceTree = "<group>"; };
 		DEB5B9E31BDB6123000CDA1B /* privacy.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = privacy.xib; sourceTree = "<group>"; };
+		DEB6D2A91C0C363C004B385B /* discussionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = discussionCell.xib; path = ../../../discussionCell.xib; sourceTree = "<group>"; };
 		DEB793911B68C6E400046815 /* contactsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = contactsCell.h; sourceTree = "<group>"; };
 		DEB793921B68C6E400046815 /* contactsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = contactsCell.m; sourceTree = "<group>"; };
 		DEB793931B68C6E400046815 /* contactsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = contactsCell.xib; sourceTree = "<group>"; };
@@ -483,6 +486,8 @@
 		DEF024A71B80FBF9008DBABF /* contactDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = contactDetailCell.m; sourceTree = "<group>"; };
 		DEF024A91B823E86008DBABF /* detailsImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = detailsImageView.h; sourceTree = "<group>"; };
 		DEF024AA1B823E86008DBABF /* detailsImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = detailsImageView.m; sourceTree = "<group>"; };
+		DEFD45561C12E9C200865AD2 /* Feedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feedback.h; sourceTree = "<group>"; };
+		DEFD45571C12E9C300865AD2 /* Feedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Feedback.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -564,6 +569,7 @@
 			children = (
 				292338941AA350A400A47A39 /* GroupsView.h */,
 				292338951AA350A400A47A39 /* GroupsView.m */,
+				DE9B83A31C0672FF00AF052E /* GroupsView.xib */,
 				DE74144A1BEE7FD200E6BF78 /* Report */,
 				DEB2134C1B8FFD8100009E5D /* Discussion */,
 			);
@@ -637,6 +643,8 @@
 				DEB5B9E31BDB6123000CDA1B /* privacy.xib */,
 				DEB5B9D11BD235D6000CDA1B /* settingTVC.h */,
 				DEB5B9D21BD235D6000CDA1B /* settingTVC.m */,
+				DEFD45561C12E9C200865AD2 /* Feedback.h */,
+				DEFD45571C12E9C300865AD2 /* Feedback.m */,
 				292338AA1AA350A400A47A39 /* ProfileView.xib */,
 			);
 			path = 03_Profile;
@@ -1165,9 +1173,9 @@
 				DEB5B9CF1BC5F7DE000CDA1B /* discussionTVCell.xib */,
 				DEB213561B9017D500009E5D /* discussionCell.h */,
 				DEB213571B9017D500009E5D /* discussionCell.m */,
+				DEB6D2A91C0C363C004B385B /* discussionCell.xib */,
 				DEB5B9D61BD8B592000CDA1B /* discussionCellWithoutPicture.h */,
 				DEB5B9D71BD8B592000CDA1B /* discussionCellWithoutPicture.m */,
-				DEAD61011B9B9DBD002E7B29 /* discussionCell.xib */,
 				DEB5B9A51BB4DF44000CDA1B /* WeiXinActivity.h */,
 				DEB5B9A61BB4DF44000CDA1B /* WeiXinActivity.m */,
 			);
@@ -1210,7 +1218,7 @@
 		29EB23FD19E9292500D7AA97 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = KZ;
 				TargetAttributes = {
 					29EB240419E9292500D7AA97 = {
@@ -1282,7 +1290,6 @@
 				DEB7939C1B6C45E100046815 /* Binoculars-50.png in Resources */,
 				DEAD60F21B9AC366002E7B29 /* logo-120x120.gif in Resources */,
 				292338CA1AA350A400A47A39 /* MessagesCell.xib in Resources */,
-				DEAD61021B9B9DBD002E7B29 /* discussionCell.xib in Resources */,
 				292338F71AA374C300A47A39 /* SelectMultipleView.xib in Resources */,
 				DEAD60F71B9AC393002E7B29 /* iphone5-buttons-register-1.jpg in Resources */,
 				DEB5B9D51BD444B4000CDA1B /* plus.png in Resources */,
@@ -1299,6 +1306,7 @@
 				DEB5B99B1BACB482000CDA1B /* LaunchScreen.xib in Resources */,
 				29A531331AAEEF9500263CB1 /* profile_blank@2x.png in Resources */,
 				DEAD61001B9AD7D5002E7B29 /* Default-568h@2x.png in Resources */,
+				DEB6D2AA1C0C363C004B385B /* discussionCell.xib in Resources */,
 				DEBB7B351AE2FD21009CD940 /* tab_discovers.png in Resources */,
 				68DB82551BBA2EE70071912D /* female.png in Resources */,
 				DEBF53CE1B4CF9C900891128 /* discoversCell.xib in Resources */,
@@ -1310,6 +1318,7 @@
 				DEB793A11B6C45E100046815 /* tab_discovers_2.png in Resources */,
 				DEAD60F81B9AC393002E7B29 /* iphone5-buttons-facebook-1.jpg in Resources */,
 				292338FC1AA37C4100A47A39 /* FacebookFriendsView.xib in Resources */,
+				DE9B83A41C0672FF00AF052E /* GroupsView.xib in Resources */,
 				29EB241619E9292500D7AA97 /* Images.xcassets in Resources */,
 				DEB5B9D01BC5F7DE000CDA1B /* discussionTVCell.xib in Resources */,
 				292338D41AA350A400A47A39 /* WelcomeView.xib in Resources */,
@@ -1336,6 +1345,7 @@
 				292339B41AA38E0F00A47A39 /* JSQMessagesCollectionViewLayoutAttributes.m in Sources */,
 				292339BD1AA38E0F00A47A39 /* JSQMessagesCollectionView.m in Sources */,
 				292339271AA38DBD00A47A39 /* AFNetworkReachabilityManager.m in Sources */,
+				DEFD45581C12E9C300865AD2 /* Feedback.m in Sources */,
 				292D2EFA1A84497A00CEC270 /* JSQSystemSoundPlayer.m in Sources */,
 				292339BE1AA38E0F00A47A39 /* JSQMessagesCollectionViewCell.m in Sources */,
 				292339241AA38DBD00A47A39 /* AFHTTPRequestOperation.m in Sources */,
@@ -1480,6 +1490,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1494,7 +1505,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1529,7 +1540,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -1544,6 +1555,7 @@
 				CODE_SIGN_ENTITLEMENTS = app/app.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
@@ -1557,6 +1569,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.kdstudio.bluewhalechat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1571,6 +1584,7 @@
 				CODE_SIGN_ENTITLEMENTS = app/app.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
@@ -1584,6 +1598,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.kdstudio.bluewhalechat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";

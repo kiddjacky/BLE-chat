@@ -37,4 +37,7 @@
 @property (strong, nonatomic) DiscoversView *discoversView;
 @property (strong, nonatomic) ContactsView *contactsView;
 
+@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) CLLocation *currentLocation;
+
 @end

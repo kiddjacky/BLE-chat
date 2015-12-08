@@ -13,5 +13,6 @@
 @interface discussionTVC : UITableViewController  <UIActionSheetDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate, UIAlertViewDelegate >
 
 @property (strong, nonatomic) PFObject *group;
+@property (strong, nonatomic) CLLocation *currentLocation;
 
 @end

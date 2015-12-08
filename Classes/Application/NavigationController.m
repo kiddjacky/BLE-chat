@@ -21,10 +21,12 @@
 {
 	[super viewDidLoad];
 
-	self.navigationBar.barTintColor = HEXCOLOR(0x19C5FF00);
+	//self.navigationBar.barTintColor = HEXCOLOR(0x19C5FF00);
+    self.navigationBar.barTintColor = [UIColor colorWithRed:0.10 green:0.77 blue:1.00 alpha:1.0];
 	self.navigationBar.tintColor = [UIColor whiteColor];
 	self.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
 	self.navigationBar.translucent = NO;
+
 }
 
 @end

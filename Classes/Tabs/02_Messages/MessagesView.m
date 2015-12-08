@@ -87,8 +87,12 @@
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	if ([PFUser currentUser] != nil)
 	{
+        if ([[PFUser currentUser][PF_USER_IS_BLACK_LIST] isEqualToNumber:[NSNumber numberWithInt:1]]) {
+            LoginUser(self);
+        } else {
         //[[NSNotificationCenter defaultCenter] postNotificationName:PFUSER_READY object:nil];
 		[self loadMessages];
+        }
 	}
 	else LoginUser(self);
 }
