@@ -3,12 +3,10 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GroupsView">
             <connections>
-                <outlet property="sg" destination="7j9-ST-D0a" id="b9G-ri-T9D"/>
                 <outlet property="tableView" destination="IMh-RJ-qNf" id="rca-7t-uka"/>
                 <outlet property="view" destination="iN0-l3-epB" id="lSD-Ty-z3H"/>
             </connections>
@@ -19,7 +17,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="IMh-RJ-qNf">
-                    <rect key="frame" x="0.0" y="36" width="600" height="564"/>
+                    <rect key="frame" x="0.0" y="40" width="600" height="560"/>
                     <animations/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
@@ -27,32 +25,16 @@
                         <outlet property="delegate" destination="-1" id="QE2-WS-Pvj"/>
                     </connections>
                 </tableView>
-                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="7j9-ST-D0a">
-                    <rect key="frame" x="8" y="0.0" width="584" height="29"/>
-                    <animations/>
-                    <segments>
-                        <segment title="Feature"/>
-                        <segment title="Local"/>
-                        <segment title="Mine"/>
-                    </segments>
-                    <color key="tintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                    <connections>
-                        <action selector="selectView:" destination="-1" eventType="valueChanged" id="WyV-6z-JPS"/>
-                    </connections>
-                </segmentedControl>
             </subviews>
             <animations/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="IMh-RJ-qNf" firstAttribute="top" secondItem="7j9-ST-D0a" secondAttribute="bottom" constant="8" symbolic="YES" id="315-Vd-Pal"/>
-                <constraint firstItem="7j9-ST-D0a" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="JqJ-1w-7hD"/>
-                <constraint firstItem="7j9-ST-D0a" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" multiplier="0.9" constant="8" id="RGE-nG-Jag"/>
-                <constraint firstItem="7j9-ST-D0a" firstAttribute="leading" secondItem="IMh-RJ-qNf" secondAttribute="leading" constant="8" id="eC2-qt-ycq"/>
-                <constraint firstAttribute="bottom" secondItem="IMh-RJ-qNf" secondAttribute="bottom" id="sXE-HE-HZ0"/>
-                <constraint firstAttribute="trailing" secondItem="7j9-ST-D0a" secondAttribute="trailing" constant="8" id="w5K-0k-YaJ"/>
-                <constraint firstItem="7j9-ST-D0a" firstAttribute="trailing" secondItem="IMh-RJ-qNf" secondAttribute="trailing" constant="-8" id="wvj-tw-ZSL"/>
+                <constraint firstItem="IMh-RJ-qNf" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Nrb-FS-nlZ"/>
+                <constraint firstItem="IMh-RJ-qNf" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="40" id="XAN-N0-xlJ"/>
+                <constraint firstAttribute="bottom" secondItem="IMh-RJ-qNf" secondAttribute="bottom" id="lQ4-tt-Bmb"/>
+                <constraint firstAttribute="trailing" secondItem="IMh-RJ-qNf" secondAttribute="trailing" id="oA8-GB-XWJ"/>
             </constraints>
-            <point key="canvasLocation" x="-92" y="90"/>
+            <point key="canvasLocation" x="-224" y="180"/>
         </view>
     </objects>
 </document>

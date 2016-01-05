@@ -544,7 +544,7 @@
 
                 UIImage *def_image_male = [UIImage imageNamed:@"male"];
                 UIImage *def_image_female = [UIImage imageNamed:@"female"];
-                UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
+                //UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
                 if ([self.target[PF_USER_SEX]  isEqual: @"Male"])
                 {
                 self.imageUser.image = def_image_male;
@@ -555,7 +555,7 @@
                     self.imageUser.image = def_image_female;
                 }
                 
-                else { self.imageUser.image = def_image;}
+                else { self.imageUser.image = def_image_male;}
             }
          }
      }];

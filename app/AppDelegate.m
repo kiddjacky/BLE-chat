@@ -84,10 +84,10 @@
 	self.groupsView = [[GroupsView alloc] init];
 	self.messagesView = [[MessagesView alloc] init];
 	//self.profileView = [[ProfileView alloc] init];
-    self.settingView = [[settingTVC alloc] init];
-    self.discoversView = [[DiscoversView alloc] init];
+    self.settingView = [[settingTVC alloc] initWithNibName:nil bundle:nil];
+    self.discoversView = [[DiscoversView alloc] initWithNibName:nil bundle:nil];
     //self.discoversView.managedObjectContext = self.DiscoverDatabaseContext;
-    self.contactsView = [[ContactsView alloc] init];
+    self.contactsView = [[ContactsView alloc] initWithNibName:nil bundle:nil];
     //self.contactsView.managedObjectContext = self.DiscoverDatabaseContext;
 
 	NavigationController *navController1 = [[NavigationController alloc] initWithRootViewController:self.groupsView];

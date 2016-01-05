@@ -40,7 +40,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
-        [self.tabBarItem setImage:[UIImage imageNamed:@"tab_profile"]];
+        [self.tabBarItem setImage:[UIImage imageNamed:@"setting"]];
         self.tabBarItem.title = @"Setting";
     }
     return self;
@@ -198,7 +198,7 @@
     }
     else if (indexPath.section==1) {
         if (indexPath.row==0) {
-            privacy *pv = [[privacy alloc] initWithNibName:@"Privacy Policy" bundle:nil];
+            privacy *pv = [[privacy alloc] initWithNibName:@"privacy" bundle:nil];
             pv.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:pv animated:YES];
         }

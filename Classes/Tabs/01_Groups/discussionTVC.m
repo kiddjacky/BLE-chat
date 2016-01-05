@@ -348,7 +348,7 @@
         self.group[PF_GROUPS_UP_LIST] = empty_array;
         self.group[PF_GROUPS_DOWN_LIST] = empty_array;
         self.group[PF_USER_BLOCKED_TOPICS] = empty_array;
-        self.group[PF_GROUPS_FEATURE] = [NSNumber numberWithInteger:1];
+        self.group[PF_GROUPS_FEATURE] = [NSNumber numberWithInteger:0];
         
         PFGeoPoint *postLocation = [PFGeoPoint geoPointWithLatitude:self.currentLocation.coordinate.latitude
                                                              longitude:self.currentLocation.coordinate.longitude];

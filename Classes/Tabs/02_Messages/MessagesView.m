@@ -49,7 +49,7 @@
 {
 	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 	{
-		[self.tabBarItem setImage:[UIImage imageNamed:@"tab_messages"]];
+		[self.tabBarItem setImage:[UIImage imageNamed:@"message"]];
 		self.tabBarItem.title = @"Messages";
 		//-----------------------------------------------------------------------------------------------------------------------------------------
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(actionCleanup) name:NOTIFICATION_USER_LOGGED_OUT object:nil];

@@ -130,6 +130,12 @@
 		DE31A2DD1AF7152800FD8DE2 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE31A2DC1AF7152800FD8DE2 /* CoreDataTableViewController.m */; };
 		DE31A2E31AF7321700FD8DE2 /* AppDelegate+MOC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE31A2E21AF7321700FD8DE2 /* AppDelegate+MOC.m */; };
 		DE31A2E61AF7357400FD8DE2 /* DiscoversView+MOC.m in Sources */ = {isa = PBXBuildFile; fileRef = DE31A2E51AF7357400FD8DE2 /* DiscoversView+MOC.m */; };
+		DE6686CA1C3510E1004C0E18 /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = DE6686C91C3510E1004C0E18 /* message.png */; };
+		DE6686CC1C3510F1004C0E18 /* discussion.png in Resources */ = {isa = PBXBuildFile; fileRef = DE6686CB1C3510F1004C0E18 /* discussion.png */; };
+		DE6686CE1C351103004C0E18 /* setting.png in Resources */ = {isa = PBXBuildFile; fileRef = DE6686CD1C351103004C0E18 /* setting.png */; };
+		DE6686D01C351166004C0E18 /* discover.png in Resources */ = {isa = PBXBuildFile; fileRef = DE6686CF1C351166004C0E18 /* discover.png */; };
+		DE6686D21C351170004C0E18 /* contact.png in Resources */ = {isa = PBXBuildFile; fileRef = DE6686D11C351170004C0E18 /* contact.png */; };
+		DE6686D41C3BADD8004C0E18 /* Apptimize.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE6686D31C3BADD8004C0E18 /* Apptimize.framework */; };
 		DE6DA8251ABF54CE007A683B /* DiscoversView.m in Sources */ = {isa = PBXBuildFile; fileRef = DE6DA8241ABF54CE007A683B /* DiscoversView.m */; };
 		DE7414501BEFBB8100E6BF78 /* report.m in Sources */ = {isa = PBXBuildFile; fileRef = DE74144F1BEFBB8100E6BF78 /* report.m */; };
 		DE9B83A41C0672FF00AF052E /* GroupsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DE9B83A31C0672FF00AF052E /* GroupsView.xib */; };
@@ -413,6 +419,12 @@
 		DE31A2E71AF74D2700FD8DE2 /* PhotoDatabaseAvailability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoDatabaseAvailability.h; sourceTree = "<group>"; };
 		DE31A2EA1AF8689100FD8DE2 /* DatabaseAvailability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatabaseAvailability.h; sourceTree = "<group>"; };
 		DE4AA4831AC9B582008309D0 /* TransferService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransferService.h; sourceTree = "<group>"; };
+		DE6686C91C3510E1004C0E18 /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
+		DE6686CB1C3510F1004C0E18 /* discussion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = discussion.png; sourceTree = "<group>"; };
+		DE6686CD1C351103004C0E18 /* setting.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = setting.png; sourceTree = "<group>"; };
+		DE6686CF1C351166004C0E18 /* discover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = discover.png; sourceTree = "<group>"; };
+		DE6686D11C351170004C0E18 /* contact.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = contact.png; sourceTree = "<group>"; };
+		DE6686D31C3BADD8004C0E18 /* Apptimize.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Apptimize.framework; sourceTree = "<group>"; };
 		DE6DA8231ABF54CE007A683B /* DiscoversView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoversView.h; sourceTree = "<group>"; };
 		DE6DA8241ABF54CE007A683B /* DiscoversView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoversView.m; sourceTree = "<group>"; };
 		DE74144E1BEFBB8100E6BF78 /* report.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = report.h; sourceTree = "<group>"; };
@@ -505,6 +517,7 @@
 				29A299641A5575AF00117608 /* CoreLocation.framework in Frameworks */,
 				29A299621A5575A900117608 /* MobileCoreServices.framework in Frameworks */,
 				29A299601A5575A100117608 /* QuartzCore.framework in Frameworks */,
+				DE6686D41C3BADD8004C0E18 /* Apptimize.framework in Frameworks */,
 				29A2995E1A55759A00117608 /* Security.framework in Frameworks */,
 				29A2995A1A55758B00117608 /* SystemConfiguration.framework in Frameworks */,
 				DEB5B9BC1BB4EDD6000CDA1B /* libWeChatSDK.a in Frameworks */,
@@ -994,6 +1007,11 @@
 		29A5312C1AAEEF9500263CB1 /* tabbar */ = {
 			isa = PBXGroup;
 			children = (
+				DE6686C91C3510E1004C0E18 /* message.png */,
+				DE6686CB1C3510F1004C0E18 /* discussion.png */,
+				DE6686CD1C351103004C0E18 /* setting.png */,
+				DE6686CF1C351166004C0E18 /* discover.png */,
+				DE6686D11C351170004C0E18 /* contact.png */,
 				689D00E81B1D9BFD003E21F3 /* contact-icon.png */,
 				DEB793961B6C45E100046815 /* Binoculars-50.png */,
 				DEB793971B6C45E100046815 /* Binoculars-100.png */,
@@ -1023,6 +1041,7 @@
 		29EB23FC19E9292500D7AA97 = {
 			isa = PBXGroup;
 			children = (
+				DE6686D31C3BADD8004C0E18 /* Apptimize.framework */,
 				DEAD60FF1B9AD7D5002E7B29 /* Default-568h@2x.png */,
 				2923388B1AA350A400A47A39 /* Classes */,
 				2927192F19F284AC009C308B /* Vendors */,
@@ -1289,10 +1308,13 @@
 				29A531341AAEEF9500263CB1 /* tab_groups@2x.png in Resources */,
 				DEB7939C1B6C45E100046815 /* Binoculars-50.png in Resources */,
 				DEAD60F21B9AC366002E7B29 /* logo-120x120.gif in Resources */,
+				DE6686D01C351166004C0E18 /* discover.png in Resources */,
 				292338CA1AA350A400A47A39 /* MessagesCell.xib in Resources */,
 				292338F71AA374C300A47A39 /* SelectMultipleView.xib in Resources */,
 				DEAD60F71B9AC393002E7B29 /* iphone5-buttons-register-1.jpg in Resources */,
 				DEB5B9D51BD444B4000CDA1B /* plus.png in Resources */,
+				DE6686CC1C3510F1004C0E18 /* discussion.png in Resources */,
+				DE6686CA1C3510E1004C0E18 /* message.png in Resources */,
 				292338CE1AA350A400A47A39 /* ProfileView.xib in Resources */,
 				292339A31AA38E0F00A47A39 /* JSQMessages.strings in Resources */,
 				DEB5B9E41BDB6123000CDA1B /* privacy.xib in Resources */,
@@ -1300,6 +1322,7 @@
 				292338C61AA350A400A47A39 /* SelectSingleView.xib in Resources */,
 				DEB7939D1B6C45E100046815 /* Binoculars-100.png in Resources */,
 				DEAD60FE1B9AD795002E7B29 /* iphone5-background.jpg in Resources */,
+				DE6686D21C351170004C0E18 /* contact.png in Resources */,
 				29A531361AAEEF9500263CB1 /* tab_profile@2x.png in Resources */,
 				DEB5B9C41BB66508000CDA1B /* weixin_icon1.png in Resources */,
 				689D00E91B1D9BFD003E21F3 /* contact-icon.png in Resources */,
@@ -1308,6 +1331,7 @@
 				DEAD61001B9AD7D5002E7B29 /* Default-568h@2x.png in Resources */,
 				DEB6D2AA1C0C363C004B385B /* discussionCell.xib in Resources */,
 				DEBB7B351AE2FD21009CD940 /* tab_discovers.png in Resources */,
+				DE6686CE1C351103004C0E18 /* setting.png in Resources */,
 				68DB82551BBA2EE70071912D /* female.png in Resources */,
 				DEBF53CE1B4CF9C900891128 /* discoversCell.xib in Resources */,
 				29A531311AAEEF9500263CB1 /* messages_blank@2x.png in Resources */,
@@ -1559,9 +1583,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = app/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1588,9 +1613,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = app/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

@@ -46,7 +46,7 @@
     
     if (self)
     {
-        [self.tabBarItem setImage:[UIImage imageNamed:@"contact-icon"]];
+        [self.tabBarItem setImage:[UIImage imageNamed:@"contact"]];
         self.tabBarItem.title = @"Contacts";
     }
     
@@ -90,6 +90,7 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+
     self.title = @"Contacts";
     self.tableView.tableFooterView = [[UIView alloc] init];
     [self.tableView registerNib:[UINib nibWithNibName:@"contactsCell" bundle:nil] forCellReuseIdentifier:@"contactsCell"];
@@ -216,9 +217,19 @@
              PFUser *pfuser = [objects firstObject];
              if (pfuser[PF_USER_THUMBNAIL] == nil)
              {
-                 UIImage *def_image = [UIImage imageNamed:@"tab_discovers_2"];
-                 //UIImage *def_image = [UIImage imageNamed:@"profile_blank@2x.png"];
-                 cell.imageUser.image = def_image;
+                 UIImage *def_image_male = [UIImage imageNamed:@"male"];
+                 UIImage *def_image_female = [UIImage imageNamed:@"female"];
+                 if ([pfuser[PF_USER_SEX]  isEqual: @"Male"])
+                 {
+                     cell.imageUser.image = def_image_male;
+                 }
+                 
+                 else if ([pfuser[PF_USER_SEX]  isEqual: @"Female"])
+                 {
+                     cell.imageUser.image = def_image_female;
+                 }
+                 
+                 else { cell.imageUser.image = def_image_male;}
                  
              } else {
                  [cell bindData:pfuser];

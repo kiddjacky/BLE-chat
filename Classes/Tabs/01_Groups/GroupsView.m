@@ -42,7 +42,9 @@
     NSMutableArray *join;
     NSMutableArray *vote; //0 means didn't vote, 1 means yes, 2 means no
     NSInteger selection;
+    NSMutableArray *buttonName;
 }
+
 
 //@property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) CLLocation *currentLocation;
@@ -59,7 +61,7 @@
 	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 	if (self)
 	{
-		[self.tabBarItem setImage:[UIImage imageNamed:@"tab_groups"]];
+		[self.tabBarItem setImage:[UIImage imageNamed:@"discussion"]];
 		self.tabBarItem.title = @"Discussions";
 	}
 	return self;
@@ -90,8 +92,14 @@
     down = [[NSMutableArray alloc] init];
     join = [[NSMutableArray alloc] init];
     vote = [[NSMutableArray alloc] init];
+    buttonName = [[NSMutableArray alloc] initWithArray:@[@"Featured", @"What's Hot", @"Local", @"My Post"]];
+    
     
     selection = 0;
+    
+    //for horizontal scroller menu
+    //[self createScrollMenu];
+    [self createSegment];
     
     self.refreshControl = [[UIRefreshControl alloc] init];
     self.refreshControl.backgroundColor = [UIColor clearColor];
@@ -116,9 +124,60 @@
     NSLog(@"location now is %@", self.currentLocation);
 }
 
-- (IBAction)selectView:(id)sender {
-    if ([sender isEqual:self.sg]){
+//for horizontal scroller menu
+/*
+- (void)createScrollMenu
+{
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];
+    
+    int x = 0;
+    for (int i = 0; i < 4; i++) {
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width/2 + x), 0, 100, 40)];
+        [button addTarget:self action:@selector(newView:) forControlEvents:UIControlEventTouchDown];
+        [button setTitle:buttonName[i] forState:UIControlStateNormal];
+        button.tag = i;
+        [scrollView addSubview:button];
         
+        x += button.frame.size.width;
+    }
+    
+    scrollView.contentSize = CGSizeMake((self.view.frame.size.width + x), scrollView.frame.size.height);
+    //scrollView.backgroundColor = [UIColor redColor];
+    
+    [self.view addSubview:scrollView];
+}
+
+-(void)newView:(UIButton *)sender
+{
+    if (sender.userInteractionEnabled == YES) {
+        for (UIView *button in sender.superview.subviews) {
+            if ([button isKindOfClass:[UIButton class]]) {
+                button.userInteractionEnabled = YES;
+            }
+        }
+        selection = sender.tag;
+        sender.userInteractionEnabled = NO;
+        [self loadGroups];
+    }
+    
+}
+*/
+
+-(void)createSegment
+{
+    self.sg = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Featured", @"Local", @"My Post", nil]];
+    NSLog(@"width is %f", self.view.frame.size.width);
+    
+    self.sg.frame = CGRectMake(30, 0, self.view.frame.size.width-60, 30);
+    self.sg.selectedSegmentIndex = 0;
+    
+    
+    [self.sg addTarget:self action:@selector(selectView:) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:self.sg];
+}
+
+- (void)selectView:(id)sender {
+        NSLog(@"self viewSelect is %@", self.viewSelect);
         //get index position for the selected control
         NSInteger selectedIndex = [sender selectedSegmentIndex];
         if (selectedIndex == 0) {
@@ -133,7 +192,6 @@
             selection = 2;
             [self loadGroups];
         }
-    }
 
 }
 
@@ -143,6 +201,8 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	[super viewDidAppear:animated];
+    //[self createSegment];
+    self.sg.frame = CGRectMake(30, 0, self.view.frame.size.width-60, 30);
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	if ([PFUser currentUser] != nil)
 	{
@@ -800,7 +860,7 @@
     
     NSString *text = group[PF_GROUPS_NAME];
     NSString *details = group[PF_GROUPS_DESCRIPTION];
-    NSString *promote = @"Download the app BlueWhale at APP store now! #BlueWhale";
+    NSString *promote = @"Download BlueWhale Chat at APP store now to join this discussion! #BlueWhale";
 
     if (group[PF_GROUPS_PICTURE]==nil) {
         UIImage *image = [UIImage imageNamed:@"logo-120x120.gif"];

@@ -15,6 +15,7 @@
 @interface GroupsView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, UIActionSheetDelegate>
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UIScrollView *viewSelect;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *sg;
 @property UIRefreshControl *refreshControl;
 

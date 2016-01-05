@@ -55,7 +55,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
-        [self.tabBarItem setImage:[UIImage imageNamed:@"Find_User-100"]];
+        [self.tabBarItem setImage:[UIImage imageNamed:@"discover"]];
         self.tabBarItem.title = @"Discovers";
     }
     [[NSNotificationCenter defaultCenter] addObserverForName:DatabaseAvailabilityNotification
@@ -65,6 +65,7 @@
                                                       NSLog(@"Get database notification");
                                                       self.managedObjectContext = note.userInfo[DatabaseAvailabilityContext];
                                                   }];
+    
     return self;
 }
 
@@ -102,6 +103,7 @@
 {
     [super viewDidLoad];
     self.title = @"Discovers";
+
     //---------------------------------------------------------------------------------------------------------------------------------------------
     // self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self
     //                                                                         action:@selector(actionNew)];
