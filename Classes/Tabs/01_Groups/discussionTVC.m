@@ -295,12 +295,12 @@
 {
     UIImage *image = info[UIImagePickerControllerEditedImage];
     //---------------------------------------------------------------------------------------------------------------------------------------------
-    UIImage *picture = ResizeImage(image, 280, 280);
+    //UIImage *picture = ResizeImage(image, 280, 280);
     //UIImage *thumbnail = ResizeImage(image, 60, 60);
     //---------------------------------------------------------------------------------------------------------------------------------------------
-    self.picture.image = picture;
+    self.picture.image = image;
     //---------------------------------------------------------------------------------------------------------------------------------------------
-    PFFile *filePicture = [PFFile fileWithName:@"picture.jpg" data:UIImageJPEGRepresentation(picture, 0.6)];
+    PFFile *filePicture = [PFFile fileWithName:@"picture.jpg" data:UIImageJPEGRepresentation(image, 1)];
     [filePicture saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
      {
          if (error != nil) [ProgressHUD showError:@"Network error."];

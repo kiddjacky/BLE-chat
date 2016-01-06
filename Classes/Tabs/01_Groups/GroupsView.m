@@ -165,7 +165,7 @@
 
 -(void)createSegment
 {
-    self.sg = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Featured", @"Local", @"My Post", nil]];
+    self.sg = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Featured", @"Hot", @"Local", @"My Post", nil]];
     NSLog(@"width is %f", self.view.frame.size.width);
     
     self.sg.frame = CGRectMake(30, 0, self.view.frame.size.width-60, 30);
@@ -188,8 +188,12 @@
             selection = 1;
             [self loadGroups];
         }
-        else {
+        else if (selectedIndex == 2) {
             selection = 2;
+            [self loadGroups];
+        }
+        else {
+            selection = 3;
             [self loadGroups];
         }
 
@@ -260,7 +264,7 @@
     if (selection == 0) {
         [query whereKey:PF_GROUPS_FEATURE equalTo:[NSNumber numberWithInt:1]];
     }
-    else if (selection == 1) {
+    else if (selection == 2) {
         PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:self.currentLocation.coordinate.latitude
                                                    longitude:self.currentLocation.coordinate.longitude];
         NSLog(@"location is %@", point);
@@ -268,13 +272,20 @@
         [query whereKey:PF_GROUPS_LOCATION
            nearGeoPoint:point
        withinKilometers:10];
-    } else {
+    }
+    else if (selection == 3) {
         [query whereKey:PF_GROUPS_CREATER equalTo:[PFUser currentUser]];
+    }
+    if (selection == 1) {
+        [query orderByAscending:@"total"];
+        [query setLimit:20];
+    }
+    else {
+        [query orderByAscending:@"createdAt"];
+        [query setLimit:100];
     }
     //[query whereKey:PF_GROUPS_IS_PUBLIC notEqualTo:[NSNumber numberWithInt:0]];
     [query whereKey:@"objectId" notContainedIn:blockList];
-    [query orderByAscending:@"createdAt"];
-    [query setLimit:100];
 	[query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
 	{
 		if (error == nil)

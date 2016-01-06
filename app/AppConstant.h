@@ -64,6 +64,7 @@
 #define		PF_GROUPS_NAME						@"name"					//	String
 #define     PF_GROUPS_UP                        @"up"                   //  Number
 #define     PF_GROUPS_DOWN                      @"down"                 //  Number
+#define     PF_GROUPS_TOTAL                     @"total"                //  Number
 #define     PF_GROUPS_UP_NAME                   @"upName"               //  String
 #define     PF_GROUPS_DOWN_NAME                 @"downName"             //  String
 #define     PF_GROUPS_UP_LIST                   @"upList"               //  Array of user vote up
